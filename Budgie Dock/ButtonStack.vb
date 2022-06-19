@@ -17,6 +17,6 @@
     End Sub
 
     Private Sub theStackPanel_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles theStackPanel.MouseUp
-        theStackPanel.Background = HoverColor
+        theStackPanel.Background = DefaultColor
     End Sub
 End Class

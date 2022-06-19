@@ -27,6 +27,8 @@
     Private Sub imageiconobj_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseEnter
         imageiconobj.Opacity = 0.8
         containerwin.appname.Content = appname
+        containerwin.appname.UpdateLayout()
+        Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
         containerwin.appname.Visibility = Visibility.Visible
     End Sub
 
@@ -35,12 +37,17 @@
         containerwin.appname.Visibility = Visibility.Hidden
     End Sub
 
+    Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
+        Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+    End Sub
+
     Private Sub imageiconobj_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseUp
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
             Process.Start(apppath)
         ElseIf e.ChangedButton = 2 Then
             containerwin.menustack.Visibility = Visibility.Visible
+            Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)
             containerwin.OptionsIcon = Me
         End If
     End Sub

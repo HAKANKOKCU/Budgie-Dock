@@ -8,7 +8,6 @@ Class MainWindow
     Dim agwid = 0
     Dim iddd As Integer = 0
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
-        Me.Height = appsgrid.Height + 106
         ticker = New DispatcherTimer
         ticker.Interval = TimeSpan.FromMilliseconds(10)
         ticker.Start()
@@ -36,6 +35,12 @@ Class MainWindow
             appsgrid.Orientation = Orientation.Vertical
             appsgrid.Width = My.Settings.Size
         End If
+        Me.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+        Me.Left = 0
+        If My.Settings.animatescale = 0 Then
+            My.Settings.animatescale = 1
+        End If
+        Me.Height = appsgrid.Height + 108
     End Sub
 
     Sub reicon()
@@ -58,7 +63,10 @@ Class MainWindow
             Dim sizee As Integer = 0
             For Each a As UIElement In appsgrid.Children
                 If TypeOf a Is Image Then
-                    sizee += My.Settings.Size
+                    Try
+                        sizee += My.Settings.Size
+                    Catch
+                    End Try
                 End If
             Next
             agwid = sizee
@@ -72,22 +80,25 @@ Class MainWindow
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
         If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - My.Settings.Size - 310
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Dim sizee As Integer = 0
         For Each a As UIElement In appsgrid.Children
             If TypeOf a Is Image Then
-                sizee += My.Settings.Size
+                Try
+                    sizee += My.Settings.Size
+                Catch
+                End Try
             End If
         Next
         If sizee < 200 Then
             sizee = 200
         End If
         If My.Settings.pos = "Bottom" Then
-            Me.Width = sizee
-            Me.Left = (Forms.Screen.PrimaryScreen.WorkingArea.Width / 2) - (Me.Width / 2)
+            'Me.Width = sizee
+            'Me.Left = (Forms.Screen.PrimaryScreen.WorkingArea.Width / 2) - (Me.Width / 2)
         Else
             Me.Height = sizee
             Me.Top = (Forms.Screen.PrimaryScreen.WorkingArea.Height / 2) - (Me.Height / 2)
@@ -103,6 +114,11 @@ Class MainWindow
             End If
         Catch
         End Try
+        If Not appsgrid.Height = My.Settings.Size Then
+            appsgrid.Height = My.Settings.Size
+            Me.Height = appsgrid.Height + 108
+            reicon()
+        End If
     End Sub
 
     Private Sub DeleteIconButton_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles DeleteIconButton.MouseUp
@@ -148,15 +164,19 @@ Class MainWindow
         'If e.Data.GetDataPresent(e.Data.GetDataPresent(DataFormats.FileDrop)) Then
         Try
             For Each Path As String In e.Data.GetData(DataFormats.FileDrop)
+                Dim n = My.Computer.FileSystem.GetName(Path)
+                If n = "" Then
+                    n = Path
+                End If
                 Dim a As New icon
                 a.apppath = Path
                 a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
-                a.appname = My.Computer.FileSystem.GetName(Path)
+                a.appname = n
                 a.stackpanel = appsgrid
                 a.containerwin = Me
                 a.endinit()
                 a.idd = iddd
-                iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", My.Computer.FileSystem.GetName(Path)})
+                iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
                 iddd += 1
             Next
             savicon()
@@ -165,6 +185,7 @@ Class MainWindow
         Catch
             appname.Visibility = Windows.Visibility.Visible
             appname.Content = "Can't Add Icon Of That Type"
+            Canvas.SetLeft(appname, (Me.Width / 2) - (appname.ActualWidth / 2))
         End Try
     End Sub
 
@@ -175,7 +196,16 @@ Class MainWindow
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
-        appsgrid.Width += (agwid - appsgrid.Width) / 8
+        appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
     End Sub
 
+    Private Sub Window_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles MyBase.KeyUp
+        If e.Key = Key.S Then
+            Dim icop As New BDOptions
+            menustack.Visibility = Visibility.Hidden
+            icop.ShowDialog()
+        ElseIf e.Key = Key.R Then
+            reicon()
+        End If
+    End Sub
 End Class
