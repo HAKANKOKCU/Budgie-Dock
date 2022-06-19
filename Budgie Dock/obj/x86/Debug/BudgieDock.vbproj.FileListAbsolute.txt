@@ -1,0 +1,14 @@
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\bin\Debug\BudgieDock.exe
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\bin\Debug\BudgieDock.pdb
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\bin\Debug\BudgieDock.xml
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\MainWindow.baml
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\MainWindow.g.vb
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\Application.g.vb
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock_MarkupCompile.cache
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.g.resources
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.Resources.resources
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.vbproj.GenerateResource.Cache
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.exe
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.xml
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\obj\x86\Debug\BudgieDock.pdb
+C:\Users\ASUS PC\AppData\Local\Temporary Projects\BudgieDock\bin\Debug\BudgieDock.exe.config

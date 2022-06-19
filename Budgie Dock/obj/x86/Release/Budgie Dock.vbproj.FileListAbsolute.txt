@@ -1,0 +1,9 @@
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\IconOptions.baml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\MainWindow.baml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\IconOptions.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\MainWindow.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Application.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock_MarkupCompile.cache
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.g.resources
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\BudgieDock.Resources.resources
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.vbproj.GenerateResource.Cache

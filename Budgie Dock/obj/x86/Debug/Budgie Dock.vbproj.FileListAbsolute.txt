@@ -1,0 +1,18 @@
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Debug\Budgie Dock.exe.config
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Debug\Budgie Dock.exe
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Debug\Budgie Dock.pdb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Debug\Budgie Dock.xml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\MainWindow.baml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\MainWindow.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Application.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock_MarkupCompile.cache
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock.g.resources
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BudgieDock.Resources.resources
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock.vbproj.GenerateResource.Cache
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock.exe
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock.xml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\Budgie Dock.pdb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\IconOptions.baml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\IconOptions.g.vb
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BDOptions.baml
+C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BDOptions.g.vb

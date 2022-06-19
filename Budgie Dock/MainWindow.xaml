@@ -1,0 +1,34 @@
+﻿<Window x:Class="MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Budgie Dock" Height="350" Width="525" ResizeMode="NoResize" Foreground="White" WindowStyle="None" 
+        AllowsTransparency="True" ShowInTaskbar="False" Icon="/Budgie%20Dock;component/prflrsmi.ico">
+    <Window.Background>
+        <SolidColorBrush Opacity="0" Color="White"/>
+    </Window.Background>
+    <Grid VerticalAlignment="Bottom">
+        <StackPanel Name="mas" VerticalAlignment="Center">
+            <StackPanel Visibility="Hidden" Name="menustack" Width="200" Background="Wheat">
+                <StackPanel Height="26" Width="200" Name="OptIconButton">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center">Icon Options</Label>
+                </StackPanel>
+                <StackPanel Height="26" Width="200" Name="OptMainButton">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center">Budgie Dock Options</Label>
+                </StackPanel>
+                <StackPanel Height="26" Width="200" Name="DeleteIconButton">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center">Delete</Label>
+                </StackPanel>
+            </StackPanel>
+            <Label HorizontalAlignment="Center" Visibility="Hidden" Name="appname">Appname
+                <Label.Background>
+                    <SolidColorBrush Opacity="0.5" Color="White"></SolidColorBrush>
+                </Label.Background>
+            </Label>
+            <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" AllowDrop="True" Width="0">
+                <StackPanel.Background>
+                    <SolidColorBrush Opacity="0.1" Color="White"/>
+                </StackPanel.Background>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
