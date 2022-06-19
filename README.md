@@ -1,4 +1,6 @@
 # Budgie-Dock
-Budgie Dock App (0.1 alpha)
+Budgie Dock App (0.2 alpha)
 
-app is located at `Budgie Dock/bin/Debug/`
+App is located at `Budgie Dock/bin/Debug/`
+
+Needs .Net Framework 4
