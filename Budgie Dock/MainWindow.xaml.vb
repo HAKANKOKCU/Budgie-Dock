@@ -64,7 +64,10 @@ Class MainWindow
                 a.stackpanel = appsgrid
                 a.containerwin = Me
                 a.endinit()
-                a.imageiconobj.Height = My.Settings.Size - 5
+                Try
+                    a.imageiconobj.Height = My.Settings.Size - 5
+                Catch
+                End Try
                 If animate Then a.imageiconobj.Height = 5
                 a.idd = iddd
                 iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
