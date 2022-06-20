@@ -1,7 +1,7 @@
 ﻿Imports System.Windows.Threading
 
 Class MainWindow
-    Public OptionsIcon As icon
+    Public OptionsIcon As iconobj
     Public WithEvents ticker As DispatcherTimer
     Public WithEvents animater As DispatcherTimer
     Public iconlist As New ArrayList
@@ -15,6 +15,7 @@ Class MainWindow
         animater.Interval = TimeSpan.FromMilliseconds(1)
         animater.Start()
         My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\")
+        My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons")
         If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data") Then
             Dim dd As String = ""
             My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", dd, False)
@@ -57,7 +58,7 @@ Class MainWindow
         iconlist.Clear()
         If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
             For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
-                Dim a As New icon
+                Dim a As New iconobj
                 a.apppath = Iconn.Split("*")(0)
                 a.iconpath = Iconn.Split("*")(1)
                 a.appname = Iconn.Split("*")(2)
@@ -167,6 +168,7 @@ Class MainWindow
         icop.iconid = OptionsIcon.idd
         menustack.Visibility = Visibility.Hidden
         icop.ShowDialog()
+        savicon()
     End Sub
 
     Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles bdr.DragEnter
@@ -181,15 +183,28 @@ Class MainWindow
                 If n = "" Then
                     n = Path
                 End If
-                Dim a As New icon
+                Dim aiconsuccess As Boolean = False
+                Try
+                    Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
+                    aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                    aiconsuccess = True
+                Catch ' ex As Exception
+                    'MsgBox(ex.Message, MsgBoxStyle.Critical)
+                End Try
+                Dim a As New iconobj
                 a.apppath = Path
-                a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                If aiconsuccess Then
+                    a.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png"
+                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png", n})
+                Else
+                    a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                    iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
+                End If
                 a.appname = n
                 a.stackpanel = appsgrid
                 a.containerwin = Me
                 a.endinit()
                 a.idd = iddd
-                iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
                 iddd += 1
             Next
             savicon()

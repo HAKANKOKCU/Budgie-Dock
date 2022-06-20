@@ -92,7 +92,7 @@
       <DependentUpon>BDOptions.xaml</DependentUpon>
     </Compile>
     <Compile Include="ButtonStack.vb" />
-    <Compile Include="icon.vb" />
+    <Compile Include="iconobj.vb" />
     <Compile Include="IconOptions.xaml.vb">
       <DependentUpon>IconOptions.xaml</DependentUpon>
     </Compile>

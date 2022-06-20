@@ -1,7 +1,7 @@
 ﻿Public Class IconOptions
     Property iconid As Integer = 0
     Property mainwin As MainWindow
-    Property iconn As icon
+    Property iconn As iconobj
     Private Sub IconOptions_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         AppShell.Text = mainwin.iconlist(iconid)(0)
         IconPath.Text = mainwin.iconlist(iconid)(1)
