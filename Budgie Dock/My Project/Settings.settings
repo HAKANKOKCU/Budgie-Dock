@@ -5,11 +5,26 @@
     <Setting Name="Size" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">40</Value>
     </Setting>
-    <Setting Name="pos" Type="System.String" Scope="User">
+    <Setting Name="pos" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Bottom</Value>
     </Setting>
     <Setting Name="animatescale" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="dockopacity" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="dockcr" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="dockRed" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="dockGreen" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="dockBlue" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">255</Value>
     </Setting>
   </Settings>
 </SettingsFile>

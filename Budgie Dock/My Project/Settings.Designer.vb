@@ -65,16 +65,13 @@ Partial Friend NotInheritable Class MySettings
         End Set
     End Property
     
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+    <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("Bottom")>  _
-    Public Property pos() As String
+    Public ReadOnly Property pos() As String
         Get
             Return CType(Me("pos"),String)
         End Get
-        Set
-            Me("pos") = value
-        End Set
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
@@ -86,6 +83,66 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("animatescale") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("10")>  _
+    Public Property dockopacity() As Integer
+        Get
+            Return CType(Me("dockopacity"),Integer)
+        End Get
+        Set
+            Me("dockopacity") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property dockcr() As Integer
+        Get
+            Return CType(Me("dockcr"),Integer)
+        End Get
+        Set
+            Me("dockcr") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property dockRed() As Integer
+        Get
+            Return CType(Me("dockRed"),Integer)
+        End Get
+        Set
+            Me("dockRed") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property dockGreen() As Integer
+        Get
+            Return CType(Me("dockGreen"),Integer)
+        End Get
+        Set
+            Me("dockGreen") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property dockBlue() As Integer
+        Get
+            Return CType(Me("dockBlue"),Integer)
+        End Get
+        Set
+            Me("dockBlue") = value
         End Set
     End Property
 End Class

@@ -41,9 +41,12 @@ Class MainWindow
             My.Settings.animatescale = 1
         End If
         Me.Height = appsgrid.Height + 108
+        bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
+        bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
     End Sub
 
     Sub reicon()
+        appsgrid.Width = My.Settings.Size
         iddd = 0
         appsgrid.Children.Clear()
         iconlist.Clear()
@@ -56,6 +59,7 @@ Class MainWindow
                 a.stackpanel = appsgrid
                 a.containerwin = Me
                 a.endinit()
+                a.imageiconobj.Height = 5
                 a.idd = iddd
                 iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
                 iddd += 1
@@ -193,10 +197,24 @@ Class MainWindow
         Dim icop As New BDOptions
         menustack.Visibility = Visibility.Hidden
         icop.ShowDialog()
+        bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+        bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
         appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
+        Dim a As Integer = 0
+        Try
+            For Each i As Image In appsgrid.Children
+                a += My.Settings.Size - 5
+                If appsgrid.Width >= a Then
+                    i.Height += (My.Settings.Size - 6 - i.Height) / My.Settings.animatescale
+                Else
+                    i.Height = 5
+                End If
+            Next
+        Catch
+        End Try
     End Sub
 
     Private Sub Window_KeyUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles MyBase.KeyUp
@@ -204,6 +222,8 @@ Class MainWindow
             Dim icop As New BDOptions
             menustack.Visibility = Visibility.Hidden
             icop.ShowDialog()
+            bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+            bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         ElseIf e.Key = Key.R Then
             reicon()
         End If

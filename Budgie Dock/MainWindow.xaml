@@ -26,11 +26,10 @@
                     </Label.Background>
                 </Label>
             </Canvas>
-            <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" AllowDrop="True" Width="0">
-                <StackPanel.Background>
-                     <SolidColorBrush Opacity="0.1" Color="White"/>
-                </StackPanel.Background>
-            </StackPanel>
+            <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True">
+                <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0" ClipToBounds="True">
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>
