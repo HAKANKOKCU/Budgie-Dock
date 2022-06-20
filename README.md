@@ -1,5 +1,5 @@
 # Budgie-Dock
-Budgie Dock App (0.4 Beta!)
+Budgie Dock App (0.5 Beta!)
 
 App is located at `Budgie Dock/bin/Debug/`
 
