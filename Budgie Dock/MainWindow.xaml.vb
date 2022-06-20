@@ -19,6 +19,7 @@ Class MainWindow
             Dim dd As String = ""
             My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", dd, False)
         End If
+        appsgrid.Width = My.Settings.Size
         reicon()
         Dim dlbtn As New ButtonStack
         dlbtn.theStackPanel = DeleteIconButton
@@ -43,10 +44,14 @@ Class MainWindow
         Me.Height = appsgrid.Height + 108
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+        If My.Settings.pos = "Bottom" Then
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height
+        Else
+            Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
+        End If
     End Sub
 
-    Sub reicon()
-        appsgrid.Width = My.Settings.Size
+    Sub reicon(Optional ByVal animate As Boolean = True)
         iddd = 0
         appsgrid.Children.Clear()
         iconlist.Clear()
@@ -59,7 +64,8 @@ Class MainWindow
                 a.stackpanel = appsgrid
                 a.containerwin = Me
                 a.endinit()
-                a.imageiconobj.Height = 5
+                a.imageiconobj.Height = My.Settings.Size - 5
+                If animate Then a.imageiconobj.Height = 5
                 a.idd = iddd
                 iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
                 iddd += 1
@@ -131,7 +137,7 @@ Class MainWindow
         menustack.Visibility = Windows.Visibility.Hidden
         appname.Visibility = Windows.Visibility.Hidden
         savicon()
-        reicon()
+        reicon(False)
     End Sub
 
     Private Sub MainWindow_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
@@ -160,11 +166,11 @@ Class MainWindow
         icop.ShowDialog()
     End Sub
 
-    Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles appsgrid.DragEnter
+    Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles bdr.DragEnter
         e.Effects = DragDropEffects.Link
     End Sub
 
-    Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles appsgrid.Drop
+    Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles bdr.Drop
         'If e.Data.GetDataPresent(e.Data.GetDataPresent(DataFormats.FileDrop)) Then
         Try
             For Each Path As String In e.Data.GetData(DataFormats.FileDrop)
@@ -184,7 +190,7 @@ Class MainWindow
                 iddd += 1
             Next
             savicon()
-            reicon()
+            reicon(False)
             'End If
         Catch
             appname.Visibility = Windows.Visibility.Visible
@@ -225,6 +231,7 @@ Class MainWindow
             bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
             bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         ElseIf e.Key = Key.R Then
+            appsgrid.Width = My.Settings.Size
             reicon()
         End If
     End Sub
