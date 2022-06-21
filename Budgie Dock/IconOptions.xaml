@@ -11,12 +11,12 @@
             <TextBox Name="IconPath">Iconpath</TextBox>
             <Label>App Run Path (ex. firefox.exe)</Label>
             <TextBox Name="AppShell">Apppath</TextBox>
-            <Border CornerRadius="15" Height="35" Width="120" Background="Orange" Cursor="Hand" Name="ApplyBTN">
+            <Border CornerRadius="18" Height="35" Width="120" Background="Orange" Cursor="Hand" Name="ApplyBTN">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Foreground="White">Set Icon Info</Label>
                 </StackPanel>
             </Border>
-            <Border CornerRadius="15" Height="35" Width="120" Background="Orange" Cursor="Hand" Name="EditBTN">
+            <Border CornerRadius="18" Height="35" Width="120" Background="Orange" Cursor="Hand" Name="EditBTN">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Foreground="White">Edit In Text Editor</Label>
                 </StackPanel>

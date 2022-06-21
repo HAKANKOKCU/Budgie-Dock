@@ -14,10 +14,10 @@
                         <Label HorizontalAlignment="Center" VerticalAlignment="Center">Icon Options</Label>
                     </StackPanel>
                     <StackPanel Height="26" Width="200" Name="OptMainButton">
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Budgie Dock Options</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Budgie Dock Options (S)</Label>
                     </StackPanel>
                     <StackPanel Height="26" Width="200" Name="ListingButton">
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Change List Order</Label>
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Change List Order (L)</Label>
                     </StackPanel>
                     <StackPanel Height="26" Width="200" Name="DeleteIconButton">
                         <Label HorizontalAlignment="Center" VerticalAlignment="Center">Delete</Label>
@@ -30,8 +30,7 @@
                 </Label>
             </Canvas>
             <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True">
-                <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0" ClipToBounds="True">
-                </StackPanel>
+                <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0" ClipToBounds="True"></StackPanel>
             </Border>
         </StackPanel>
     </Grid>

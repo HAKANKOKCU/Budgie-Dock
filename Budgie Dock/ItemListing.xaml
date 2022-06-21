@@ -3,11 +3,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="Item Listing" Height="280" Width="396" WindowStartupLocation="CenterScreen" Icon="/Budgie%20Dock;component/prflrsmi.ico">
     <DockPanel>
-        <Button DockPanel.Dock="Bottom" Name="closebtn">OK</Button>
+        <Border CornerRadius="14" Height="25" Background="Orange" Cursor="Hand" Name="closebtn" DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Foreground="White">OK</Label>
+            </StackPanel>
+        </Border>
         <DockPanel>
             <StackPanel DockPanel.Dock="Right">
-                <Button Name="moveup">Move Up</Button>
-                <Button Name="movedown">Move Down</Button>
+                <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="moveup">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Foreground="White">Move Up</Label>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="movedown">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Foreground="White">Move Down</Label>
+                    </StackPanel>
+                </Border>
             </StackPanel>
             <ListBox Name="itemslist"></ListBox>
         </DockPanel>

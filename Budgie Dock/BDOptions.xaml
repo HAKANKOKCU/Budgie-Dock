@@ -27,7 +27,11 @@
                 <Label>Dock Corner Radius</Label>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="dcor" MaxLength="3"></TextBox>
             </StackPanel>
-            <Button Name="restartapp">Restart</Button>
+            <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label Foreground="White">Restart</Label>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 </Window>

@@ -7,7 +7,7 @@
         Next
     End Sub
 
-    Private Sub closebtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles closebtn.Click
+    Private Sub closebtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles closebtn.MouseUp
         Dim filecontent As String = ""
         Dim firstone As Boolean = True
         For Each a As String In itlist
@@ -21,7 +21,7 @@
         Me.Close()
     End Sub
 
-    Private Sub moveup_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles moveup.Click
+    Private Sub moveup_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles moveup.MouseUp
         Try
             Dim selid = itemslist.SelectedIndex
             Dim cntunselect As String = itemslist.Items(selid - 1)
@@ -35,7 +35,7 @@
         End Try
     End Sub
 
-    Private Sub movedown_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles movedown.Click
+    Private Sub movedown_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles movedown.MouseUp
         Try
             Dim selid = itemslist.SelectedIndex
             Dim cntunselect As String = itemslist.Items(selid + 1)

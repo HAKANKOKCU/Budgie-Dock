@@ -1,6 +1,6 @@
 ﻿Public Class BDOptions
     Dim acs As Boolean = False
-    Private Sub restartapp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles restartapp.Click
+    Private Sub restartapp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles restartapp.MouseUp
         System.Windows.Forms.Application.Restart()
         End
     End Sub

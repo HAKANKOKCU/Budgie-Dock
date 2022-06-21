@@ -11,10 +11,10 @@ Imports System.Windows
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("BudgieDock")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyTitle("Budgie Dock")> 
+<Assembly: AssemblyDescription("Budgie Dock Application")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("BudgieDock")> 
+<Assembly: AssemblyProduct("Budgie Dock")> 
 <Assembly: AssemblyCopyright("Copyright @  2022")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
