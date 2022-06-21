@@ -9,7 +9,7 @@ Class MainWindow
     Dim iddd As Integer = 0
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ticker = New DispatcherTimer
-        ticker.Interval = TimeSpan.FromMilliseconds(10)
+        ticker.Interval = TimeSpan.FromMilliseconds(1)
         ticker.Start()
         animater = New DispatcherTimer
         animater.Interval = TimeSpan.FromMilliseconds(1)
@@ -48,7 +48,7 @@ Class MainWindow
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
@@ -96,7 +96,7 @@ Class MainWindow
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
         If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
