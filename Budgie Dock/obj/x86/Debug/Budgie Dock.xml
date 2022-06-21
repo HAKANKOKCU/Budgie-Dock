@@ -14,6 +14,14 @@ InitializeComponent
 	<summary>
 BDOptions
 </summary>
+</member><member name="M:BudgieDock.ItemListing.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.ItemListing">
+	<summary>
+ItemListing
+</summary>
 </member><member name="M:BudgieDock.IconOptions.InitializeComponent">
 	<summary>
 InitializeComponent

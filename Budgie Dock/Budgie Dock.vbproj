@@ -80,6 +80,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ItemListing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -95,6 +99,9 @@
     <Compile Include="iconobj.vb" />
     <Compile Include="IconOptions.xaml.vb">
       <DependentUpon>IconOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ItemListing.xaml.vb">
+      <DependentUpon>ItemListing.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>

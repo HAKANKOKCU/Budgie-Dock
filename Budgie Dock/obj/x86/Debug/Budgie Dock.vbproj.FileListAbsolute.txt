@@ -16,3 +16,5 @@ C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\o
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\IconOptions.g.vb
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BDOptions.baml
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BDOptions.g.vb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\ItemListing.baml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\ItemListing.g.vb

@@ -28,6 +28,8 @@ Class MainWindow
         opbtn.theStackPanel = OptIconButton
         Dim optbtn As New ButtonStack
         optbtn.theStackPanel = OptMainButton
+        Dim listbtn As New ButtonStack
+        listbtn.theStackPanel = ListingButton
         If My.Settings.pos = "Bottom" Then
             mas.Orientation = Orientation.Vertical
             appsgrid.Orientation = Orientation.Horizontal
@@ -42,7 +44,7 @@ Class MainWindow
         If My.Settings.animatescale = 0 Then
             My.Settings.animatescale = 1
         End If
-        Me.Height = appsgrid.Height + 108
+        Me.Height = appsgrid.Height + 134
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         If My.Settings.pos = "Bottom" Then
@@ -130,7 +132,7 @@ Class MainWindow
         End Try
         If Not appsgrid.Height = My.Settings.Size Then
             appsgrid.Height = My.Settings.Size
-            Me.Height = appsgrid.Height + 108
+            Me.Height = appsgrid.Height + 134
             reicon()
         End If
     End Sub
@@ -183,8 +185,13 @@ Class MainWindow
                 If n = "" Then
                     n = Path
                 End If
-                Dim fi As New IO.FileInfo(Path)
-                n = n.Replace(fi.Extension, "")
+                Try
+                    Dim fi As New IO.FileInfo(Path)
+                    Dim droptemp = fi.Length 'This should give a error if drag is folder
+                    n = n.Replace(fi.Extension, "")
+                Catch
+                    'do nothing if drop is folder.
+                End Try
                 Dim aiconsuccess As Boolean = False
                 Try
                     Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
@@ -194,8 +201,10 @@ Class MainWindow
                     End Try
                     aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
                     aiconsuccess = True
-                Catch ' ex As Exception
-                    'MsgBox(ex.Message, MsgBoxStyle.Critical)
+                Catch
+                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png") Then
+                        aiconsuccess = True
+                    End If
                 End Try
                 Dim a As New iconobj
                 a.apppath = Path
@@ -226,6 +235,7 @@ Class MainWindow
     Private Sub OptMainButton_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles OptMainButton.MouseUp
         Dim icop As New BDOptions
         menustack.Visibility = Visibility.Hidden
+        appname.Visibility = Windows.Visibility.Hidden
         icop.ShowDialog()
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
@@ -257,6 +267,18 @@ Class MainWindow
         ElseIf e.Key = Key.R Then
             appsgrid.Width = My.Settings.Size
             reicon()
+        ElseIf e.Key = Key.L Then
+            Dim win As New ItemListing
+            win.ShowDialog()
+            reicon()
         End If
+    End Sub
+
+    Private Sub ListingButton_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ListingButton.MouseUp
+        Dim win As New ItemListing
+        appname.Visibility = Windows.Visibility.Hidden
+        menustack.Visibility = Visibility.Hidden
+        win.ShowDialog()
+        reicon()
     End Sub
 End Class

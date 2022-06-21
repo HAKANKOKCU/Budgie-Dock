@@ -1,0 +1,15 @@
+﻿<Window x:Class="ItemListing"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Item Listing" Height="280" Width="396" WindowStartupLocation="CenterScreen" Icon="/Budgie%20Dock;component/prflrsmi.ico">
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom" Name="closebtn">OK</Button>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Right">
+                <Button Name="moveup">Move Up</Button>
+                <Button Name="movedown">Move Down</Button>
+            </StackPanel>
+            <ListBox Name="itemslist"></ListBox>
+        </DockPanel>
+    </DockPanel>
+</Window>
