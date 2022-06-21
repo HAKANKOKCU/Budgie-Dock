@@ -183,10 +183,16 @@ Class MainWindow
                 If n = "" Then
                     n = Path
                 End If
+                Dim fi As New IO.FileInfo(Path)
+                n = n.Replace(fi.Extension, "")
                 Dim aiconsuccess As Boolean = False
                 Try
                     Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
-                    aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                    Try
+                        My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png")
+                    Catch
+                    End Try
+                    aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
                     aiconsuccess = True
                 Catch ' ex As Exception
                     'MsgBox(ex.Message, MsgBoxStyle.Critical)
@@ -194,8 +200,8 @@ Class MainWindow
                 Dim a As New iconobj
                 a.apppath = Path
                 If aiconsuccess Then
-                    a.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png"
-                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + n.Replace(":", "_eq").Replace("\", "_bs") + ".png", n})
+                    a.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png"
+                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", n})
                 Else
                     a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
                     iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
