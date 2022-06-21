@@ -1,5 +1,6 @@
 # Budgie-Dock
 Budgie Dock App (0.7 Beta!)
+<a href="https://github.com/HAKANKOKCU/Budgie-Dock/raw/main/Budgie%20Dock/bin/Debug/Budgie%20Dock.exe">Download</a>
 
 App is located at `Budgie Dock/bin/Debug/`. Put it to `shell:startup` folder to make it run at startup.
 
