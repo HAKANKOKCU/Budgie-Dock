@@ -27,6 +27,12 @@
                 <Label>Dock Corner Radius</Label>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="dcor" MaxLength="3"></TextBox>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label>Separator Color</Label>
+                <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorR" MaxLength="3"></TextBox>
+                <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorG" MaxLength="3"></TextBox>
+                <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorB" MaxLength="3"></TextBox>
+            </StackPanel>
             <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Foreground="White">Restart</Label>

@@ -3,7 +3,11 @@
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         For Each a As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
             itlist.Add(a)
-            itemslist.Items.Add(a.Split("*")(2))
+            Try
+                itemslist.Items.Add(a.Split("*")(2))
+            Catch
+                itemslist.Items.Add("-- Separator --")
+            End Try
         Next
     End Sub
 

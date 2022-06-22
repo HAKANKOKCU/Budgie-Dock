@@ -113,9 +113,9 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
-    Public Property dockRed() As Integer
+    Public Property dockRed() As Byte
         Get
-            Return CType(Me("dockRed"),Integer)
+            Return CType(Me("dockRed"),Byte)
         End Get
         Set
             Me("dockRed") = value
@@ -125,9 +125,9 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
-    Public Property dockGreen() As Integer
+    Public Property dockGreen() As Byte
         Get
-            Return CType(Me("dockGreen"),Integer)
+            Return CType(Me("dockGreen"),Byte)
         End Get
         Set
             Me("dockGreen") = value
@@ -137,12 +137,48 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
-    Public Property dockBlue() As Integer
+    Public Property dockBlue() As Byte
         Get
-            Return CType(Me("dockBlue"),Integer)
+            Return CType(Me("dockBlue"),Byte)
         End Get
         Set
             Me("dockBlue") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property separatorRed() As Byte
+        Get
+            Return CType(Me("separatorRed"),Byte)
+        End Get
+        Set
+            Me("separatorRed") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property SeparatorGreen() As Byte
+        Get
+            Return CType(Me("SeparatorGreen"),Byte)
+        End Get
+        Set
+            Me("SeparatorGreen") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property SeparatorBlue() As Byte
+        Get
+            Return CType(Me("SeparatorBlue"),Byte)
+        End Get
+        Set
+            Me("SeparatorBlue") = value
         End Set
     End Property
 End Class

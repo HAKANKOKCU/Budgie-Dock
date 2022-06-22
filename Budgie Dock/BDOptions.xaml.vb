@@ -30,6 +30,9 @@
         docR.Text = My.Settings.dockRed
         docG.Text = My.Settings.dockGreen
         docB.Text = My.Settings.dockBlue
+        scolorR.Text = My.Settings.separatorRed
+        scolorG.Text = My.Settings.SeparatorGreen
+        scolorB.Text = My.Settings.SeparatorBlue
         acs = True
     End Sub
 
@@ -92,6 +95,39 @@
         Try
             If acs Then
                 My.Settings.dockBlue = docB.Text
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub scolorR_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles scolorR.TextChanged
+        Try
+            If acs Then
+                My.Settings.separatorRed = scolorR.Text
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub scolorG_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles scolorG.TextChanged
+        Try
+            If acs Then
+                My.Settings.SeparatorGreen = scolorG.Text
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub scolorB_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles scolorB.TextChanged
+        Try
+            If acs Then
+                My.Settings.SeparatorBlue = scolorB.Text
                 My.Settings.Save()
             End If
         Catch ex As Exception

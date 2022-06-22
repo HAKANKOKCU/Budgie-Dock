@@ -17,14 +17,23 @@
     <Setting Name="dockcr" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="dockRed" Type="System.Int32" Scope="User">
+    <Setting Name="dockRed" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">255</Value>
     </Setting>
-    <Setting Name="dockGreen" Type="System.Int32" Scope="User">
+    <Setting Name="dockGreen" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">255</Value>
     </Setting>
-    <Setting Name="dockBlue" Type="System.Int32" Scope="User">
+    <Setting Name="dockBlue" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">255</Value>
+    </Setting>
+    <Setting Name="separatorRed" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SeparatorGreen" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SeparatorBlue" Type="System.Byte" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

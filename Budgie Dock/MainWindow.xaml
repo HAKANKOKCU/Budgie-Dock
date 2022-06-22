@@ -8,8 +8,11 @@
     </Window.Background>
     <Grid VerticalAlignment="Bottom">
         <StackPanel Name="mas" VerticalAlignment="Center">
-            <Canvas Height="134" Name="ncan">
+            <Canvas Height="160" Name="ncan">
                 <StackPanel Visibility="Hidden" Name="menustack" Width="200" Background="Wheat">
+                    <StackPanel Height="26" Width="200" Name="AddspButton">
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center">Add Separator</Label>
+                    </StackPanel>
                     <StackPanel Height="26" Width="200" Name="OptIconButton">
                         <Label HorizontalAlignment="Center" VerticalAlignment="Center">Icon Options</Label>
                     </StackPanel>
@@ -23,7 +26,7 @@
                         <Label HorizontalAlignment="Center" VerticalAlignment="Center">Delete</Label>
                     </StackPanel>
                 </StackPanel>
-                <Label HorizontalAlignment="Center" Height="30" Visibility="Hidden" Name="appname" Canvas.Top="104">Appname
+                <Label HorizontalAlignment="Center" Height="30" Visibility="Hidden" Name="appname" Canvas.Top="130">Appname
                     <Label.Background>
                         <SolidColorBrush Opacity="0.5" Color="White"></SolidColorBrush>
                     </Label.Background>

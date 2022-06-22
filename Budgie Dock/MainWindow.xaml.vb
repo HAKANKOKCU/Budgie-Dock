@@ -30,6 +30,8 @@ Class MainWindow
         optbtn.theStackPanel = OptMainButton
         Dim listbtn As New ButtonStack
         listbtn.theStackPanel = ListingButton
+        Dim asbtn As New ButtonStack
+        asbtn.theStackPanel = AddspButton
         If My.Settings.pos = "Bottom" Then
             mas.Orientation = Orientation.Vertical
             appsgrid.Orientation = Orientation.Horizontal
@@ -44,7 +46,7 @@ Class MainWindow
         If My.Settings.animatescale = 0 Then
             My.Settings.animatescale = 1
         End If
-        Me.Height = appsgrid.Height + 134
+        Me.Height = appsgrid.Height + 160
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         If My.Settings.pos = "Bottom" Then
@@ -60,21 +62,38 @@ Class MainWindow
         iconlist.Clear()
         If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
             For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
-                Dim a As New iconobj
-                a.apppath = Iconn.Split("*")(0)
-                a.iconpath = Iconn.Split("*")(1)
-                a.appname = Iconn.Split("*")(2)
-                a.stackpanel = appsgrid
-                a.containerwin = Me
-                a.endinit()
-                Try
-                    a.imageiconobj.Height = My.Settings.Size - 5
-                Catch
-                End Try
-                If animate Then a.imageiconobj.Height = 5
-                a.idd = iddd
-                iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
-                iddd += 1
+                If Iconn = "sep" Then
+                    Dim a As New Grid
+                    Try
+                        a.Height = My.Settings.Size - 5
+                    Catch
+                    End Try
+                    a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
+                    a.Width = 1
+                    Dim sr As New Sepremover
+                    sr.id = iddd
+                    sr.mainwin = Me
+                    sr.sepgrid = a
+                    appsgrid.Children.Add(a)
+                    iconlist.Add("sep")
+                    iddd += 1
+                Else
+                    Dim a As New iconobj
+                    a.apppath = Iconn.Split("*")(0)
+                    a.iconpath = Iconn.Split("*")(1)
+                    a.appname = Iconn.Split("*")(2)
+                    a.stackpanel = appsgrid
+                    a.containerwin = Me
+                    a.endinit()
+                    Try
+                        a.imageiconobj.Height = My.Settings.Size - 5
+                    Catch
+                    End Try
+                    If animate Then a.imageiconobj.Height = 5
+                    a.idd = iddd
+                    iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
+                    iddd += 1
+                End If
             Next
             Dim sizee As Integer = 0
             For Each a As UIElement In appsgrid.Children
@@ -83,6 +102,8 @@ Class MainWindow
                         sizee += My.Settings.Size
                     Catch
                     End Try
+                Else
+                    sizee += 3
                 End If
             Next
             agwid = sizee
@@ -107,6 +128,8 @@ Class MainWindow
                     sizee += My.Settings.Size
                 Catch
                 End Try
+            Else
+                sizee += 3
             End If
         Next
         If sizee < 200 Then
@@ -132,7 +155,7 @@ Class MainWindow
         End Try
         If Not appsgrid.Height = My.Settings.Size Then
             appsgrid.Height = My.Settings.Size
-            Me.Height = appsgrid.Height + 134
+            Me.Height = appsgrid.Height + 160
             reicon()
         End If
     End Sub
@@ -153,11 +176,15 @@ Class MainWindow
     Sub savicon()
         Dim filecontent As String = ""
         Dim firstone As Boolean = True
-        For Each a As Array In iconlist
+        For Each a As Object In iconlist
             If Not firstone Then
                 filecontent += "|"
             End If
-            filecontent += a(0) & "*" & a(1) & "*" & a(2)
+            If a.Length = 3 And TypeOf a Is Array Then
+                filecontent += a(0) & "*" & a(1) & "*" & a(2)
+            Else
+                filecontent += a
+            End If
             firstone = False
         Next
         My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
@@ -239,18 +266,22 @@ Class MainWindow
         icop.ShowDialog()
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
+        reicon()
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
         appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
         Dim a As Integer = 0
         Try
-            For Each i As Image In appsgrid.Children
-                a += My.Settings.Size - 5
-                If appsgrid.Width >= a Then
-                    i.Height += (My.Settings.Size - 6 - i.Height) / My.Settings.animatescale
-                Else
-                    i.Height = 5
+            For Each i As UIElement In appsgrid.Children
+                If TypeOf i Is Image Then
+                    Dim ii As Image = i
+                    a += My.Settings.Size - 5
+                    If appsgrid.Width >= a Then
+                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                    Else
+                        ii.Height = 5
+                    End If
                 End If
             Next
         Catch
@@ -264,6 +295,7 @@ Class MainWindow
             icop.ShowDialog()
             bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
             bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
+            reicon()
         ElseIf e.Key = Key.R Then
             appsgrid.Width = My.Settings.Size
             reicon()
@@ -279,6 +311,14 @@ Class MainWindow
         appname.Visibility = Windows.Visibility.Hidden
         menustack.Visibility = Visibility.Hidden
         win.ShowDialog()
+        reicon()
+    End Sub
+
+    Private Sub AddspButton_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles AddspButton.MouseUp
+        iconlist.Add("sep")
+        appname.Visibility = Windows.Visibility.Hidden
+        menustack.Visibility = Visibility.Hidden
+        savicon()
         reicon()
     End Sub
 End Class
