@@ -64,12 +64,14 @@ Class MainWindow
             For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
                 If Iconn = "sep" Then
                     Dim a As New Grid
+                    a.UseLayoutRounding = True
                     Try
                         a.Height = My.Settings.Size - 5
                     Catch
                     End Try
                     a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
                     a.Width = 1
+                    a.Margin = New Thickness(1, 0, 1, 0)
                     Dim sr As New Sepremover
                     sr.id = iddd
                     sr.mainwin = Me
@@ -77,6 +79,7 @@ Class MainWindow
                     appsgrid.Children.Add(a)
                     iconlist.Add("sep")
                     iddd += 1
+                    a.ClipToBounds = True
                 Else
                     Dim a As New iconobj
                     a.apppath = Iconn.Split("*")(0)
@@ -85,6 +88,7 @@ Class MainWindow
                     a.stackpanel = appsgrid
                     a.containerwin = Me
                     a.endinit()
+                    a.imageiconobj.ClipToBounds = True
                     Try
                         a.imageiconobj.Height = My.Settings.Size - 5
                     Catch

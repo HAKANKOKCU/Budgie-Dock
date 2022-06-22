@@ -32,8 +32,8 @@
                     </Label.Background>
                 </Label>
             </Canvas>
-            <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True">
-                <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0" ClipToBounds="True"></StackPanel>
+            <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True">
+                <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0"></StackPanel>
             </Border>
         </StackPanel>
     </Grid>

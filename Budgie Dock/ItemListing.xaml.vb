@@ -1,12 +1,14 @@
 ﻿Public Class ItemListing
     Dim itlist As New ArrayList
+    Dim sepid As Integer = 0
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         For Each a As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
             itlist.Add(a)
             Try
                 itemslist.Items.Add(a.Split("*")(2))
             Catch
-                itemslist.Items.Add("-- Separator --")
+                itemslist.Items.Add("-- Separator " + sepid.ToString + " --")
+                sepid += 1
             End Try
         Next
     End Sub
@@ -49,6 +51,15 @@
             itemslist.Items(selid) = cntunselect
             itlist(selid) = usl
             itemslist.SelectedItem = itemslist.Items(selid + 1)
+        Catch
+        End Try
+    End Sub
+
+    Private Sub del_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles del.MouseUp
+        Try
+            Dim selid = itemslist.SelectedIndex
+            itemslist.Items.RemoveAt(selid)
+            itlist.RemoveAt(selid)
         Catch
         End Try
     End Sub
