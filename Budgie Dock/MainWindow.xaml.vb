@@ -65,12 +65,10 @@ Class MainWindow
                 If Iconn = "sep" Then
                     Dim a As New Grid
                     a.UseLayoutRounding = True
-                    Try
-                        a.Height = My.Settings.Size - 5
-                    Catch
-                    End Try
+                    a.Height = 5
                     a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
                     a.Width = 1
+                    a.ClipToBounds = True
                     a.Margin = New Thickness(1, 0, 1, 0)
                     Dim sr As New Sepremover
                     sr.id = iddd
@@ -281,6 +279,14 @@ Class MainWindow
                 If TypeOf i Is Image Then
                     Dim ii As Image = i
                     a += My.Settings.Size - 5
+                    If appsgrid.Width >= a Then
+                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                    Else
+                        ii.Height = 5
+                    End If
+                ElseIf TypeOf i Is Grid Then
+                    Dim ii As Grid = i
+                    a += 3
                     If appsgrid.Width >= a Then
                         ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
                     Else

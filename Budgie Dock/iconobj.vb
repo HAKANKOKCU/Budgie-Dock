@@ -13,6 +13,7 @@
         imageiconobj.Source = img
         imageiconobj.Width = My.Settings.Size
         imageiconobj.Height = My.Settings.Size
+        imageiconobj.ClipToBounds = True
         If Not alreadyadded Then
             stackpanel.Children.Add(imageiconobj)
             alreadyadded = True

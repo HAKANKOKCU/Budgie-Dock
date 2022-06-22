@@ -12,8 +12,7 @@
                     My.Settings.animatescale = asc.Text
                     My.Settings.Save()
                 Else
-                    asc.Text = 1
-                    My.Settings.animatescale = asc.Text
+                    My.Settings.animatescale = 1
                     My.Settings.Save()
                 End If
             End If
