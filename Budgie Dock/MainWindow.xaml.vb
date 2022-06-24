@@ -80,11 +80,15 @@ Class MainWindow
                     a.ClipToBounds = True
                 Else
                     Dim a As New iconobj
-                    a.apppath = Iconn.Split("*")(0)
+                    a.apppath = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(0)
                     a.iconpath = Iconn.Split("*")(1)
-                    a.appname = Iconn.Split("*")(2)
+                    a.appname = Iconn.Split("*")(2).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|")
                     a.stackpanel = appsgrid
                     a.containerwin = Me
+                    Try
+                        a.apparams = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(1).Replace("{BD-UPL-}", "^")
+                    Catch
+                    End Try
                     a.endinit()
                     a.imageiconobj.ClipToBounds = True
                     Try
@@ -123,31 +127,8 @@ Class MainWindow
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
-        Dim sizee As Integer = 0
-        For Each a As UIElement In appsgrid.Children
-            If TypeOf a Is Image Then
-                Try
-                    sizee += My.Settings.Size
-                Catch
-                End Try
-            Else
-                sizee += 3
-            End If
-        Next
-        If sizee < 200 Then
-            sizee = 200
-        End If
-        If My.Settings.pos = "Bottom" Then
-            'Me.Width = sizee
-            'Me.Left = (Forms.Screen.PrimaryScreen.WorkingArea.Width / 2) - (Me.Width / 2)
-        Else
-            Me.Height = sizee
-            Me.Top = (Forms.Screen.PrimaryScreen.WorkingArea.Height / 2) - (Me.Height / 2)
-        End If
-        'Console.WriteLine(Me.Left)
-        'Console.WriteLine(Me.Top)
-        Me.WindowState = Windows.WindowState.Normal
-        Me.Show()
+        'Me.WindowState = Windows.WindowState.Normal
+        'Me.Show()
         Try
             If menustack.Visibility = Windows.Visibility.Visible Then
                 appname.Content = OptionsIcon.appname

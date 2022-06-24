@@ -11,6 +11,7 @@
             <TextBox Name="IconPath">Iconpath</TextBox>
             <Label>App Run Path (ex. firefox.exe)</Label>
             <TextBox Name="AppShell">Apppath</TextBox>
+            <Label FontSize="10" Padding="0">Protip: Use "^" for parameters. (ex: firefox.exe^https://example.com). Use "{BD-UPL-}" for "^" in parameter </Label>
             <Border CornerRadius="18" Height="35" Width="120" Background="Orange" Cursor="Hand" Name="ApplyBTN">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Foreground="White">Set Icon Info</Label>

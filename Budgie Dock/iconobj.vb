@@ -8,11 +8,12 @@
     Property idd As Integer = Nothing
     Property isremoved As Boolean = False
     Property appname As String = ""
+    Property apparams As String = ""
     Sub endinit()
         Dim img As New BitmapImage(New Uri(iconpath))
         imageiconobj.Source = img
         imageiconobj.Width = My.Settings.Size
-        imageiconobj.Height = My.Settings.Size
+        imageiconobj.Height = My.Settings.Size - 5
         imageiconobj.ClipToBounds = True
         If Not alreadyadded Then
             stackpanel.Children.Add(imageiconobj)
@@ -45,7 +46,7 @@
     Private Sub imageiconobj_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseUp
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
-            Process.Start(apppath)
+            Process.Start(apppath, apparams)
         ElseIf e.ChangedButton = 2 Then
             containerwin.menustack.Visibility = Visibility.Visible
             Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)

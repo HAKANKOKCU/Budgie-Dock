@@ -9,9 +9,9 @@
     End Sub
 
     Private Sub ApplyBTN_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ApplyBTN.MouseUp
-        mainwin.iconlist(iconid)(0) = AppShell.Text
+        mainwin.iconlist(iconid)(0) = AppShell.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}")
         mainwin.iconlist(iconid)(1) = IconPath.Text
-        mainwin.iconlist(iconid)(2) = Appname.Text
+        mainwin.iconlist(iconid)(2) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}")
         iconn.appname = Appname.Text
         iconn.iconpath = IconPath.Text
         iconn.apppath = AppShell.Text
@@ -22,4 +22,5 @@
     Private Sub EditBTN_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles EditBTN.MouseUp
         Process.Start(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data")
     End Sub
+
 End Class
