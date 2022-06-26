@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="restoreAPI.vb" />
     <Compile Include="Sepremover.vb" />
     <Page Include="BDOptions.xaml">
       <SubType>Designer</SubType>

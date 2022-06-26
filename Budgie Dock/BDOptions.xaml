@@ -33,7 +33,13 @@
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorG" MaxLength="3"></TextBox>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorB" MaxLength="3"></TextBox>
             </StackPanel>
-            <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
+            <StackPanel Orientation="Horizontal">
+                <Label>Dock Margin Top</Label>
+                <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="dmtop" MaxLength="3"></TextBox>
+            </StackPanel>
+            <CheckBox Name="ahd">Auto Hide Dock (Works correctly when taskbar at not bottom/hidden or its not transparent)</CheckBox>
+            <CheckBox Name="tpm">Forced Top Most (Restart Needed For Disabling)</CheckBox>
+                <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <Label Foreground="White">Restart</Label>
                 </StackPanel>

@@ -32,6 +32,9 @@
         scolorR.Text = My.Settings.separatorRed
         scolorG.Text = My.Settings.SeparatorGreen
         scolorB.Text = My.Settings.SeparatorBlue
+        ahd.IsChecked = My.Settings.autoHide
+        tpm.IsChecked = My.Settings.topMost
+        dmtop.Text = My.Settings.paddingTop
         acs = True
     End Sub
 
@@ -131,6 +134,31 @@
             End If
         Catch ex As Exception
             MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub ahd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ahd.Click
+        If acs Then
+            My.Settings.autoHide = ahd.IsChecked
+            My.Settings.Save()
+        End If
+    End Sub
+
+    Private Sub tpm_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles tpm.Click
+        If acs Then
+            My.Settings.topMost = tpm.IsChecked
+            My.Settings.Save()
+        End If
+    End Sub
+
+    Private Sub dmtop_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles dmtop.TextChanged
+        Try
+            If acs Then
+                My.Settings.paddingTop = dmtop.Text
+                My.Settings.Save()
+            End If
+        Catch ex As Exception
+            If Not dmtop.Text = "-" Then MsgBox("Please Enter A Valid Number")
         End Try
     End Sub
 End Class

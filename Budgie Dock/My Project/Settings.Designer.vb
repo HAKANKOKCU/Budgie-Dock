@@ -181,6 +181,42 @@ Partial Friend NotInheritable Class MySettings
             Me("SeparatorBlue") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property autoHide() As Boolean
+        Get
+            Return CType(Me("autoHide"),Boolean)
+        End Get
+        Set
+            Me("autoHide") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property topMost() As Boolean
+        Get
+            Return CType(Me("topMost"),Boolean)
+        End Get
+        Set
+            Me("topMost") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+    Public Property paddingTop() As Integer
+        Get
+            Return CType(Me("paddingTop"),Integer)
+        End Get
+        Set
+            Me("paddingTop") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

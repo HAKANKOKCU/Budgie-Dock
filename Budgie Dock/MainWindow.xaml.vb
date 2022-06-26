@@ -7,6 +7,8 @@ Class MainWindow
     Public iconlist As New ArrayList
     Dim agwid = 0
     Dim iddd As Integer = 0
+    Dim isdockhovered As Boolean = False
+    Public rid As Integer = 0
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ticker = New DispatcherTimer
         ticker.Interval = TimeSpan.FromMilliseconds(1)
@@ -50,15 +52,18 @@ Class MainWindow
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
         If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide, My.Settings.Size - 2, 0) + My.Settings.paddingTop
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
+        Me.Topmost = My.Settings.topMost
     End Sub
 
     Sub reicon(Optional ByVal animate As Boolean = True)
+        rid += 1
         iddd = 0
         appsgrid.Children.Clear()
+        isappopen.Children.Clear()
         iconlist.Clear()
         If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
             For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
@@ -78,6 +83,9 @@ Class MainWindow
                     iconlist.Add("sep")
                     iddd += 1
                     a.ClipToBounds = True
+                    Dim pp As New Grid
+                    pp.Width = 3
+                    isappopen.Children.Add(pp)
                 Else
                     Dim a As New iconobj
                     a.apppath = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(0)
@@ -85,6 +93,7 @@ Class MainWindow
                     a.appname = Iconn.Split("*")(2).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|")
                     a.stackpanel = appsgrid
                     a.containerwin = Me
+                    a.runid = rid
                     Try
                         a.apparams = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(1).Replace("{BD-UPL-}", "^")
                     Catch
@@ -123,9 +132,12 @@ Class MainWindow
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
         If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
+        End If
+        If My.Settings.topMost Then
+            Me.Topmost = True
         End If
         'Me.WindowState = Windows.WindowState.Normal
         'Me.Show()
@@ -254,6 +266,7 @@ Class MainWindow
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
         appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
+        isappopen.Width += (agwid - isappopen.Width) / My.Settings.animatescale
         Dim a As Integer = 0
         Try
             For Each i As UIElement In appsgrid.Children
@@ -311,5 +324,13 @@ Class MainWindow
         menustack.Visibility = Visibility.Hidden
         savicon()
         reicon()
+    End Sub
+
+    Private Sub bdr_MouseEnter(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseEnter
+        isdockhovered = True
+    End Sub
+
+    Private Sub bdr_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
+        isdockhovered = False
     End Sub
 End Class
