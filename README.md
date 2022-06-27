@@ -8,4 +8,4 @@ App is located at `Budgie Dock/bin/Debug/`. Put it to `shell:startup` folder to 
 
 ![resim](https://user-images.githubusercontent.com/103432992/175825992-dc68a296-8c90-4aec-ab47-9a89d6347d65.png)
 
-Needs .Net Framework 4. Minimum windows version is XP
+Needs .Net Framework 4. Minimum windows version is 7 (There are too much display glitches in xp)
