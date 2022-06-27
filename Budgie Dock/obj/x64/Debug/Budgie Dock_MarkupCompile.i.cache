@@ -4,7 +4,7 @@
 winexe
 VB
 .vb
-C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x64\Debug\
 BudgieDock
 none
 false
@@ -12,7 +12,7 @@ false
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\Application.xaml
 41621722031
 
-131425204863
+14210674381
 13-1051466787
 BDOptions.xaml;IconOptions.xaml;ItemListing.xaml;MainWindow.xaml;
 

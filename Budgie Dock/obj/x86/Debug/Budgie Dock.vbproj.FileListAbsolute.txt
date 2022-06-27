@@ -18,3 +18,8 @@ C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\o
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\BDOptions.g.vb
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\ItemListing.baml
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\ItemListing.g.vb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Downloads\Budgie Dock.exe.config
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.exe.config
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.exe
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.pdb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.xml

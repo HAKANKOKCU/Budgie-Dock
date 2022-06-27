@@ -7,3 +7,14 @@ C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\o
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.g.resources
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\BudgieDock.Resources.resources
 C:\Users\ASUS PC\documents\visual studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.vbproj.GenerateResource.Cache
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Release\Budgie Dock.exe.config
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Release\Budgie Dock.exe
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Release\Budgie Dock.pdb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\Release\Budgie Dock.xml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\BDOptions.baml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\ItemListing.baml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\BDOptions.g.vb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\ItemListing.g.vb
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.exe
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.xml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Release\Budgie Dock.pdb
