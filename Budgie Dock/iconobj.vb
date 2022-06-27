@@ -5,6 +5,7 @@ Public Class iconobj
     <DllImport("user32.dll", EntryPoint:="SetForegroundWindow")> _
     Private Shared Function SetForegroundWindow(ByVal hWnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
     End Function
+    Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     Private Sub ActivateApp(ByVal aid As Integer)
 
         'Minimize Window
@@ -38,14 +39,19 @@ Public Class iconobj
     Property appname As String = ""
     Property apparams As String = ""
     Public WithEvents runproc As Process
-    Dim hr = False
-    Dim isopen = False
-    Dim isprocfound = False
+    Public hr = False
+    Public isopen = False
+    Public isprocfound = False
     Private fi As IO.FileInfo
     Property runid As Integer = 0
+    Property checkIfRuning As Boolean = True
+    Property isEditingAvable As Boolean = True
     Sub endinit()
-        Dim img As New BitmapImage(New Uri(iconpath))
-        imageiconobj.Source = img
+        Try
+            Dim img As New BitmapImage(New Uri(iconpath))
+            imageiconobj.Source = img
+        Catch
+        End Try
         imageiconobj.Width = My.Settings.Size
         Try
             imageiconobj.Height = My.Settings.Size - 5
@@ -54,11 +60,18 @@ Public Class iconobj
         imageiconobj.ClipToBounds = True
         isapopen.Width = My.Settings.Size / 3
         isapopen.Margin = New Thickness(My.Settings.Size / 3, 0, My.Settings.Size / 3, 0)
-        isapopen.Height = 5
+        isapopen.Height = 3
         isapopen.Background = Brushes.Transparent
         isapopen.ClipToBounds = True
-        tick.Interval = TimeSpan.FromMilliseconds(1000)
-        fi = New IO.FileInfo(apppath)
+        If isEditingAvable And Not hr Then
+            tick.Interval = TimeSpan.FromMilliseconds(2000)
+        Else
+            tick.Interval = TimeSpan.FromMilliseconds(100)
+        End If
+        Try
+            fi = New IO.FileInfo(apppath)
+        Catch
+        End Try
         tick.Start()
         If Not alreadyadded Then
             stackpanel.Children.Add(imageiconobj)
@@ -97,22 +110,14 @@ Public Class iconobj
                 hr = True
                 isprocfound = True
             Else
-                Try
-                    AppActivate(runproc.ProcessName)
-                Catch ex As Exception
-                    'MsgBox(ex.Message)
-                    Try
-                        AppActivate(My.Computer.FileSystem.GetName(apppath))
-                    Catch
-                        'ActivateAppl(runproc.Id)
-                    End Try
-                End Try
                 ActivateApp(runproc.Id)
             End If
-        ElseIf e.ChangedButton = 2 Then
+        ElseIf e.ChangedButton = 2 And isEditingAvable Then
             containerwin.menustack.Visibility = Visibility.Visible
             Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)
             containerwin.OptionsIcon = Me
+        ElseIf e.ChangedButton = 2 And Not isEditingAvable Then
+            ActivateApp(runproc.Id)
         End If
     End Sub
 
@@ -130,26 +135,66 @@ Public Class iconobj
         apppath = ""
         Dim img As New BitmapImage()
         imageiconobj.Source = img
-        imageiconobj.Visibility = False
+        imageiconobj.Visibility = Visibility.Collapsed
         imageiconobj.Width = 1
         imageiconobj = Nothing
         containerwin.OptionsIcon = Nothing
         containerwin.menustack.Visibility = Visibility.Hidden
+        stackpanel.Children.Remove(imageiconobj)
+        containerwin.isappopen.Children.Remove(isapopen)
         isremoved = True
+        tick.Stop()
+        If containerwin.isappopen.Children.Count = 1 Then
+            containerwin.isappopen.Children.Clear()
+        End If
     End Sub
 
     Private Sub tick_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tick.Tick
-        isopen = False
-        isapopen.Background = Brushes.Transparent
-        If Not fi.Extension = "" Then
-            For Each prc As Process In Process.GetProcesses
-                If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                    isapopen.Background = Brushes.White
-                    isopen = True
-                    If hr Then If runproc.HasExited Then isprocfound = False
-                    If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+        If checkIfRuning Then
+            isopen = False
+            isapopen.Background = Brushes.Transparent
+            If Not fi.Extension = "" Then
+                For Each prc As Process In Process.GetProcesses
+                    If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
+                        isapopen.Background = Brushes.White
+                        isopen = True
+                        If hr Then If runproc.HasExited Then isprocfound = False
+                        If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                    End If
+                Next
+            End If
+        Else
+            If hr Then
+                Try
+                    If Not runproc.HasExited Then
+                        Dim idd = runproc.Id
+                        runproc.Refresh()
+                        runproc = Process.GetProcessById(idd)
+                    End If
+                Catch
+                End Try
+            End If
+            Try
+                If runproc.HasExited Then
+                    containerwin.aaps.Remove(runproc.Id)
+                    If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+                    Try
+                        remove()
+                    Catch
+                    End Try
+                Else
+                    appname = runproc.MainWindowTitle
                 End If
-            Next
+            Catch
+            End Try
+            'If runproc.MainWindowTitle = "" Then
+            'containerwin.aaps.Remove(runproc.Id)
+            'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+            'Try
+            'remove()
+            'Catch
+            'End Try
+            'End If
         End If
         If Not containerwin.rid = runid Then
             tick.Stop()
@@ -169,11 +214,39 @@ Public Class iconobj
     Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
         isapopen.Background = Brushes.Transparent
         isprocfound = False
+        If Not checkIfRuning Then
+            containerwin.aaps.Remove(runproc.Id)
+        End If
+        If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+        Try
+            remove()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub isapopen_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseEnter
+        If checkIfRuning Then
+            isapopen.Background = Brushes.Lime
+        Else
+            isapopen.Background = Brushes.Red
+        End If
+    End Sub
+
+    Private Sub isapopen_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseLeave
+        isapopen.Background = Brushes.White
     End Sub
 
     Private Sub isapopen_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles isapopen.MouseUp
-        runproc = Process.Start(apppath, apparams)
-        hr = True
-        isprocfound = True
+        If checkIfRuning Then
+            runproc = Process.Start(apppath, apparams)
+            hr = True
+            isprocfound = True
+        Else
+            Try
+                runproc.Kill()
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical)
+            End Try
+        End If
     End Sub
 End Class
