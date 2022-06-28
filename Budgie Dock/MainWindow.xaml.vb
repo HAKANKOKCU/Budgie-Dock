@@ -13,7 +13,7 @@ Class MainWindow
     Dim isdockhovered As Boolean = False
     Public rid As Integer = 0
     Dim ismw As Boolean = False
-    Public ReadOnly disallowedpnames() As String = {"explorer", "explorer.exe", "textinputhost", Process.GetCurrentProcess.ProcessName.ToLower}
+    Public ReadOnly disallowedpnames() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", Process.GetCurrentProcess.ProcessName.ToLower}
     Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     <DllImport("user32.dll")> _
     Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
@@ -75,6 +75,8 @@ Class MainWindow
         iddd = 0
         ruwid = 0
         agwid = 0
+        isappopen.Width = 0
+        runingapps.Width = 0
         appsgrid.Children.Clear()
         isappopen.Children.Clear()
         iconlist.Clear()
@@ -174,6 +176,7 @@ Class MainWindow
         runingapps.Width += (ruwid - runingapps.Width) / My.Settings.animatescale
         isappopen.Width += ((agwid + ruwid) - isappopen.Width) / My.Settings.animatescale
         Dim a As Integer = 0
+        Dim ar As Integer = 0
         Try
             For Each i As UIElement In appsgrid.Children
                 If TypeOf i Is Image Then
@@ -197,11 +200,20 @@ Class MainWindow
             For Each i As UIElement In runingapps.Children
                 If TypeOf i Is Grid Then
                     Dim ii As Grid = i
-                    a += 3
-                    If appsgrid.Width >= a Then
+                    ar += 3
+                    If appsgrid.Width >= ar Then
                         ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
                     Else
-                        'ii.Height = 5
+                        ii.Height = 5
+                    End If
+                End If
+                If TypeOf i Is Image Then
+                    Dim ii As Image = i
+                    ar += 3
+                    If appsgrid.Width >= ar Then
+                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                    Else
+                        ii.Height = 5
                     End If
                 End If
             Next
@@ -411,10 +423,10 @@ Class MainWindow
                             ico.hr = True
                             ico.runproc = app
                             ico.checkIfRuning = False
-                            Try
-                                ico.imageiconobj.Height = My.Settings.Size - 5
-                            Catch
-                            End Try
+                            'Try
+                            ico.imageiconobj.Height = 5 'My.Settings.Size - 5
+                            'Catch
+                            'End Try
                             aaps.Add(app.Id)
                         End If
                     End If

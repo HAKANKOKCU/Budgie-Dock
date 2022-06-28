@@ -63,11 +63,7 @@ Public Class iconobj
         isapopen.Height = 3
         isapopen.Background = Brushes.Transparent
         isapopen.ClipToBounds = True
-        If isEditingAvable And Not hr Then
-            tick.Interval = TimeSpan.FromMilliseconds(2000)
-        Else
-            tick.Interval = TimeSpan.FromMilliseconds(100)
-        End If
+        tick.Interval = TimeSpan.FromMilliseconds(2000)
         Try
             fi = New IO.FileInfo(apppath)
         Catch
@@ -144,7 +140,7 @@ Public Class iconobj
         containerwin.isappopen.Children.Remove(isapopen)
         isremoved = True
         tick.Stop()
-        If containerwin.isappopen.Children.Count = 1 Then
+        If containerwin.isappopen.Children.Count <= 2 Then
             containerwin.isappopen.Children.Clear()
         End If
     End Sub
@@ -170,6 +166,9 @@ Public Class iconobj
                         Dim idd = runproc.Id
                         runproc.Refresh()
                         runproc = Process.GetProcessById(idd)
+                    Else
+                        If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+                        remove()
                     End If
                 Catch
                 End Try
@@ -179,7 +178,7 @@ Public Class iconobj
                     containerwin.aaps.Remove(runproc.Id)
                     If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     Try
-                        remove()
+                        If Not isremoved Then remove()
                     Catch
                     End Try
                 Else
@@ -199,7 +198,7 @@ Public Class iconobj
         If Not containerwin.rid = runid Then
             tick.Stop()
             Try
-                remove()
+                If Not isremoved Then remove()
             Catch
             End Try
         End If
@@ -217,9 +216,9 @@ Public Class iconobj
         If Not checkIfRuning Then
             containerwin.aaps.Remove(runproc.Id)
         End If
-        If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+        'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
         Try
-            remove()
+            'If Not isremoved Then remove()
         Catch
         End Try
     End Sub

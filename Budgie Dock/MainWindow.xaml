@@ -38,7 +38,7 @@
                     <StackPanel Orientation="Horizontal" Name="runingapps" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
                 </DockPanel>
             </Border>
-            <StackPanel Name="isappopen" Orientation="Horizontal" Width="0" ClipToBounds="True">
+            <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
                 <StackPanel.Background>
                     <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
                 </StackPanel.Background>
