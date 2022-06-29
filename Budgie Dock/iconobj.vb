@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Threading
 Imports System.Runtime.InteropServices
+Imports System.ComponentModel
 
 Public Class iconobj
     <DllImport("user32.dll", EntryPoint:="SetForegroundWindow")> _
@@ -48,6 +49,7 @@ Public Class iconobj
     Property isEditingAvable As Boolean = True
     Dim prcrem As procremove
     Dim aid As Integer
+    Public WithEvents runBG As BackgroundWorker
     Sub endinit()
         Try
             Dim img As New BitmapImage(New Uri(iconpath))
@@ -81,6 +83,8 @@ Public Class iconobj
                 prcrem = New procremove
                 prcrem.processName = runproc.ProcessName
             End If
+        Else
+            runBG = New BackgroundWorker
         End If
     End Sub
 
@@ -95,7 +99,7 @@ Public Class iconobj
         containerwin.appname.UpdateLayout()
         Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
         containerwin.appname.Visibility = Visibility.Visible
-        If hr Then
+        If hr And Not isEditingAvable Then
             Try
                 If runproc.MainWindowTitle = "" Then
                     containerwin.aaps.Remove(runproc.Id)
@@ -123,9 +127,7 @@ Public Class iconobj
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
             If Not isopen Then
-                runproc = Process.Start(apppath, apparams)
-                hr = True
-                isprocfound = True
+                runBG.RunWorkerAsync()
             Else
                 ActivateApp(runproc.Id)
             End If
@@ -161,7 +163,7 @@ Public Class iconobj
         containerwin.isappopen.Children.Remove(isapopen)
         isremoved = True
         tick.Stop()
-        If containerwin.isappopen.Children.Count <= 2 Then
+        If containerwin.isappopen.Children.Count <= 3 Then
             containerwin.isappopen.Children.Clear()
         End If
         If Not isEditingAvable Then
@@ -184,6 +186,9 @@ Public Class iconobj
                         If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
                     End If
                 Next
+            End If
+            If runBG.IsBusy Then
+                imageiconobj.Opacity = 0.1
             End If
         Else
             If hr Then
@@ -264,9 +269,7 @@ Public Class iconobj
 
     Private Sub isapopen_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles isapopen.MouseUp
         If checkIfRuning Then
-            runproc = Process.Start(apppath, apparams)
-            hr = True
-            isprocfound = True
+            runBG.RunWorkerAsync()
         Else
             Try
                 runproc.Kill()
@@ -274,5 +277,17 @@ Public Class iconobj
                 MsgBox(ex.Message, MsgBoxStyle.Critical)
             End Try
         End If
+    End Sub
+
+    Private Sub runBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles runBG.DoWork
+        Dim prc = Process.Start(apppath, apparams)
+        e.Result = prc
+    End Sub
+
+    Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
+        imageiconobj.Opacity = 1
+        runproc = e.Result
+        hr = True
+        isprocfound = True
     End Sub
 End Class
