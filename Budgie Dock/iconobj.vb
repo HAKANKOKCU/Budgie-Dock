@@ -46,6 +46,8 @@ Public Class iconobj
     Property runid As Integer = 0
     Property checkIfRuning As Boolean = True
     Property isEditingAvable As Boolean = True
+    Dim prcrem As procremove
+    Dim aid As Integer
     Sub endinit()
         Try
             Dim img As New BitmapImage(New Uri(iconpath))
@@ -74,6 +76,12 @@ Public Class iconobj
             containerwin.isappopen.Children.Add(isapopen)
             alreadyadded = True
         End If
+        If Not isEditingAvable Then
+            If hr Then
+                prcrem = New procremove
+                prcrem.processName = runproc.ProcessName
+            End If
+        End If
     End Sub
 
     Private Sub imageiconobj_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseDown
@@ -88,14 +96,17 @@ Public Class iconobj
         Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
         containerwin.appname.Visibility = Visibility.Visible
         If hr Then
-            If runproc.MainWindowTitle = "" Then
-                containerwin.aaps.Remove(runproc.Id)
-                If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-                Try
-                    remove()
-                Catch
-                End Try
-            End If
+            Try
+                If runproc.MainWindowTitle = "" Then
+                    containerwin.aaps.Remove(runproc.Id)
+                    'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+                    Try
+                        remove()
+                    Catch
+                    End Try
+                End If
+            Catch
+            End Try
         End If
     End Sub
 
@@ -123,7 +134,7 @@ Public Class iconobj
             Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)
             containerwin.OptionsIcon = Me
         ElseIf e.ChangedButton = 2 And Not isEditingAvable Then
-            ActivateApp(runproc.Id)
+            prcrem.hide()
         End If
     End Sub
 
@@ -153,6 +164,11 @@ Public Class iconobj
         If containerwin.isappopen.Children.Count <= 2 Then
             containerwin.isappopen.Children.Clear()
         End If
+        If Not isEditingAvable Then
+            containerwin.aaps.Remove(aid)
+            containerwin.refopenapps(False)
+            containerwin.ruwid -= My.Settings.Size
+        End If
     End Sub
 
     Private Sub tick_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tick.Tick
@@ -174,11 +190,11 @@ Public Class iconobj
                 Try
                     If Not runproc.HasExited Then
                         Dim idd = runproc.Id
+                        aid = idd
                         runproc.Refresh()
                         runproc = Process.GetProcessById(idd)
                     Else
-                        If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-                        remove()
+                        If Not isremoved Then remove()
                     End If
                 Catch
                 End Try
@@ -186,7 +202,6 @@ Public Class iconobj
             Try
                 If runproc.HasExited Then
                     containerwin.aaps.Remove(runproc.Id)
-                    If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     Try
                         If Not isremoved Then remove()
                     Catch
@@ -206,11 +221,13 @@ Public Class iconobj
             'End If
         End If
         If Not containerwin.rid = runid Then
-            tick.Stop()
-            Try
-                If Not isremoved Then remove()
-            Catch
-            End Try
+            If isEditingAvable Then
+                tick.Stop()
+                Try
+                    If Not isremoved Then remove()
+                Catch
+                End Try
+            End If
         End If
     End Sub
     Private Sub ActivateAppl(ByVal pID As Integer)
@@ -223,14 +240,14 @@ Public Class iconobj
     Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
         isapopen.Background = Brushes.Transparent
         isprocfound = False
-        If Not checkIfRuning Then
-            containerwin.aaps.Remove(runproc.Id)
-        End If
+        'If Not checkIfRuning Then
+        'containerwin.aaps.Remove(runproc.Id)
+        'End If
         'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-        Try
-            'If Not isremoved Then remove()
-        Catch
-        End Try
+        'Try
+        'If Not isremoved Then remove()
+        'Catch
+        'End Try
     End Sub
 
     Private Sub isapopen_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseEnter

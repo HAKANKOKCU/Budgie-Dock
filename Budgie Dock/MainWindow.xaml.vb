@@ -13,7 +13,8 @@ Class MainWindow
     Dim isdockhovered As Boolean = False
     Public rid As Integer = 0
     Dim ismw As Boolean = False
-    Public ReadOnly disallowedpnames() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", Process.GetCurrentProcess.ProcessName.ToLower}
+    Public disallowedpnames As New ArrayList
+    Public defaultdisallowed() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", "dwm", "dwm.exe", Process.GetCurrentProcess.ProcessName.ToLower}
     Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     <DllImport("user32.dll")> _
     Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
@@ -26,12 +27,22 @@ Class MainWindow
         refer = New DispatcherTimer
         refer.Interval = TimeSpan.FromMilliseconds(1000)
         refer.Start()
+        For Each dup As String In defaultdisallowed
+            disallowedpnames.Add(dup)
+        Next
         My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\")
         My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons")
         If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data") Then
             Dim dd As String = ""
             My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", dd, False)
         End If
+        If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data") Then
+            Dim dd As String = ""
+            My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data", dd, False)
+        End If
+        For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
+            disallowedpnames.Add(dup)
+        Next
         appsgrid.Width = My.Settings.Size
         reicon()
         Dim dlbtn As New ButtonStack
@@ -166,6 +177,7 @@ Class MainWindow
         If My.Settings.topMost Then
             Me.Topmost = True
         End If
+        Me.Left = 0
         'Me.WindowState = Windows.WindowState.Normal
         'Me.Show()
         Try
@@ -180,9 +192,18 @@ Class MainWindow
             Me.Height = appsgrid.Height + 160
             reicon()
         End If
-        appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
-        runingapps.Width += (ruwid - runingapps.Width) / My.Settings.animatescale
-        isappopen.Width += ((agwid + ruwid) - isappopen.Width) / My.Settings.animatescale
+        Try
+            appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
+        Catch
+        End Try
+        Try
+            runingapps.Width += (ruwid - runingapps.Width) / My.Settings.animatescale
+        Catch
+        End Try
+        Try
+            isappopen.Width += ((agwid + ruwid) - isappopen.Width) / My.Settings.animatescale
+        Catch
+        End Try
         Dim a As Integer = 0
         Dim ar As Integer = 0
         If Not My.Settings.animatescale = 0 Then
@@ -428,13 +449,13 @@ Class MainWindow
                             ico.containerwin = Me
                             ico.runid = rid
                             ico.isEditingAvable = False
-                            ico.endinit()
+                            ico.hr = True
+                            ico.runproc = app
                             ico.isapopen.Background = Brushes.White
                             ico.isopen = True
                             ico.isprocfound = True
-                            ico.hr = True
-                            ico.runproc = app
                             ico.checkIfRuning = False
+                            ico.endinit()
                             If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
                             Try
                                 If Not ani Then ico.imageiconobj.Height = My.Settings.Size - 5

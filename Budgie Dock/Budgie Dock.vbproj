@@ -96,6 +96,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="procremove.vb" />
     <Compile Include="restoreAPI.vb" />
     <Compile Include="Sepremover.vb" />
     <Page Include="BDOptions.xaml">
