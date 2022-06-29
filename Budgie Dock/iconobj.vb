@@ -87,6 +87,16 @@ Public Class iconobj
         containerwin.appname.UpdateLayout()
         Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
         containerwin.appname.Visibility = Visibility.Visible
+        If hr Then
+            If runproc.MainWindowTitle = "" Then
+                containerwin.aaps.Remove(runproc.Id)
+                If Not isremoved Then containerwin.ruwid -= My.Settings.Size
+                Try
+                    remove()
+                Catch
+                End Try
+            End If
+        End If
     End Sub
 
     Private Sub imageiconobj_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseLeave

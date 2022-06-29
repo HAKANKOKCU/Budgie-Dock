@@ -75,8 +75,6 @@ Class MainWindow
         iddd = 0
         ruwid = 0
         agwid = 0
-        isappopen.Width = 0
-        runingapps.Width = 0
         appsgrid.Children.Clear()
         isappopen.Children.Clear()
         iconlist.Clear()
@@ -87,7 +85,11 @@ Class MainWindow
                 If Iconn = "sep" Then
                     Dim a As New Grid
                     a.UseLayoutRounding = True
-                    a.Height = 5
+                    If Not My.Settings.animatescale = 1 Then a.Height = 5
+                    Try
+                        If My.Settings.animatescale = 1 Then a.Height = My.Settings.Size - 5
+                    Catch
+                    End Try
                     a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
                     a.Width = 1
                     a.ClipToBounds = True
@@ -121,7 +123,13 @@ Class MainWindow
                         a.imageiconobj.Height = My.Settings.Size - 5
                     Catch
                     End Try
-                    If animate Then a.imageiconobj.Height = 5
+                    If animate Then
+                        If Not My.Settings.animatescale = 1 Then a.imageiconobj.Height = 5
+                        Try
+                            If My.Settings.animatescale = 1 Then a.imageiconobj.Height = My.Settings.Size - 5
+                        Catch
+                        End Try
+                    End If
                     a.idd = iddd
                     iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
                     iddd += 1
@@ -146,7 +154,7 @@ Class MainWindow
             appsgrid.Children.Add(lbldrg)
             agwid = 138
         End If
-        refopenapps()
+        refopenapps(IIf(My.Settings.animatescale = 1, False, True))
     End Sub
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
@@ -177,48 +185,50 @@ Class MainWindow
         isappopen.Width += ((agwid + ruwid) - isappopen.Width) / My.Settings.animatescale
         Dim a As Integer = 0
         Dim ar As Integer = 0
-        Try
-            For Each i As UIElement In appsgrid.Children
-                If TypeOf i Is Image Then
-                    Dim ii As Image = i
-                    a += My.Settings.Size - 5
-                    If appsgrid.Width >= a Then
-                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
-                    Else
-                        ii.Height = 5
+        If Not My.Settings.animatescale = 0 Then
+            Try
+                For Each i As UIElement In appsgrid.Children
+                    If TypeOf i Is Image Then
+                        Dim ii As Image = i
+                        a += My.Settings.Size - 5
+                        If appsgrid.Width >= a Then
+                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                        Else
+                            ii.Height = 5
+                        End If
+                    ElseIf TypeOf i Is Grid Then
+                        Dim ii As Grid = i
+                        a += 3
+                        If appsgrid.Width >= a Then
+                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                        Else
+                            ii.Height = 5
+                        End If
                     End If
-                ElseIf TypeOf i Is Grid Then
-                    Dim ii As Grid = i
-                    a += 3
-                    If appsgrid.Width >= a Then
-                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
-                    Else
-                        ii.Height = 5
+                Next
+                For Each i As UIElement In runingapps.Children
+                    If TypeOf i Is Grid Then
+                        Dim ii As Grid = i
+                        ar += 3
+                        If appsgrid.Width >= ar Then
+                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                        Else
+                            ii.Height = 5
+                        End If
                     End If
-                End If
-            Next
-            For Each i As UIElement In runingapps.Children
-                If TypeOf i Is Grid Then
-                    Dim ii As Grid = i
-                    ar += 3
-                    If appsgrid.Width >= ar Then
-                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
-                    Else
-                        ii.Height = 5
+                    If TypeOf i Is Image Then
+                        Dim ii As Image = i
+                        ar += 3
+                        If appsgrid.Width >= ar Then
+                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                        Else
+                            ii.Height = 5
+                        End If
                     End If
-                End If
-                If TypeOf i Is Image Then
-                    Dim ii As Image = i
-                    ar += 3
-                    If appsgrid.Width >= ar Then
-                        ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
-                    Else
-                        ii.Height = 5
-                    End If
-                End If
-            Next
-        Catch
-        End Try
+                Next
+            Catch
+            End Try
+        End If
     End Sub
 
     Private Sub DeleteIconButton_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles DeleteIconButton.MouseUp
@@ -340,6 +350,8 @@ Class MainWindow
             reicon()
         ElseIf e.Key = Key.R Then
             appsgrid.Width = My.Settings.Size
+            isappopen.Width = My.Settings.Size
+            runingapps.Width = 0
             reicon()
         ElseIf e.Key = Key.L Then
             Dim win As New ItemListing
@@ -375,7 +387,7 @@ Class MainWindow
     Private Sub refer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles refer.Tick
         refopenapps()
     End Sub
-    Sub refopenapps()
+    Sub refopenapps(Optional ByVal ani As Boolean = True)
         For Each app As Process In Process.GetProcesses
             If Not app.MainWindowTitle = "" Then
                 If Not disallowedpnames.Contains(app.ProcessName.ToLower) Then
@@ -423,10 +435,11 @@ Class MainWindow
                             ico.hr = True
                             ico.runproc = app
                             ico.checkIfRuning = False
-                            'Try
-                            ico.imageiconobj.Height = 5 'My.Settings.Size - 5
-                            'Catch
-                            'End Try
+                            If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
+                            Try
+                                If Not ani Then ico.imageiconobj.Height = My.Settings.Size - 5
+                            Catch
+                            End Try
                             aaps.Add(app.Id)
                         End If
                     End If
