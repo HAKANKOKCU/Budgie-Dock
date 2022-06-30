@@ -13,7 +13,7 @@ Imports System.Windows
 
 <Assembly: AssemblyTitle("Budgie Dock")> 
 <Assembly: AssemblyDescription("Budgie Dock Application")> 
-<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyCompany("HAKANKOKCU")> 
 <Assembly: AssemblyProduct("Budgie Dock")> 
 <Assembly: AssemblyCopyright("Copyright @  2022")> 
 <Assembly: AssemblyTrademark("")> 

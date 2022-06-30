@@ -81,10 +81,12 @@ Public Class iconobj
         If Not isEditingAvable Then
             If hr Then
                 prcrem = New procremove
-                prcrem.processName = runproc.ProcessName
+                prcrem.process = runproc
             End If
         Else
             runBG = New BackgroundWorker
+            runBG.WorkerReportsProgress = True
+            runBG.WorkerSupportsCancellation = True
         End If
     End Sub
 
@@ -94,18 +96,28 @@ Public Class iconobj
     End Sub
 
     Private Sub imageiconobj_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseEnter
-        imageiconobj.Opacity = 0.8
-        containerwin.appname.Content = appname
-        containerwin.appname.UpdateLayout()
-        Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
-        containerwin.appname.Visibility = Visibility.Visible
+        If isEditingAvable Then
+            If runBG.IsBusy Then
+                imageiconobj.Opacity = 0.1
+            Else
+                imageiconobj.Opacity = 0.8
+            End If
+        Else
+            imageiconobj.Opacity = 0.8
+        End If
+        If Not containerwin.menustack.Visibility = Visibility.Visible Then
+            containerwin.appname.Content = appname
+            containerwin.appname.UpdateLayout()
+            Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+            containerwin.appname.Visibility = Visibility.Visible
+        End If
         If hr And Not isEditingAvable Then
             Try
                 If runproc.MainWindowTitle = "" Then
                     containerwin.aaps.Remove(runproc.Id)
                     'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     Try
-                        remove()
+                        If Not isremoved Then remove()
                     Catch
                     End Try
                 End If
@@ -115,19 +127,32 @@ Public Class iconobj
     End Sub
 
     Private Sub imageiconobj_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseLeave
-        imageiconobj.Opacity = 1
+        If isEditingAvable Then
+            If runBG.IsBusy Then
+                imageiconobj.Opacity = 0.1
+            Else
+                imageiconobj.Opacity = 1
+            End If
+        Else
+            imageiconobj.Opacity = 1
+        End If
         containerwin.appname.Visibility = Visibility.Hidden
     End Sub
 
     Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
-        Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+        If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
     End Sub
 
     Private Sub imageiconobj_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseUp
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
             If Not isopen Then
-                runBG.RunWorkerAsync()
+                Try
+                    runBG.RunWorkerAsync()
+                    imageiconobj.Opacity = 0.1
+                Catch
+                    runBG.CancelAsync()
+                End Try
             Else
                 ActivateApp(runproc.Id)
             End If
@@ -150,6 +175,7 @@ Public Class iconobj
     End Sub
 
     Sub remove()
+        If isremoved Then Exit Sub
         iconpath = ""
         apppath = ""
         Dim img As New BitmapImage()
@@ -167,6 +193,7 @@ Public Class iconobj
             containerwin.isappopen.Children.Clear()
         End If
         If Not isEditingAvable Then
+            containerwin.runingapps.Children.Remove(imageiconobj)
             containerwin.aaps.Remove(aid)
             containerwin.refopenapps(False)
             containerwin.ruwid -= My.Settings.Size
@@ -264,12 +291,21 @@ Public Class iconobj
     End Sub
 
     Private Sub isapopen_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseLeave
-        isapopen.Background = Brushes.White
+        If isEditingAvable Then
+            isapopen.Background = Brushes.White
+        Else
+            isapopen.Background = Brushes.Transparent
+        End If
     End Sub
 
     Private Sub isapopen_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles isapopen.MouseUp
         If checkIfRuning Then
-            runBG.RunWorkerAsync()
+            Try
+                runBG.RunWorkerAsync()
+                imageiconobj.Opacity = 0.1
+            Catch
+                runBG.CancelAsync()
+            End Try
         Else
             Try
                 runproc.Kill()
@@ -281,13 +317,22 @@ Public Class iconobj
 
     Private Sub runBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles runBG.DoWork
         Dim prc = Process.Start(apppath, apparams)
-        e.Result = prc
+        runBG.ReportProgress(50, prc)
+        Try
+            If Not runBG.CancellationPending Then
+                prc.WaitForInputIdle()
+            End If
+        Catch
+        End Try
+    End Sub
+
+    Private Sub runBG_ProgressChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ProgressChangedEventArgs) Handles runBG.ProgressChanged
+        runproc = e.UserState
+        hr = True
+        isprocfound = True
     End Sub
 
     Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
         imageiconobj.Opacity = 1
-        runproc = e.Result
-        hr = True
-        isprocfound = True
     End Sub
 End Class

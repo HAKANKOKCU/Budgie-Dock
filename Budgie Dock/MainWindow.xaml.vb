@@ -13,8 +13,11 @@ Class MainWindow
     Dim isdockhovered As Boolean = False
     Public rid As Integer = 0
     Dim ismw As Boolean = False
+
     Public disallowedpnames As New ArrayList
-    Public defaultdisallowed() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", "dwm", "dwm.exe", Process.GetCurrentProcess.ProcessName.ToLower}
+    'This array will be "injected" to disallowedpnames in "Loaded" Function.
+    Public defaultdisallowed() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
+
     Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     <DllImport("user32.dll")> _
     Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
@@ -158,6 +161,7 @@ Class MainWindow
                     sizee += 3
                 End If
             Next
+            agwid = sizee
             agwid = sizee
         Else
             Dim lbldrg As New Label
@@ -467,5 +471,13 @@ Class MainWindow
                 End If
             End If
         Next
+        'ruwid = 0
+        'For Each itm As UIElement In runingapps.Children
+        'If TypeOf itm Is Image Then
+        'ruwid += My.Settings.Size
+        'Else
+        'ruwid += 3
+        'End If
+        'Next
     End Sub
 End Class
