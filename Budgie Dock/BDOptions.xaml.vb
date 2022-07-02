@@ -1,5 +1,7 @@
-﻿Public Class BDOptions
+﻿Imports Microsoft.Win32
+Public Class BDOptions
     Dim acs As Boolean = False
+    Public filepick As New OpenFileDialog
     Private Sub restartapp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles restartapp.MouseUp
         System.Windows.Forms.Application.Restart()
         End
@@ -22,6 +24,7 @@
     End Sub
 
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        ithmPath.Content = My.Settings.CurrentIconThemePath
         asc.Text = My.Settings.animatescale.ToString
         isz.Text = My.Settings.Size
         dopac.Text = My.Settings.dockopacity
@@ -160,5 +163,20 @@
         Catch ex As Exception
             If Not dmtop.Text = "-" Then MsgBox("Please Enter A Valid Number")
         End Try
+    End Sub
+
+    Private Sub pickfile_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles pickfile.MouseUp
+        filepick.Filter = "INI|*.ini"
+        If filepick.ShowDialog = True Then
+            My.Settings.CurrentIconThemePath = filepick.FileName
+            ithmPath.Content = My.Settings.CurrentIconThemePath
+        End If
+    End Sub
+
+    Private Sub ithmPath_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ithmPath.MouseUp
+        If MsgBox("Remove Icon Pack?", MsgBoxStyle.YesNo + MsgBoxStyle.Question) = MsgBoxResult.Yes Then
+            My.Settings.CurrentIconThemePath = ""
+            ithmPath.Content = My.Settings.CurrentIconThemePath
+        End If
     End Sub
 End Class

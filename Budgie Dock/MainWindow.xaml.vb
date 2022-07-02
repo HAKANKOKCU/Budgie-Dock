@@ -13,7 +13,6 @@ Class MainWindow
     Dim isdockhovered As Boolean = False
     Public rid As Integer = 0
     Dim ismw As Boolean = False
-
     Public disallowedpnames As New ArrayList
     'This array will be "injected" to disallowedpnames in "Loaded" Function.
     Public defaultdisallowed() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
@@ -23,6 +22,7 @@ Class MainWindow
     Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
     End Function
     Dim icc As New ArrayList
+    Dim icopack As Ini = Nothing
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ticker = New DispatcherTimer
         ticker.Interval = TimeSpan.FromMilliseconds(1)
@@ -81,9 +81,19 @@ Class MainWindow
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Me.Topmost = My.Settings.topMost
+        LoadIconPack()
+    End Sub
+
+    Sub LoadIconPack()
+        If My.Computer.FileSystem.FileExists(My.Settings.CurrentIconThemePath) Then
+            icopack = New Ini(My.Settings.CurrentIconThemePath)
+        Else
+            icopack = Nothing
+        End If
     End Sub
 
     Sub reicon(Optional ByVal animate As Boolean = True)
+        LoadIconPack()
         icc.Clear()
         rid += 1
         iddd = 0
@@ -315,26 +325,36 @@ Class MainWindow
                 Catch
                     'do nothing if drop is folder.
                 End Try
-                Dim aiconsuccess As Boolean = False
-                Try
-                    Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
-                    Try
-                        My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png")
-                    Catch
-                    End Try
-                    aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
-                    aiconsuccess = True
-                Catch
-                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png") Then
-                        aiconsuccess = True
-                    End If
-                End Try
                 Dim a As New iconobj
+                Dim aiconsuccess As Boolean = False
+                Dim findico = True
+                If Not icopack Is Nothing Then
+                    If Not icopack.GetValue("IconPaths", n) = "Code_Item.NotFound" Then
+                        findico = False
+                        a.iconpath = icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
+                        iconlist.Add({Path, icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\"), n})
+                    End If
+                End If
+                If findico Then
+                    Try
+                        Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
+                        Try
+                            My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png")
+                        Catch
+                        End Try
+                        aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                        aiconsuccess = True
+                    Catch
+                        If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png") Then
+                            aiconsuccess = True
+                        End If
+                    End Try
+                End If
                 a.apppath = Path
                 If aiconsuccess Then
                     a.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png"
                     iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", n})
-                Else
+                ElseIf findico Then
                     a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
                     iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
                 End If
@@ -414,7 +434,7 @@ Class MainWindow
     End Sub
     Sub refopenapps(Optional ByVal ani As Boolean = True)
         For Each app As Process In Process.GetProcesses
-            If Not app.MainWindowTitle = "" Then
+            If Not app.MainWindowHandle = IntPtr.Zero Then
                 If Not disallowedpnames.Contains(app.ProcessName.ToLower) Then
                     If Not icc.Contains(app.ProcessName.ToLower) Then
                         If Not aaps.Contains(app.Id) Then
@@ -436,17 +456,26 @@ Class MainWindow
                             End If
                             Dim ico As New iconobj
                             'ico.idd = 0
-                            Try
-                                Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
-                                icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
-                                ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                            Catch ex As Exception
-                                If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
-                                    ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                                Else
-                                    ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                            Dim findico = True
+                            If Not icopack Is Nothing Then
+                                If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
+                                    findico = False
+                                    ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
                                 End If
-                            End Try
+                            End If
+                            If findico Then
+                                Try
+                                    Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
+                                    icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                                    ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                Catch ex As Exception
+                                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
+                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                    Else
+                                        ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                                    End If
+                                End Try
+                            End If
                             ico.appname = app.MainWindowTitle & " - " + app.ProcessName
                             ico.stackpanel = runingapps
                             ico.apppath = app.ProcessName
@@ -471,13 +500,14 @@ Class MainWindow
                 End If
             End If
         Next
-        'ruwid = 0
-        'For Each itm As UIElement In runingapps.Children
-        'If TypeOf itm Is Image Then
-        'ruwid += My.Settings.Size
-        'Else
-        'ruwid += 3
-        'End If
-        'Next
+        ruwid = 0
+        For Each itm As UIElement In runingapps.Children
+            If TypeOf itm Is Image Then
+                Dim itemm As Image = itm
+                ruwid += itemm.Width
+            Else
+                ruwid += 3
+            End If
+        Next
     End Sub
 End Class

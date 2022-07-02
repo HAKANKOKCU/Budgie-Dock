@@ -40,6 +40,7 @@ Public Class iconobj
     Property appname As String = ""
     Property apparams As String = ""
     Public WithEvents runproc As Process
+    Public WithEvents animater As DispatcherTimer
     Public hr = False
     Public isopen = False
     Public isprocfound = False
@@ -50,12 +51,15 @@ Public Class iconobj
     Dim prcrem As procremove
     Dim aid As Integer
     Public WithEvents runBG As BackgroundWorker
+    Public WithEvents waitBG As BackgroundWorker
+    Dim anispeed = 10
     Sub endinit()
         Try
             Dim img As New BitmapImage(New Uri(iconpath))
             imageiconobj.Source = img
         Catch
         End Try
+        imageiconobj.Focusable = True
         imageiconobj.Width = My.Settings.Size
         Try
             imageiconobj.Height = My.Settings.Size - 5
@@ -78,16 +82,87 @@ Public Class iconobj
             containerwin.isappopen.Children.Add(isapopen)
             alreadyadded = True
         End If
+        animater = New DispatcherTimer
+        animater.Interval = TimeSpan.FromMilliseconds(1)
         If Not isEditingAvable Then
             If hr Then
                 prcrem = New procremove
                 prcrem.process = runproc
+                waitBG = New BackgroundWorker
+                waitBG.RunWorkerAsync()
+                animater.Start()
             End If
         Else
             runBG = New BackgroundWorker
             runBG.WorkerReportsProgress = True
             runBG.WorkerSupportsCancellation = True
         End If
+    End Sub
+
+    Private Sub imageiconobj_GotFocus(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles imageiconobj.GotFocus
+        imageiconobj.Opacity = 0.8
+        If isEditingAvable Then
+            If runBG.IsBusy Then
+                imageiconobj.Opacity = 0.1
+            Else
+                imageiconobj.Opacity = 0.8
+            End If
+        Else
+            imageiconobj.Opacity = 0.8
+        End If
+        If Not containerwin.menustack.Visibility = Visibility.Visible Then
+            containerwin.appname.Content = appname
+            containerwin.appname.UpdateLayout()
+            Canvas.SetLeft(containerwin.appname, (containerwin.Width / 2) - (containerwin.appname.ActualWidth / 2))
+            containerwin.appname.Visibility = Visibility.Visible
+        End If
+    End Sub
+
+    Private Sub imageiconobj_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles imageiconobj.KeyDown
+        If e.Key = Key.Space Then
+            imageiconobj.Opacity = 0.5
+        ElseIf e.Key = Key.N Then
+            Try
+                runBG.RunWorkerAsync()
+                imageiconobj.Opacity = 0.1
+                If Not My.Settings.animatescale = 1 Then animater.Start()
+            Catch
+                runBG.CancelAsync()
+            End Try
+        ElseIf e.Key = Key.Enter Then
+            If Not isopen Then
+                Try
+                    runBG.RunWorkerAsync()
+                    imageiconobj.Opacity = 0.1
+                    If Not My.Settings.animatescale = 1 Then animater.Start()
+                Catch
+                    runBG.CancelAsync()
+                End Try
+            Else
+                ActivateApp(runproc.Id)
+            End If
+        End If
+    End Sub
+
+    Private Sub imageiconobj_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles imageiconobj.KeyUp
+        If e.Key = Key.Space Then
+            imageiconobj.Opacity = 1
+            If Not isopen Then
+                Try
+                    runBG.RunWorkerAsync()
+                    imageiconobj.Opacity = 0.1
+                    If Not My.Settings.animatescale = 1 Then animater.Start()
+                Catch
+                    runBG.CancelAsync()
+                End Try
+            Else
+                ActivateApp(runproc.Id)
+            End If
+        End If
+    End Sub
+
+    Private Sub imageiconobj_LostFocus(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles imageiconobj.LostFocus
+        imageiconobj.Opacity = 1
     End Sub
 
     Private Sub imageiconobj_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseDown
@@ -114,7 +189,7 @@ Public Class iconobj
         If hr And Not isEditingAvable Then
             Try
                 If runproc.MainWindowTitle = "" Then
-                    containerwin.aaps.Remove(runproc.Id)
+                    'containerwin.aaps.Remove(runproc.Id)
                     'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     Try
                         If Not isremoved Then remove()
@@ -150,6 +225,7 @@ Public Class iconobj
                 Try
                     runBG.RunWorkerAsync()
                     imageiconobj.Opacity = 0.1
+                    If Not My.Settings.animatescale = 1 Then animater.Start()
                 Catch
                     runBG.CancelAsync()
                 End Try
@@ -189,8 +265,8 @@ Public Class iconobj
         containerwin.isappopen.Children.Remove(isapopen)
         isremoved = True
         tick.Stop()
-        If containerwin.isappopen.Children.Count <= 3 Then
-            containerwin.isappopen.Children.Clear()
+        If containerwin.runingapps.Children.Count = 1 Then
+            containerwin.runingapps.Children.Clear()
         End If
         If Not isEditingAvable Then
             containerwin.runingapps.Children.Remove(imageiconobj)
@@ -223,8 +299,11 @@ Public Class iconobj
                     If Not runproc.HasExited Then
                         Dim idd = runproc.Id
                         aid = idd
-                        runproc.Refresh()
-                        runproc = Process.GetProcessById(idd)
+                        Dim prc = Process.GetProcessById(idd)
+                        If runproc.ProcessName = prc.ProcessName And Not prc.ProcessName = "" Then
+                            runproc.Refresh()
+                            runproc = Process.GetProcessById(idd)
+                        End If
                     Else
                         If Not isremoved Then remove()
                     End If
@@ -233,7 +312,6 @@ Public Class iconobj
             End If
             Try
                 If runproc.HasExited Then
-                    containerwin.aaps.Remove(runproc.Id)
                     Try
                         If Not isremoved Then remove()
                     Catch
@@ -272,14 +350,6 @@ Public Class iconobj
     Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
         isapopen.Background = Brushes.Transparent
         isprocfound = False
-        'If Not checkIfRuning Then
-        'containerwin.aaps.Remove(runproc.Id)
-        'End If
-        'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-        'Try
-        'If Not isremoved Then remove()
-        'Catch
-        'End Try
     End Sub
 
     Private Sub isapopen_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseEnter
@@ -303,6 +373,7 @@ Public Class iconobj
             Try
                 runBG.RunWorkerAsync()
                 imageiconobj.Opacity = 0.1
+                If Not My.Settings.animatescale = 1 Then animater.Start()
             Catch
                 runBG.CancelAsync()
             End Try
@@ -334,5 +405,26 @@ Public Class iconobj
 
     Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
         imageiconobj.Opacity = 1
+        animater.Stop()
+    End Sub
+
+    Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
+        If imageiconobj.Opacity = 1 Then
+            anispeed = -10
+        ElseIf imageiconobj.Opacity < 0.1 Then
+            anispeed = 10
+        End If
+        imageiconobj.Opacity += anispeed / 1000
+    End Sub
+
+    Private Sub waitBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles waitBG.DoWork
+        Try
+            runproc.WaitForInputIdle()
+        Catch
+        End Try
+    End Sub
+
+    Private Sub waitBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles waitBG.RunWorkerCompleted
+        animater.Stop()
     End Sub
 End Class
