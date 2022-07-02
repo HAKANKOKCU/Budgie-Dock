@@ -50,6 +50,16 @@ InitializeComponent
 	<summary>
 MainWindow
 </summary>
+</member><member name="M:BudgieDock.Ini.#ctor(System.String)">
+	<summary>
+	</summary>
+	<param name="IniFileName">Drive,Path and Filname for the inifile</param>
+	<remarks></remarks>
+</member><member name="M:BudgieDock.Ini.SaveIniFile">
+	<summary>
+	</summary>
+	<returns></returns>
+	<remarks>Saving the inifile will remove all comments and invalid lines and all sections and valuenames will be in capitals.</remarks>
 </member><member name="P:BudgieDock.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
