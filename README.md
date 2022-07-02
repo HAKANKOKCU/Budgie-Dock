@@ -11,6 +11,10 @@ Needs .Net Framework 4. Minimum windows version is 7 (There are too much display
 * S > Budgie Dock Settings
 * L > Item/Icon Listing
 * R > Refresh Dock
+* Right Arrow (Needs focus) > Next Icon
+* Left Arrow (Needs focus) > Previous Icon
+* Enter > Same as click
+* N > Open Again
 
 # Basic Usage Tips
 * If an app/process have multipie windows, you can click it again to show next window.
