@@ -306,11 +306,11 @@ Class MainWindow
         savicon()
     End Sub
 
-    Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles bdr.DragEnter
+    Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.DragEnter
         e.Effects = DragDropEffects.Link
     End Sub
 
-    Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles bdr.Drop
+    Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.Drop
         'If e.Data.GetDataPresent(e.Data.GetDataPresent(DataFormats.FileDrop)) Then
         Try
             For Each Path As String In e.Data.GetData(DataFormats.FileDrop)

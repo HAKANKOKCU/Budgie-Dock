@@ -33,8 +33,8 @@
                 </Label>
             </Canvas>
             <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True">
-                <DockPanel ClipToBounds="True">
-                    <StackPanel Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" AllowDrop="True" Width="0" ClipToBounds="True"></StackPanel>
+                <DockPanel ClipToBounds="True" AllowDrop="True">
+                    <StackPanel AllowDrop="True" Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
                     <StackPanel Orientation="Horizontal" Name="runingapps" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
                 </DockPanel>
             </Border>

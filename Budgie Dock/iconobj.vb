@@ -283,13 +283,13 @@ Public Class iconobj
                     If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
                         isapopen.Background = Brushes.White
                         isopen = True
-                        If hr Then If runproc.HasExited Then isprocfound = False
-                        If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                        Try
+                            If hr Then If runproc.HasExited Then isprocfound = False
+                            If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                        Catch
+                        End Try
                     End If
                 Next
-            End If
-            If runBG.IsBusy Then
-                imageiconobj.Opacity = 0.1
             End If
         Else
             If hr Then
@@ -404,15 +404,19 @@ Public Class iconobj
     Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
         imageiconobj.Opacity = 1
         animater.Stop()
+        anitim = 0
     End Sub
-
+    Dim anitim As Integer = 0
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
-        If imageiconobj.Opacity = 1 Then
-            anispeed = -10
-        ElseIf imageiconobj.Opacity < 0.1 Then
-            anispeed = 10
-        End If
-        imageiconobj.Opacity += anispeed / 1000
+        Try
+            anitim += 1
+            If anitim = 2000 Then
+                anispeed = -anispeed
+                anitim = 0
+            End If
+            imageiconobj.Opacity += anispeed / 1000
+        Catch
+        End Try
     End Sub
 
     Private Sub waitBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles waitBG.DoWork
@@ -424,5 +428,7 @@ Public Class iconobj
 
     Private Sub waitBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles waitBG.RunWorkerCompleted
         animater.Stop()
+        imageiconobj.Opacity = 1
+        anitim = 0
     End Sub
 End Class
