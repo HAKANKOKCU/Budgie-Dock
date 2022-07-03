@@ -257,22 +257,20 @@ Public Class iconobj
         Dim img As New BitmapImage()
         imageiconobj.Source = img
         imageiconobj.Visibility = Visibility.Collapsed
-        imageiconobj.Width = 1
-        imageiconobj = Nothing
+        imageiconobj.Width = 0
         containerwin.OptionsIcon = Nothing
         containerwin.menustack.Visibility = Visibility.Hidden
         stackpanel.Children.Remove(imageiconobj)
         containerwin.isappopen.Children.Remove(isapopen)
+        imageiconobj = Nothing
         isremoved = True
         tick.Stop()
-        If containerwin.runingapps.Children.Count = 1 Then
-            containerwin.runingapps.Children.Clear()
-        End If
         If Not isEditingAvable Then
-            containerwin.runingapps.Children.Remove(imageiconobj)
             containerwin.aaps.Remove(aid)
             containerwin.refopenapps(False)
-            containerwin.ruwid -= My.Settings.Size
+        End If
+        If containerwin.runingapps.Children.Count = 1 Then
+            containerwin.runingapps.Children.Clear()
         End If
     End Sub
 
