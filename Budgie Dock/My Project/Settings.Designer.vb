@@ -229,6 +229,42 @@ Partial Friend NotInheritable Class MySettings
             Me("CurrentIconThemePath") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property iuRed() As Byte
+        Get
+            Return CType(Me("iuRed"),Byte)
+        End Get
+        Set
+            Me("iuRed") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property iuGreen() As Byte
+        Get
+            Return CType(Me("iuGreen"),Byte)
+        End Get
+        Set
+            Me("iuGreen") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("255")>  _
+    Public Property iuBlue() As Byte
+        Get
+            Return CType(Me("iuBlue"),Byte)
+        End Get
+        Set
+            Me("iuBlue") = value
+        End Set
+    End Property
 End Class
 
 Namespace My

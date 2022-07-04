@@ -281,7 +281,7 @@ Public Class iconobj
             If Not fi.Extension = "" Then
                 For Each prc As Process In Process.GetProcesses
                     If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                        isapopen.Background = Brushes.White
+                        isapopen.Background = New SolidColorBrush(Color.FromArgb(255, My.Settings.iuRed, My.Settings.iuGreen, My.Settings.iuBlue))
                         isopen = True
                         Try
                             If hr Then If runproc.HasExited Then isprocfound = False
@@ -360,7 +360,7 @@ Public Class iconobj
 
     Private Sub isapopen_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseLeave
         If isEditingAvable Then
-            isapopen.Background = Brushes.White
+            isapopen.Background = New SolidColorBrush(Color.FromArgb(255, My.Settings.iuRed, My.Settings.iuGreen, My.Settings.iuBlue))
         Else
             isapopen.Background = Brushes.Transparent
         End If

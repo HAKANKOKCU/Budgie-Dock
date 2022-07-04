@@ -6,6 +6,15 @@
         AppShell.Text = mainwin.iconlist(iconid)(0)
         IconPath.Text = mainwin.iconlist(iconid)(1)
         Appname.Text = mainwin.iconlist(iconid)(2)
+        Try
+            Dim bi As New BitmapImage
+            bi.BeginInit()
+            bi.UriSource = New Uri(mainwin.iconlist(iconid)(1))
+            bi.EndInit()
+            Me.Icon = bi
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
+        End Try
     End Sub
 
     Private Sub ApplyBTN_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ApplyBTN.MouseUp

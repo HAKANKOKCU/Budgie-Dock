@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BDOptions"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="BudgieDock Options" Height="379" Width="567" WindowStartupLocation="CenterScreen">
+    Title="BudgieDock Options" Height="379" Width="567" WindowStartupLocation="CenterScreen" Icon="/Budgie%20Dock;component/prflrsmi.ico">
        <ScrollViewer VerticalScrollBarVisibility="Auto">
          <StackPanel>
             <Label FontSize="20" FontWeight="Bold" Background="Orange" Foreground="White">Budgie Dock Options</Label>
@@ -24,11 +24,17 @@
                 <TextBox Width="40" CharacterCasing="Normal" Text="255" Name="docB" MaxLength="3"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
+                <Label>IsAppRuning Line Color (RGB)</Label>
+                <TextBox Width="40" CharacterCasing="Normal" Text="255" Name="iuR" MaxLength="3"></TextBox>
+                <TextBox Width="40" CharacterCasing="Normal" Text="255" Name="iuG" MaxLength="3"></TextBox>
+                <TextBox Width="40" CharacterCasing="Normal" Text="255" Name="iuB" MaxLength="3"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Label>Dock Corner Radius</Label>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="dcor" MaxLength="3"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label>Separator Color</Label>
+                <Label>Separator Color (RGB)</Label>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorR" MaxLength="3"></TextBox>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorG" MaxLength="3"></TextBox>
                 <TextBox Width="40" CharacterCasing="Normal" Text="0" Name="scolorB" MaxLength="3"></TextBox>

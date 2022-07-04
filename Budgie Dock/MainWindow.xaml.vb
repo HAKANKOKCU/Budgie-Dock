@@ -307,7 +307,7 @@ Class MainWindow
     End Sub
 
     Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.DragEnter
-        e.Effects = DragDropEffects.Link
+        e.Effects = e.AllowedEffects
     End Sub
 
     Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.Drop
@@ -435,66 +435,68 @@ Class MainWindow
     Sub refopenapps(Optional ByVal ani As Boolean = True)
         For Each app As Process In Process.GetProcesses
             If Not app.MainWindowHandle = IntPtr.Zero Then
-                If Not disallowedpnames.Contains(app.ProcessName.ToLower) Then
-                    If Not icc.Contains(app.ProcessName.ToLower) Then
-                        If Not aaps.Contains(app.Id) Then
-                            ruwid += My.Settings.Size
-                            If ruwid = My.Settings.Size Then
-                                Dim a As New Grid
-                                a.UseLayoutRounding = True
-                                a.Height = 5
-                                a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
-                                a.Width = 1
-                                a.ClipToBounds = True
-                                a.Margin = New Thickness(1, 0, 1, 0)
-                                a.ClipToBounds = True
-                                runingapps.Children.Add(a)
-                                Dim pp As New Grid
-                                pp.Width = 3
-                                isappopen.Children.Add(pp)
-                                ruwid += 3
-                            End If
-                            Dim ico As New iconobj
-                            'ico.idd = 0
-                            Dim findico = True
-                            If Not icopack Is Nothing Then
-                                If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
-                                    findico = False
-                                    ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
+                If Not app.MainWindowTitle.Trim = "" Then
+                    If Not disallowedpnames.Contains(app.ProcessName.ToLower) Then
+                        If Not icc.Contains(app.ProcessName.ToLower) Then
+                            If Not aaps.Contains(app.Id) Then
+                                ruwid += My.Settings.Size
+                                If ruwid = My.Settings.Size Then
+                                    Dim a As New Grid
+                                    a.UseLayoutRounding = True
+                                    a.Height = 5
+                                    a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
+                                    a.Width = 1
+                                    a.ClipToBounds = True
+                                    a.Margin = New Thickness(1, 0, 1, 0)
+                                    a.ClipToBounds = True
+                                    runingapps.Children.Add(a)
+                                    Dim pp As New Grid
+                                    pp.Width = 3
+                                    isappopen.Children.Add(pp)
+                                    ruwid += 3
                                 End If
-                            End If
-                            If findico Then
-                                Try
-                                    Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
-                                    icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
-                                    ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                                Catch ex As Exception
-                                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
-                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                                    Else
-                                        ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                                Dim ico As New iconobj
+                                'ico.idd = 0
+                                Dim findico = True
+                                If Not icopack Is Nothing Then
+                                    If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
+                                        findico = False
+                                        ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
                                     End If
+                                End If
+                                If findico Then
+                                    Try
+                                        Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
+                                        icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                    Catch ex As Exception
+                                        If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
+                                            ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                        Else
+                                            ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                                        End If
+                                    End Try
+                                End If
+                                ico.appname = app.MainWindowTitle & " - " + app.ProcessName
+                                ico.stackpanel = runingapps
+                                ico.apppath = app.ProcessName
+                                ico.containerwin = Me
+                                ico.runid = rid
+                                ico.isEditingAvable = False
+                                ico.hr = True
+                                ico.runproc = app
+                                ico.isapopen.Background = Brushes.White
+                                ico.isopen = True
+                                ico.isprocfound = True
+                                ico.checkIfRuning = False
+                                ico.endinit()
+                                If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
+                                Try
+                                    If Not ani Then ico.imageiconobj.Height = My.Settings.Size - 5
+                                Catch
                                 End Try
+                                aaps.Add(app.Id)
                             End If
-                            ico.appname = app.MainWindowTitle & " - " + app.ProcessName
-                            ico.stackpanel = runingapps
-                            ico.apppath = app.ProcessName
-                            ico.containerwin = Me
-                            ico.runid = rid
-                            ico.isEditingAvable = False
-                            ico.hr = True
-                            ico.runproc = app
-                            ico.isapopen.Background = Brushes.White
-                            ico.isopen = True
-                            ico.isprocfound = True
-                            ico.checkIfRuning = False
-                            ico.endinit()
-                            If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
-                            Try
-                                If Not ani Then ico.imageiconobj.Height = My.Settings.Size - 5
-                            Catch
-                            End Try
-                            aaps.Add(app.Id)
                         End If
                     End If
                 End If
