@@ -1,3 +1,4 @@
+isappruning for all themes are 255 255 255.
 <h1>Default</h1>
 
 ![resim](https://user-images.githubusercontent.com/103432992/174958249-fc74e9b1-6af4-4ad7-aae3-66d8649f6c9b.png)
