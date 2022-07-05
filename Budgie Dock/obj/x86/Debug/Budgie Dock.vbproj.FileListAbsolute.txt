@@ -23,3 +23,5 @@ C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\b
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.exe
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.pdb
 C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\bin\x86\Budgie Dock.xml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\appdrawer.baml
+C:\Users\ASUS PC\Documents\Visual Studio 2010\Projects\Budgie Dock\Budgie Dock\obj\x86\Debug\appdrawer.g.vb
