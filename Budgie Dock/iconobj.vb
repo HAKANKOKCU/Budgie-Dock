@@ -145,7 +145,9 @@ Public Class iconobj
             Else
                 If apppath = "!AppsDrawer" Then
                     Dim ad As New appdrawer
-                    ad.Show()
+                    containerwin.Visibility = Visibility.Hidden
+                    ad.ShowDialog()
+                    containerwin.Visibility = Visibility.Visible
                 End If
             End If
         End If
@@ -169,7 +171,9 @@ Public Class iconobj
             Else
                 If apppath = "!AppsDrawer" Then
                     Dim ad As New appdrawer
-                    ad.Show()
+                    containerwin.Visibility = Visibility.Hidden
+                    ad.ShowDialog()
+                    containerwin.Visibility = Visibility.Visible
                 End If
             End If
         End If
@@ -252,7 +256,9 @@ Public Class iconobj
             Else
                 If apppath = "!AppsDrawer" Then
                     Dim ad As New appdrawer
-                    ad.Show()
+                    containerwin.Visibility = Visibility.Hidden
+                    ad.ShowDialog()
+                    containerwin.Visibility = Visibility.Visible
                 End If
             End If
         ElseIf e.ChangedButton = 2 And isEditingAvable Then
