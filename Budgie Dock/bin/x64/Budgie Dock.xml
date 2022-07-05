@@ -42,6 +42,14 @@ InitializeComponent
 	<summary>
 BDOptions
 </summary>
+</member><member name="M:BudgieDock.appdrawer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.appdrawer">
+	<summary>
+appdrawer
+</summary>
 </member><member name="M:BudgieDock.MainWindow.InitializeComponent">
 	<summary>
 InitializeComponent

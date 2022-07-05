@@ -130,16 +130,23 @@ Public Class iconobj
                 runBG.CancelAsync()
             End Try
         ElseIf e.Key = Key.Enter Then
-            If Not isopen Then
-                Try
-                    runBG.RunWorkerAsync()
-                    imageiconobj.Opacity = 0.1
-                    If Not My.Settings.animatescale = 1 Then animater.Start()
-                Catch
-                    runBG.CancelAsync()
-                End Try
+            If Not apppath.StartsWith("!") Then
+                If Not isopen Then
+                    Try
+                        runBG.RunWorkerAsync()
+                        imageiconobj.Opacity = 0.1
+                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                    Catch
+                        runBG.CancelAsync()
+                    End Try
+                Else
+                    ActivateApp(runproc.Id)
+                End If
             Else
-                ActivateApp(runproc.Id)
+                If apppath = "!AppsDrawer" Then
+                    Dim ad As New appdrawer
+                    ad.Show()
+                End If
             End If
         End If
     End Sub
@@ -147,16 +154,23 @@ Public Class iconobj
     Private Sub imageiconobj_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles imageiconobj.KeyUp
         If e.Key = Key.Space Then
             imageiconobj.Opacity = 1
-            If Not isopen Then
-                Try
-                    runBG.RunWorkerAsync()
-                    imageiconobj.Opacity = 0.1
-                    If Not My.Settings.animatescale = 1 Then animater.Start()
-                Catch
-                    runBG.CancelAsync()
-                End Try
+            If Not apppath.StartsWith("!") Then
+                If Not isopen Then
+                    Try
+                        runBG.RunWorkerAsync()
+                        imageiconobj.Opacity = 0.1
+                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                    Catch
+                        runBG.CancelAsync()
+                    End Try
+                Else
+                    ActivateApp(runproc.Id)
+                End If
             Else
-                ActivateApp(runproc.Id)
+                If apppath = "!AppsDrawer" Then
+                    Dim ad As New appdrawer
+                    ad.Show()
+                End If
             End If
         End If
     End Sub
@@ -180,12 +194,6 @@ Public Class iconobj
         Else
             imageiconobj.Opacity = 0.8
         End If
-        If Not containerwin.menustack.Visibility = Visibility.Visible Then
-            containerwin.appname.Content = appname
-            containerwin.appname.UpdateLayout()
-            Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
-            containerwin.appname.Visibility = Visibility.Visible
-        End If
         If hr And Not isEditingAvable Then
             Try
                 If runproc.MainWindowTitle = "" Then
@@ -198,6 +206,14 @@ Public Class iconobj
                 End If
             Catch
             End Try
+        End If
+        If Not isremoved Then
+            If Not containerwin.menustack.Visibility = Visibility.Visible Then
+                containerwin.appname.Content = appname
+                containerwin.appname.UpdateLayout()
+                Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+                containerwin.appname.Visibility = Visibility.Visible
+            End If
         End If
     End Sub
 
@@ -221,16 +237,23 @@ Public Class iconobj
     Private Sub imageiconobj_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseUp
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
-            If Not isopen Then
-                Try
-                    runBG.RunWorkerAsync()
-                    imageiconobj.Opacity = 0.1
-                    If Not My.Settings.animatescale = 1 Then animater.Start()
-                Catch
-                    runBG.CancelAsync()
-                End Try
+            If Not apppath.StartsWith("!") Then
+                If Not isopen Then
+                    Try
+                        runBG.RunWorkerAsync()
+                        imageiconobj.Opacity = 0.1
+                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                    Catch
+                        runBG.CancelAsync()
+                    End Try
+                Else
+                    ActivateApp(runproc.Id)
+                End If
             Else
-                ActivateApp(runproc.Id)
+                If apppath = "!AppsDrawer" Then
+                    Dim ad As New appdrawer
+                    ad.Show()
+                End If
             End If
         ElseIf e.ChangedButton = 2 And isEditingAvable Then
             containerwin.menustack.Visibility = Visibility.Visible
@@ -385,13 +408,17 @@ Public Class iconobj
     End Sub
 
     Private Sub runBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles runBG.DoWork
-        Dim prc = Process.Start(apppath, apparams)
-        runBG.ReportProgress(50, prc)
         Try
-            If Not runBG.CancellationPending Then
-                prc.WaitForInputIdle()
-            End If
-        Catch
+            Dim prc = Process.Start(apppath, apparams)
+            runBG.ReportProgress(50, prc)
+            Try
+                If Not runBG.CancellationPending Then
+                    prc.WaitForInputIdle()
+                End If
+            Catch
+            End Try
+        Catch ex As Exception
+            MsgBox(ex.Message, MsgBoxStyle.Critical)
         End Try
     End Sub
 
@@ -404,17 +431,16 @@ Public Class iconobj
     Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
         imageiconobj.Opacity = 1
         animater.Stop()
-        anitim = 0
     End Sub
-    Dim anitim As Integer = 0
+
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
         Try
-            anitim += 1
-            If anitim = 2000 Then
+            If imageiconobj.Opacity + (anispeed / 1000) >= 1 Or imageiconobj.Opacity + (anispeed / 1000) <= 0.1 Then
                 anispeed = -anispeed
-                anitim = 0
+                imageiconobj.Opacity += anispeed / 1000
+            Else
+                imageiconobj.Opacity += anispeed / 1000
             End If
-            imageiconobj.Opacity += anispeed / 1000
         Catch
         End Try
     End Sub
@@ -429,6 +455,5 @@ Public Class iconobj
     Private Sub waitBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles waitBG.RunWorkerCompleted
         animater.Stop()
         imageiconobj.Opacity = 1
-        anitim = 0
     End Sub
 End Class

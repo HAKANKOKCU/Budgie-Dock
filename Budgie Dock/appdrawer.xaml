@@ -1,0 +1,24 @@
+﻿<Window x:Class="appdrawer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Topmost="True" Title="Applications" Height="445" Width="706" WindowStyle="None" WindowState="Maximized" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+    <Window.Background>
+        <SolidColorBrush Color="Black" Opacity="0.4"></SolidColorBrush>
+    </Window.Background>
+    <DockPanel>
+        <Border HorizontalAlignment="Center" Margin="40" CornerRadius="16" Height="32" DockPanel.Dock="Top" Name="sbarea" Panel.ZIndex="100000">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.8"></SolidColorBrush>
+            </Border.Background>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Budgie%20Dock;component/search.png" OpacityMask="{x:Null}" Width="30" Height="30" VerticalAlignment="Center"></Image>
+                <TextBox Name="SearchTB" CaretBrush="White" SelectionBrush="White" Width="400" Background="{x:Null}" Padding="4" Foreground="White" BorderThickness="0" FontSize="16" VerticalAlignment="Center"></TextBox>
+            </StackPanel>
+        </Border>
+        <ScrollViewer Name="sp" Margin="0,-100,0,0" VerticalScrollBarVisibility="Hidden">
+            <WrapPanel Name="aaps" Margin="20,80,20,20">
+                
+            </WrapPanel>
+        </ScrollViewer>
+    </DockPanel>
+</Window>

@@ -81,7 +81,6 @@ Class MainWindow
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Me.Topmost = My.Settings.topMost
-        LoadIconPack()
     End Sub
 
     Sub LoadIconPack()
@@ -104,6 +103,17 @@ Class MainWindow
         iconlist.Clear()
         runingapps.Children.Clear()
         aaps.Clear()
+        disallowedpnames.Clear()
+        'Dim wid As New RWidget("C:\Users\ASUS PC\Desktop\testextension.bdockwidget", appsgrid)
+        For Each dup As String In defaultdisallowed
+            disallowedpnames.Add(dup)
+        Next
+        Try
+            For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
+                disallowedpnames.Add(dup)
+            Next
+        Catch
+        End Try
         If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
             For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
                 If Iconn = "sep" Then
@@ -220,7 +230,7 @@ Class MainWindow
         End Try
         Dim a As Integer = 0
         Dim ar As Integer = 0
-        If Not My.Settings.animatescale = 0 Then
+        If Not My.Settings.animatescale = 1 Then
             Try
                 For Each i As UIElement In appsgrid.Children
                     If TypeOf i Is Image Then

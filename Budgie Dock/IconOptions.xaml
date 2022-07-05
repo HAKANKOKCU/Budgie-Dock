@@ -4,7 +4,9 @@
     Title="Icon Options" Height="379" Width="567" WindowStartupLocation="CenterScreen">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel HorizontalAlignment="Stretch" Name="StackPanel1" VerticalAlignment="Stretch">
-            <Label FontSize="20" FontWeight="Bold" Background="Orange" Foreground="White">Edit Icon Info</Label>
+            <Border Background="Orange">
+                <Label FontSize="20" FontWeight="Bold" Foreground="White">Edit Icon Info</Label>
+            </Border>
             <Label>Name (ex. My App's Icon)</Label>
             <TextBox Name="Appname">Appname</TextBox>
             <Label>Icon Path (Dont use internet paths)</Label>

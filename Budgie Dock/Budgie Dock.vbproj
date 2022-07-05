@@ -97,10 +97,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="appdrawer.xaml.vb">
+      <DependentUpon>appdrawer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ini.vb" />
     <Compile Include="procremove.vb" />
     <Compile Include="restoreAPI.vb" />
+    <Compile Include="RWidget.vb" />
     <Compile Include="Sepremover.vb" />
+    <Page Include="appdrawer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="BDOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,6 +201,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="search.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
