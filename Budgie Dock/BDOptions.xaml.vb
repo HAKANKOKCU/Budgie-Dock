@@ -41,6 +41,7 @@ Public Class BDOptions
         iuR.Text = My.Settings.iuRed
         iuG.Text = My.Settings.iuGreen
         iuB.Text = My.Settings.iuBlue
+        dciara.IsChecked = My.Settings.ApplyDockColorAtIsAppRuning
         acs = True
     End Sub
 
@@ -214,5 +215,12 @@ Public Class BDOptions
         Catch ex As Exception
             MsgBox("Please Enter A Valid Number")
         End Try
+    End Sub
+
+    Private Sub dciara_Clicked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles dciara.Click
+        If acs Then
+            My.Settings.ApplyDockColorAtIsAppRuning = dciara.IsChecked
+            My.Settings.Save()
+        End If
     End Sub
 End Class

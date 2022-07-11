@@ -74,7 +74,19 @@ Class MainWindow
         End If
         Me.Height = appsgrid.Height + 163
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
-        bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+        If My.Settings.ApplyDockColorAtIsAppRuning Then
+            isappopen.Background = bdr.Background
+        End If
+        Try
+            If My.Settings.dockcr.Contains(",") Then
+                Dim crlist = My.Settings.dockcr.Split(",")
+                bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
+            Else
+                bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+            End If
+        Catch ex As Exception
+            MsgBox("Failled to set corner radius: " + ex.Message)
+        End Try
         If My.Settings.pos = "Bottom" Then
             Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide, My.Settings.Size - 2, 0) + My.Settings.paddingTop
         Else
@@ -193,11 +205,11 @@ Class MainWindow
     End Sub
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
-        If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
-        Else
-            Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
-        End If
+        'If My.Settings.pos = "Bottom" Then
+        Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+        'Else
+        'Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
+        'End If
         If My.Settings.topMost Then
             Me.Topmost = True
         End If
@@ -390,8 +402,20 @@ Class MainWindow
         menustack.Visibility = Visibility.Hidden
         appname.Visibility = Windows.Visibility.Hidden
         icop.ShowDialog()
-        bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+        Try
+            If My.Settings.dockcr.Contains(",") Then
+                Dim crlist = My.Settings.dockcr.Split(",")
+                bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
+            Else
+                bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+            End If
+        Catch ex As Exception
+            MsgBox("Failled to set corner radius: " + ex.Message)
+        End Try
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
+        If My.Settings.ApplyDockColorAtIsAppRuning Then
+            isappopen.Background = bdr.Background
+        End If
         reicon()
     End Sub
 
@@ -400,8 +424,20 @@ Class MainWindow
             Dim icop As New BDOptions
             menustack.Visibility = Visibility.Hidden
             icop.ShowDialog()
-            bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+            Try
+                If My.Settings.dockcr.Contains(",") Then
+                    Dim crlist = My.Settings.dockcr.Split(",")
+                    bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
+                Else
+                    bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+                End If
+            Catch ex As Exception
+                MsgBox("Failled to set corner radius: " + ex.Message)
+            End Try
             bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
+            If My.Settings.ApplyDockColorAtIsAppRuning Then
+                isappopen.Background = bdr.Background
+            End If
             reicon()
         ElseIf e.Key = Key.R Then
             appsgrid.Width = My.Settings.Size

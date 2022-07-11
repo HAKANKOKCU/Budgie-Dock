@@ -101,9 +101,9 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property dockcr() As Integer
+    Public Property dockcr() As String
         Get
-            Return CType(Me("dockcr"),Integer)
+            Return CType(Me("dockcr"),String)
         End Get
         Set
             Me("dockcr") = value
@@ -263,6 +263,18 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("iuBlue") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property ApplyDockColorAtIsAppRuning() As Boolean
+        Get
+            Return CType(Me("ApplyDockColorAtIsAppRuning"),Boolean)
+        End Get
+        Set
+            Me("ApplyDockColorAtIsAppRuning") = value
         End Set
     End Property
 End Class
