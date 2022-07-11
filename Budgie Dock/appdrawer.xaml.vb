@@ -1,9 +1,13 @@
-﻿Public Class appdrawer
+﻿Imports System.Windows.Threading
+
+Public Class appdrawer
     Dim icopack As Ini = Nothing
     Dim handleclick As Boolean = True
     Dim imargin As New Thickness(5)
     Dim hvcolor As New SolidColorBrush(Color.FromArgb(50, 255, 255, 255))
     Dim bc As New CornerRadius(10)
+    Public WithEvents animer As New DispatcherTimer
+    Dim postogo = 0
     Private Sub appdrawer_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles Me.KeyDown
         If e.Key = Key.Escape Then
             aaps.Children.Clear()
@@ -12,6 +16,17 @@
     End Sub
 
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        Me.Width = My.Computer.Screen.Bounds.Width
+        Me.Height = My.Computer.Screen.Bounds.Height
+        If Not My.Settings.animatescale = 0 Then
+            Me.Top = My.Computer.Screen.Bounds.Height
+            animer.Interval = TimeSpan.FromMilliseconds(1)
+            animer.Start()
+        Else
+            Me.Top = 0
+            Me.Opacity = 1
+        End If
+        Me.Left = 0
         SearchTB.Focus()
         If My.Computer.FileSystem.FileExists(My.Settings.CurrentIconThemePath) Then
             icopack = New Ini(My.Settings.CurrentIconThemePath)
@@ -212,6 +227,14 @@
                                         End If
                                     End Sub
             wpToadd.Children.Add(bdr)
+        End If
+    End Sub
+
+    Private Sub animer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animer.Tick
+        Me.Top += (postogo - Me.Top) / My.Settings.animatescale
+        Me.Opacity = 1.0 - (Me.Top / My.Computer.Screen.Bounds.Height)
+        If My.Settings.topMost Then
+            Me.Topmost = True
         End If
     End Sub
 End Class
