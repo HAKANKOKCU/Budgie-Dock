@@ -42,6 +42,8 @@ Public Class BDOptions
         iuG.Text = My.Settings.iuGreen
         iuB.Text = My.Settings.iuBlue
         dciara.IsChecked = My.Settings.ApplyDockColorAtIsAppRuning
+        useastb.IsChecked = My.Settings.UseDockAsTaskbar
+        dps.SelectedIndex = IIf(My.Settings.pos = "Bottom", 0, 1)
         acs = True
     End Sub
 
@@ -221,6 +223,19 @@ Public Class BDOptions
         If acs Then
             My.Settings.ApplyDockColorAtIsAppRuning = dciara.IsChecked
             My.Settings.Save()
+        End If
+    End Sub
+
+    Private Sub useastb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles useastb.Click
+        If acs Then
+            My.Settings.UseDockAsTaskbar = useastb.IsChecked
+            My.Settings.Save()
+        End If
+    End Sub
+
+    Private Sub dps_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles dps.SelectionChanged
+        If acs Then
+            My.Settings.pos = dps.SelectedItem.Content
         End If
     End Sub
 End Class

@@ -5,7 +5,7 @@
     <Setting Name="Size" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">40</Value>
     </Setting>
-    <Setting Name="pos" Type="System.String" Scope="Application">
+    <Setting Name="pos" Type="System.String" Scope="User">
       <Value Profile="(Default)">Bottom</Value>
     </Setting>
     <Setting Name="animatescale" Type="System.Int32" Scope="User">
@@ -57,6 +57,9 @@
       <Value Profile="(Default)">255</Value>
     </Setting>
     <Setting Name="ApplyDockColorAtIsAppRuning" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="UseDockAsTaskbar" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

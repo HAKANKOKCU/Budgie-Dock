@@ -65,13 +65,16 @@ Partial Friend NotInheritable Class MySettings
         End Set
     End Property
     
-    <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("Bottom")>  _
-    Public ReadOnly Property pos() As String
+    Public Property pos() As String
         Get
             Return CType(Me("pos"),String)
         End Get
+        Set
+            Me("pos") = value
+        End Set
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
@@ -275,6 +278,18 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("ApplyDockColorAtIsAppRuning") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property UseDockAsTaskbar() As Boolean
+        Get
+            Return CType(Me("UseDockAsTaskbar"),Boolean)
+        End Get
+        Set
+            Me("UseDockAsTaskbar") = value
         End Set
     End Property
 End Class

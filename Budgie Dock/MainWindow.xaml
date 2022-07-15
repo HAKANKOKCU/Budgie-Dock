@@ -33,16 +33,18 @@
                 </Label>
             </Canvas>
             <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True">
-                <DockPanel ClipToBounds="True" AllowDrop="True">
+                <DockPanel ClipToBounds="True" AllowDrop="True" HorizontalAlignment="Center">
                     <StackPanel AllowDrop="True" Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
                     <StackPanel Orientation="Horizontal" Name="runingapps" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
                 </DockPanel>
             </Border>
-            <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
-                <StackPanel.Background>
-                    <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
-                </StackPanel.Background>
-            </StackPanel>
+            <Border Name="ff" HorizontalAlignment="Center">
+                <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" ClipToBounds="True">
+                    <StackPanel.Background>
+                        <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
+                    </StackPanel.Background>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </Grid>
 </Window>

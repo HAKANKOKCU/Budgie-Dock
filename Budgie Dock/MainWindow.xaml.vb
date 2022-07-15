@@ -15,7 +15,7 @@ Class MainWindow
     Dim ismw As Boolean = False
     Public disallowedpnames As New ArrayList
     'This array will be "injected" to disallowedpnames in "Loaded" Function.
-    Public defaultdisallowed() As String = {"explorer", "explorer.exe", "textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
+    Public defaultdisallowed() As String = {"textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
 
     Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     <DllImport("user32.dll")> _
@@ -75,7 +75,7 @@ Class MainWindow
         Me.Height = appsgrid.Height + 163
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         If My.Settings.ApplyDockColorAtIsAppRuning Then
-            isappopen.Background = bdr.Background
+            ff.Background = bdr.Background
         End If
         Try
             If My.Settings.dockcr.Contains(",") Then
@@ -93,6 +93,29 @@ Class MainWindow
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Me.Topmost = My.Settings.topMost
+        RedesignLayout()
+    End Sub
+
+    Sub RedesignLayout()
+        If My.Settings.pos = "Bottom" Then
+            mas.Children.Remove(ncan)
+            mas.Children.Remove(bdr)
+            mas.Children.Remove(ff)
+            mas.Children.Add(ncan)
+            mas.Children.Add(bdr)
+            mas.Children.Add(ff)
+            Canvas.SetTop(appname, 130)
+            Canvas.SetTop(menustack, 0)
+        ElseIf My.Settings.pos = "Top" Then
+            mas.Children.Remove(ncan)
+            mas.Children.Remove(bdr)
+            mas.Children.Remove(ff)
+            mas.Children.Add(ff)
+            mas.Children.Add(bdr)
+            mas.Children.Add(ncan)
+            Canvas.SetTop(appname, 0)
+            Canvas.SetTop(menustack, 30)
+        End If
     End Sub
 
     Sub LoadIconPack()
@@ -150,6 +173,7 @@ Class MainWindow
                     a.ClipToBounds = True
                     Dim pp As New Grid
                     pp.Width = 3
+                    pp.HorizontalAlignment = Windows.HorizontalAlignment.Center
                     isappopen.Children.Add(pp)
                 Else
                     Dim a As New iconobj
@@ -205,8 +229,22 @@ Class MainWindow
     End Sub
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
+        If My.Settings.UseDockAsTaskbar Then
+            bdr.Width = My.Computer.Screen.WorkingArea.Width
+            ff.Width = My.Computer.Screen.WorkingArea.Width
+            If My.Settings.pos = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            Else
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            End If
+        Else
+            If My.Settings.pos = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            Else
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            End If
+        End If
         'If My.Settings.pos = "Bottom" Then
-        Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
         'Else
         'Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         'End If
@@ -414,8 +452,9 @@ Class MainWindow
         End Try
         bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
         If My.Settings.ApplyDockColorAtIsAppRuning Then
-            isappopen.Background = bdr.Background
+            ff.Background = bdr.Background
         End If
+        RedesignLayout()
         reicon()
     End Sub
 
@@ -436,8 +475,9 @@ Class MainWindow
             End Try
             bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
             If My.Settings.ApplyDockColorAtIsAppRuning Then
-                isappopen.Background = bdr.Background
+                ff.Background = bdr.Background
             End If
+            RedesignLayout()
             reicon()
         ElseIf e.Key = Key.R Then
             appsgrid.Width = My.Settings.Size
@@ -482,7 +522,7 @@ Class MainWindow
         For Each app As Process In Process.GetProcesses
             If Not app.MainWindowHandle = IntPtr.Zero Then
                 If Not app.MainWindowTitle.Trim = "" Then
-                    If Not disallowedpnames.Contains(app.ProcessName.ToLower) Then
+                    If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle) Then
                         If Not icc.Contains(app.ProcessName.ToLower) Then
                             If Not aaps.Contains(app.Id) Then
                                 ruwid += My.Settings.Size
@@ -557,5 +597,67 @@ Class MainWindow
                 ruwid += 3
             End If
         Next
+    End Sub
+
+    Private Sub Window_Initialized(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Initialized
+        If Command().Replace("""", "").Split(" ")(0) = "AddIcon" Then
+            If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
+                For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
+                    If Iconn = "sep" Then
+                        iconlist.Add("sep")
+                    Else
+                        iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
+                    End If
+                Next
+            End If
+            Try
+                Dim Path = Split(Command.Replace("""", ""), " ", 2)(1)
+                Dim n = My.Computer.FileSystem.GetName(Path)
+                If n = "" Then
+                    n = Path
+                End If
+                Try
+                    Dim fi As New IO.FileInfo(Path)
+                    Dim droptemp = fi.Length 'This should give a error if drag is folder
+                    n = n.Replace(fi.Extension, "")
+                Catch
+                    'do nothing if drop is folder.
+                End Try
+                Dim aiconsuccess As Boolean = False
+                Dim findico = True
+                If Not icopack Is Nothing Then
+                    If Not icopack.GetValue("IconPaths", n) = "Code_Item.NotFound" Then
+                        findico = False
+                        iconlist.Add({Path, icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\"), n})
+                    End If
+                End If
+                If findico Then
+                    Try
+                        Dim aa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Path)
+                        Try
+                            My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png")
+                        Catch
+                        End Try
+                        aa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                        aiconsuccess = True
+                    Catch
+                        If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png") Then
+                            aiconsuccess = True
+                        End If
+                    End Try
+                End If
+                If aiconsuccess Then
+                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", n})
+                ElseIf findico Then
+                    iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
+                End If
+                iddd += 1
+                savicon()
+                Console.WriteLine("Icon Added")
+            Catch ex As Exception
+                MsgBox(ex.Message, MsgBoxStyle.Critical)
+            End Try
+            End
+        End If
     End Sub
 End Class
