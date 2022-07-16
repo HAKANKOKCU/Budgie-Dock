@@ -236,6 +236,7 @@ Public Class BDOptions
     Private Sub dps_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles dps.SelectionChanged
         If acs Then
             My.Settings.pos = dps.SelectedItem.Content
+            My.Settings.Save()
         End If
     End Sub
 End Class
