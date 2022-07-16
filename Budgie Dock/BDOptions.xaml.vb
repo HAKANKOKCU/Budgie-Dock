@@ -239,4 +239,8 @@ Public Class BDOptions
             My.Settings.Save()
         End If
     End Sub
+
+    Private Sub exit_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles [Exit].MouseUp
+        End
+    End Sub
 End Class

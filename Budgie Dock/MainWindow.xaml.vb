@@ -93,6 +93,21 @@ Class MainWindow
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Me.Topmost = My.Settings.topMost
+        If My.Settings.UseDockAsTaskbar Then
+            bdr.Width = My.Computer.Screen.WorkingArea.Width
+            ff.Width = My.Computer.Screen.WorkingArea.Width
+            If My.Settings.pos = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            Else
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            End If
+        Else
+            If My.Settings.pos = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            Else
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            End If
+        End If
         RedesignLayout()
     End Sub
 
@@ -116,6 +131,11 @@ Class MainWindow
             Canvas.SetTop(appname, 0)
             Canvas.SetTop(menustack, 30)
         End If
+        mas.Orientation = Orientation.Vertical
+        appsgrid.Orientation = Orientation.Horizontal
+        ff.UpdateLayout()
+        ncan.UpdateLayout()
+        ff.UpdateLayout()
     End Sub
 
     Sub LoadIconPack()
@@ -263,7 +283,7 @@ Class MainWindow
         End Try
         If Not appsgrid.Height = My.Settings.Size Then
             appsgrid.Height = My.Settings.Size
-            Me.Height = appsgrid.Height + 160
+            Me.Height = appsgrid.Height + 162
             reicon()
         End If
         Try

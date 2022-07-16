@@ -66,11 +66,18 @@
             <CheckBox Name="tpm">Forced Top Most (Restart Needed For Disabling)</CheckBox>
             <CheckBox Name="dciara">Dock Color At IsAppRuning Area</CheckBox>
             <CheckBox Name="useastb">Taskbar Mode (Restart Needed For Disabling)</CheckBox>
-            <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Label Foreground="White">Restart</Label>
-                </StackPanel>
-            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Foreground="White">Restart</Label>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="exit">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Foreground="White">Exit</Label>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Window>
