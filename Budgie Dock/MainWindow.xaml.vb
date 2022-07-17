@@ -39,6 +39,10 @@ Class MainWindow
             Dim dd As String = ""
             My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", dd, False)
         End If
+        If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings.ini") Then
+            Dim dd As String = My.Resources.DefaultSettings
+            My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings.ini", dd, False)
+        End If
         If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data") Then
             Dim dd As String = ""
             My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data", dd, False)
@@ -46,7 +50,8 @@ Class MainWindow
         For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
             disallowedpnames.Add(dup)
         Next
-        appsgrid.Width = My.Settings.Size
+        InitSettings()
+        appsgrid.Width = GetSetting("size")
         reicon()
         Dim dlbtn As New ButtonStack
         dlbtn.theStackPanel = DeleteIconButton
@@ -58,61 +63,61 @@ Class MainWindow
         listbtn.theStackPanel = ListingButton
         Dim asbtn As New ButtonStack
         asbtn.theStackPanel = AddspButton
-        If My.Settings.pos = "Bottom" Then
+        If GetSetting("pos") = "Bottom" Then
             mas.Orientation = Orientation.Vertical
             appsgrid.Orientation = Orientation.Horizontal
-            appsgrid.Height = My.Settings.Size
+            appsgrid.Height = GetSetting("size")
         Else
             mas.Orientation = Orientation.Horizontal
             appsgrid.Orientation = Orientation.Vertical
-            appsgrid.Width = My.Settings.Size
+            appsgrid.Width = GetSetting("size")
         End If
         Me.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
         Me.Left = 0
-        If My.Settings.animatescale = 0 Then
-            My.Settings.animatescale = 1
+        If GetSetting("animateScale") = 0 Then
+            SetSetting("animateScale", 1, True)
         End If
         Me.Height = appsgrid.Height + 163
-        bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
-        If My.Settings.ApplyDockColorAtIsAppRuning Then
+        bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
+        If GetSetting("applyDockColorAtIsAppRuning") Then
             ff.Background = bdr.Background
         End If
         Try
-            If My.Settings.dockcr.Contains(",") Then
-                Dim crlist = My.Settings.dockcr.Split(",")
+            If GetSetting("dockCornerRadius").Contains(",") Then
+                Dim crlist = GetSetting("dockCornerRadius").Split(",")
                 bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
             Else
-                bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+                bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
             End If
         Catch ex As Exception
             MsgBox("Failled to set corner radius: " + ex.Message)
         End Try
-        If My.Settings.pos = "Bottom" Then
-            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+        If GetSetting("pos") = "Bottom" Then
+            Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") = 1, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
-        Me.Topmost = My.Settings.topMost
-        If My.Settings.UseDockAsTaskbar Then
+        Me.Topmost = GetSetting("topMost")
+        If GetSetting("useDockAsTaskbar") = 1 Then
             bdr.Width = My.Computer.Screen.WorkingArea.Width
             ff.Width = My.Computer.Screen.WorkingArea.Width
-            If My.Settings.pos = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            If GetSetting("pos") = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             Else
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             End If
         Else
-            If My.Settings.pos = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            If GetSetting("pos") = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             Else
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             End If
         End If
         RedesignLayout()
     End Sub
 
     Sub RedesignLayout()
-        If My.Settings.pos = "Bottom" Then
+        If GetSetting("pos") = "Bottom" Then
             mas.Children.Remove(ncan)
             mas.Children.Remove(bdr)
             mas.Children.Remove(ff)
@@ -121,7 +126,7 @@ Class MainWindow
             mas.Children.Add(ff)
             Canvas.SetTop(appname, 130)
             Canvas.SetTop(menustack, 0)
-        ElseIf My.Settings.pos = "Top" Then
+        ElseIf GetSetting("pos") = "Top" Then
             mas.Children.Remove(ncan)
             mas.Children.Remove(bdr)
             mas.Children.Remove(ff)
@@ -139,8 +144,8 @@ Class MainWindow
     End Sub
 
     Sub LoadIconPack()
-        If My.Computer.FileSystem.FileExists(My.Settings.CurrentIconThemePath) Then
-            icopack = New Ini(My.Settings.CurrentIconThemePath)
+        If My.Computer.FileSystem.FileExists(GetSetting("currentIconThemePath")) Then
+            icopack = New Ini(GetSetting("currentIconThemePath"))
         Else
             icopack = Nothing
         End If
@@ -174,12 +179,12 @@ Class MainWindow
                 If Iconn = "sep" Then
                     Dim a As New Grid
                     a.UseLayoutRounding = True
-                    If Not My.Settings.animatescale = 1 Then a.Height = 5
+                    If Not GetSetting("animateScale") = 1 Then a.Height = 5
                     Try
-                        If My.Settings.animatescale = 1 Then a.Height = My.Settings.Size - 5
+                        If GetSetting("animateScale") = 1 Then a.Height = GetSetting("size") - 5
                     Catch
                     End Try
-                    a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
+                    a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
                     a.Width = 1
                     a.ClipToBounds = True
                     a.Margin = New Thickness(1, 0, 1, 0)
@@ -210,13 +215,13 @@ Class MainWindow
                     a.endinit()
                     a.imageiconobj.ClipToBounds = True
                     Try
-                        a.imageiconobj.Height = My.Settings.Size - 5
+                        a.imageiconobj.Height = GetSetting("size") - 5
                     Catch
                     End Try
                     If animate Then
-                        If Not My.Settings.animatescale = 1 Then a.imageiconobj.Height = 5
+                        If Not GetSetting("animateScale") = 1 Then a.imageiconobj.Height = 5
                         Try
-                            If My.Settings.animatescale = 1 Then a.imageiconobj.Height = My.Settings.Size - 5
+                            If GetSetting("animateScale") = 1 Then a.imageiconobj.Height = GetSetting("size") - 5
                         Catch
                         End Try
                     End If
@@ -230,7 +235,7 @@ Class MainWindow
             For Each a As UIElement In appsgrid.Children
                 If TypeOf a Is Image Then
                     Try
-                        sizee += My.Settings.Size
+                        sizee += GetSetting("size")
                     Catch
                     End Try
                 Else
@@ -245,30 +250,30 @@ Class MainWindow
             appsgrid.Children.Add(lbldrg)
             agwid = 138
         End If
-        refopenapps(IIf(My.Settings.animatescale = 1, False, True))
+        refopenapps(IIf(GetSetting("animateScale") = 1, False, True))
     End Sub
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
-        If My.Settings.UseDockAsTaskbar Then
+        If GetSetting("useDockAsTaskbar") Then
             bdr.Width = My.Computer.Screen.WorkingArea.Width
             ff.Width = My.Computer.Screen.WorkingArea.Width
-            If My.Settings.pos = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            If GetSetting("pos") = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             Else
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             End If
         Else
-            If My.Settings.pos = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+            If GetSetting("pos") = "Bottom" Then
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             Else
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(My.Settings.autoHide And Not isdockhovered, My.Settings.Size - 2, 0) + My.Settings.paddingTop
+                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             End If
         End If
         'If My.Settings.pos = "Bottom" Then
         'Else
         'Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         'End If
-        If My.Settings.topMost Then
+        If GetSetting("topMost") = 1 Then
             Me.Topmost = True
         End If
         Me.Left = 0
@@ -281,33 +286,33 @@ Class MainWindow
             End If
         Catch
         End Try
-        If Not appsgrid.Height = My.Settings.Size Then
-            appsgrid.Height = My.Settings.Size
+        If Not appsgrid.Height = GetSetting("size") Then
+            appsgrid.Height = GetSetting("size")
             Me.Height = appsgrid.Height + 162
             reicon()
         End If
         Try
-            appsgrid.Width += (agwid - appsgrid.Width) / My.Settings.animatescale
+            appsgrid.Width += (agwid - appsgrid.Width) / GetSetting("animateScale")
         Catch
         End Try
         Try
-            runingapps.Width += (ruwid - runingapps.Width) / My.Settings.animatescale
+            runingapps.Width += (ruwid - runingapps.Width) / GetSetting("animateScale")
         Catch
         End Try
         Try
-            isappopen.Width += ((agwid + ruwid) - isappopen.Width) / My.Settings.animatescale
+            isappopen.Width += ((agwid + ruwid) - isappopen.Width) / GetSetting("animateScale")
         Catch
         End Try
         Dim a As Integer = 0
         Dim ar As Integer = 0
-        If Not My.Settings.animatescale = 1 Then
+        If Not GetSetting("animateScale") = 1 Then
             Try
                 For Each i As UIElement In appsgrid.Children
                     If TypeOf i Is Image Then
                         Dim ii As Image = i
-                        a += My.Settings.Size - 5
+                        a += GetSetting("size") - 5
                         If appsgrid.Width >= a Then
-                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                         Else
                             ii.Height = 5
                         End If
@@ -315,7 +320,7 @@ Class MainWindow
                         Dim ii As Grid = i
                         a += 3
                         If appsgrid.Width >= a Then
-                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                         Else
                             ii.Height = 5
                         End If
@@ -326,7 +331,7 @@ Class MainWindow
                         Dim ii As Grid = i
                         ar += 3
                         If appsgrid.Width >= ar Then
-                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                         Else
                             ii.Height = 5
                         End If
@@ -335,7 +340,7 @@ Class MainWindow
                         Dim ii As Image = i
                         ar += 3
                         If appsgrid.Width >= ar Then
-                            ii.Height += (My.Settings.Size - 6 - ii.Height) / My.Settings.animatescale
+                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                         Else
                             ii.Height = 5
                         End If
@@ -411,7 +416,7 @@ Class MainWindow
                 If Not icopack Is Nothing Then
                     If Not icopack.GetValue("IconPaths", n) = "Code_Item.NotFound" Then
                         findico = False
-                        a.iconpath = icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
+                        a.iconpath = icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
                         iconlist.Add({Path, icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\"), n})
                     End If
                 End If
@@ -460,18 +465,19 @@ Class MainWindow
         menustack.Visibility = Visibility.Hidden
         appname.Visibility = Windows.Visibility.Hidden
         icop.ShowDialog()
+        InitSettings()
         Try
-            If My.Settings.dockcr.Contains(",") Then
-                Dim crlist = My.Settings.dockcr.Split(",")
+            If GetSetting("dockCornerRadius").Contains(",") Then
+                Dim crlist = GetSetting("dockCornerRadius").Split(",")
                 bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
             Else
-                bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+                bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
             End If
         Catch ex As Exception
             MsgBox("Failled to set corner radius: " + ex.Message)
         End Try
-        bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
-        If My.Settings.ApplyDockColorAtIsAppRuning Then
+        bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
+        If GetSetting("applyDockColorAtIsAppRuning") Then
             ff.Background = bdr.Background
         End If
         RedesignLayout()
@@ -483,25 +489,26 @@ Class MainWindow
             Dim icop As New BDOptions
             menustack.Visibility = Visibility.Hidden
             icop.ShowDialog()
+            InitSettings()
             Try
-                If My.Settings.dockcr.Contains(",") Then
-                    Dim crlist = My.Settings.dockcr.Split(",")
+                If GetSetting("dockCornerRadius").Contains(",") Then
+                    Dim crlist = GetSetting("dockCornerRadius").Split(",")
                     bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
                 Else
-                    bdr.CornerRadius = New CornerRadius(My.Settings.dockcr)
+                    bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
                 End If
             Catch ex As Exception
                 MsgBox("Failled to set corner radius: " + ex.Message)
             End Try
-            bdr.Background = New SolidColorBrush(Color.FromArgb((My.Settings.dockopacity / 100) * 255, My.Settings.dockRed, My.Settings.dockGreen, My.Settings.dockBlue))
-            If My.Settings.ApplyDockColorAtIsAppRuning Then
+            bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
+            If GetSetting("applyDockColorAtIsAppRuning") Then
                 ff.Background = bdr.Background
             End If
             RedesignLayout()
             reicon()
         ElseIf e.Key = Key.R Then
-            appsgrid.Width = My.Settings.Size
-            isappopen.Width = My.Settings.Size
+            appsgrid.Width = GetSetting("size")
+            isappopen.Width = GetSetting("size")
             runingapps.Width = 0
             reicon()
         ElseIf e.Key = Key.L Then
@@ -545,12 +552,12 @@ Class MainWindow
                     If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle) Then
                         If Not icc.Contains(app.ProcessName.ToLower) Then
                             If Not aaps.Contains(app.Id) Then
-                                ruwid += My.Settings.Size
-                                If ruwid = My.Settings.Size Then
+                                ruwid += GetSetting("size")
+                                If ruwid = GetSetting("size") Then
                                     Dim a As New Grid
                                     a.UseLayoutRounding = True
                                     a.Height = 5
-                                    a.Background = New SolidColorBrush(Color.FromRgb(My.Settings.separatorRed, My.Settings.SeparatorGreen, My.Settings.SeparatorBlue))
+                                    a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
                                     a.Width = 1
                                     a.ClipToBounds = True
                                     a.Margin = New Thickness(1, 0, 1, 0)
@@ -567,7 +574,7 @@ Class MainWindow
                                 If Not icopack Is Nothing Then
                                     If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
                                         findico = False
-                                        ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), ""))
+                                        ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
                                     End If
                                 End If
                                 If findico Then
@@ -598,7 +605,7 @@ Class MainWindow
                                 ico.endinit()
                                 If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
                                 Try
-                                    If Not ani Then ico.imageiconobj.Height = My.Settings.Size - 5
+                                    If Not ani Then ico.imageiconobj.Height = GetSetting("size") - 5
                                 Catch
                                 End Try
                                 aaps.Add(app.Id)

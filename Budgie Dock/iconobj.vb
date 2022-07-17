@@ -60,14 +60,14 @@ Public Class iconobj
         Catch
         End Try
         imageiconobj.Focusable = True
-        imageiconobj.Width = My.Settings.Size
+        imageiconobj.Width = GetSetting("size")
         Try
-            imageiconobj.Height = My.Settings.Size - 5
+            imageiconobj.Height = GetSetting("size") - 5
         Catch
         End Try
         imageiconobj.ClipToBounds = True
-        isapopen.Width = My.Settings.Size / 3
-        isapopen.Margin = New Thickness(My.Settings.Size / 3, 0, My.Settings.Size / 3, 0)
+        isapopen.Width = GetSetting("size") / 3
+        isapopen.Margin = New Thickness(GetSetting("size") / 3, 0, GetSetting("size") / 3, 0)
         isapopen.Height = 3
         isapopen.Background = Brushes.Transparent
         isapopen.ClipToBounds = True
@@ -125,7 +125,7 @@ Public Class iconobj
             Try
                 runBG.RunWorkerAsync()
                 imageiconobj.Opacity = 0.1
-                If Not My.Settings.animatescale = 1 Then animater.Start()
+                If Not GetSetting("animateScale") = 1 Then animater.Start()
             Catch
                 runBG.CancelAsync()
             End Try
@@ -135,7 +135,7 @@ Public Class iconobj
                     Try
                         runBG.RunWorkerAsync()
                         imageiconobj.Opacity = 0.1
-                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                        If Not GetSetting("animateScale") = 1 Then animater.Start()
                     Catch
                         runBG.CancelAsync()
                     End Try
@@ -161,7 +161,7 @@ Public Class iconobj
                     Try
                         runBG.RunWorkerAsync()
                         imageiconobj.Opacity = 0.1
-                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                        If Not GetSetting("animateScale") = 1 Then animater.Start()
                     Catch
                         runBG.CancelAsync()
                     End Try
@@ -246,7 +246,7 @@ Public Class iconobj
                     Try
                         runBG.RunWorkerAsync()
                         imageiconobj.Opacity = 0.1
-                        If Not My.Settings.animatescale = 1 Then animater.Start()
+                        If Not GetSetting("animateScale") = 1 Then animater.Start()
                     Catch
                         runBG.CancelAsync()
                     End Try
@@ -310,12 +310,24 @@ Public Class iconobj
             If Not fi.Extension = "" Then
                 For Each prc As Process In Process.GetProcesses
                     If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                        isapopen.Background = New SolidColorBrush(Color.FromArgb(255, My.Settings.iuRed, My.Settings.iuGreen, My.Settings.iuBlue))
-                        isopen = True
                         Try
-                            If hr Then If runproc.HasExited Then isprocfound = False
-                            If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                            If prc.MainModule.FileName = apppath Then
+                                isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
+                                isopen = True
+                                Try
+                                    If hr Then If runproc.HasExited Then isprocfound = False
+                                    If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                                Catch
+                                End Try
+                            End If
                         Catch
+                            isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
+                            isopen = True
+                            Try
+                                If hr Then If runproc.HasExited Then isprocfound = False
+                                If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                            Catch
+                            End Try
                         End Try
                     End If
                 Next
@@ -389,7 +401,7 @@ Public Class iconobj
 
     Private Sub isapopen_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseLeave
         If isEditingAvable Then
-            isapopen.Background = New SolidColorBrush(Color.FromArgb(255, My.Settings.iuRed, My.Settings.iuGreen, My.Settings.iuBlue))
+            isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
         Else
             isapopen.Background = Brushes.Transparent
         End If
@@ -400,7 +412,7 @@ Public Class iconobj
             Try
                 runBG.RunWorkerAsync()
                 imageiconobj.Opacity = 0.1
-                If Not My.Settings.animatescale = 1 Then animater.Start()
+                If Not GetSetting("animateScale") = 1 Then animater.Start()
             Catch
                 runBG.CancelAsync()
             End Try

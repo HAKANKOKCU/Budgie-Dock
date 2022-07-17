@@ -1,0 +1,22 @@
+;; For booleans, False=0, True=1
+[Main]
+size=40
+pos=Bottom
+animateScale=5
+dockOpacity=10
+dockCornerRadius=0
+dockRed=255
+dockGreen=255
+dockBlue=255
+separatorRed=0
+separatorGreen=0
+separatorBlue=0
+autoHide=0
+topMost=0
+paddingTop=0
+currentIconThemePath=
+isAppRuningRed=255
+isAppRuningGreen=255
+isAppRuningBlue=255
+applyDockColorAtIsAppRuning=0
+useDockAsTaskbar=0

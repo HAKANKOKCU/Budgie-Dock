@@ -18,7 +18,7 @@ Public Class appdrawer
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Me.Width = My.Computer.Screen.Bounds.Width
         Me.Height = My.Computer.Screen.Bounds.Height
-        If Not My.Settings.animatescale = 0 Then
+        If Not GetSetting("animateScale") = 0 Then
             Me.Top = My.Computer.Screen.Bounds.Height
             animer.Interval = TimeSpan.FromMilliseconds(1)
             animer.Start()
@@ -28,8 +28,8 @@ Public Class appdrawer
         End If
         Me.Left = 0
         SearchTB.Focus()
-        If My.Computer.FileSystem.FileExists(My.Settings.CurrentIconThemePath) Then
-            icopack = New Ini(My.Settings.CurrentIconThemePath)
+        If My.Computer.FileSystem.FileExists(GetSetting("currentIconThemePath")) Then
+            icopack = New Ini(GetSetting("currentIconThemePath"))
         Else
             icopack = Nothing
         End If
@@ -142,7 +142,7 @@ Public Class appdrawer
                     findicon = False
                     Dim bm As New BitmapImage
                     bm.BeginInit()
-                    bm.UriSource = New Uri(icopack.GetValue("IconPaths", nm).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", My.Settings.CurrentIconThemePath.Replace(My.Computer.FileSystem.GetName(My.Settings.CurrentIconThemePath), "")))
+                    bm.UriSource = New Uri(icopack.GetValue("IconPaths", nm).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), "")))
                     bm.EndInit()
                     ico.Source = bm
                 End If
@@ -231,9 +231,9 @@ Public Class appdrawer
     End Sub
 
     Private Sub animer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animer.Tick
-        Me.Top += (postogo - Me.Top) / My.Settings.animatescale
+        Me.Top += (postogo - Me.Top) / GetSetting("animateScale")
         Me.Opacity = 1.0 - (Me.Top / My.Computer.Screen.Bounds.Height)
-        If My.Settings.topMost Then
+        If GetSetting("topMost") = 1 Then
             Me.Topmost = True
         End If
     End Sub

@@ -105,6 +105,7 @@
     <Compile Include="restoreAPI.vb" />
     <Compile Include="RWidget.vb" />
     <Compile Include="Sepremover.vb" />
+    <Compile Include="SettingsHostModule.vb" />
     <Page Include="appdrawer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +205,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DefaultSettings.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
