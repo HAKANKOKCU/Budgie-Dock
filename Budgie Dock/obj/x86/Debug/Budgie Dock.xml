@@ -77,6 +77,31 @@ MainWindow
   Overrides the current thread's CurrentUICulture property for all
   resource lookups using this strongly typed resource class.
 </summary>
+</member><member name="P:BudgieDock.My.Resources.Resources.DefaultSettings">
+	<summary>
+  Looks up a localized string similar to ;; For booleans, False=0, True=1
+[Main]
+size=40
+pos=Bottom
+animateScale=5
+dockOpacity=10
+dockCornerRadius=0
+dockRed=255
+dockGreen=255
+dockBlue=255
+separatorRed=0
+separatorGreen=0
+separatorBlue=0
+autoHide=0
+topMost=0
+paddingTop=0
+currentIconThemePath=
+isAppRuningRed=255
+isAppRuningGreen=255
+isAppRuningBlue=255
+applyDockColorAtIsAppRuning=0
+useDockAsTaskbar=0.
+</summary>
 </member><member name="T:BudgieDock.My.Resources.Resources">
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
