@@ -19,4 +19,9 @@ Needs .Net Framework 4. Minimum windows version is 7 (There are too much display
 # Basic Usage Tips
 * If an app/process have multipie windows, you can click it again to show next window.
 * You can click to line of icons **you added** to open them again
-* You can click to line of **runing app/process** icons to terminate them
+* You can click to line of **runing app/process** icons to close them
+
+# Editing Source Code With Visual Basic/Studio
+This project was made with Visual Basic 2010. It should work in newer Visual Studio.
+
+Warning: OBJ DIRECTORY IS NOT UPDATED. You may need to rebulid the project.
