@@ -9,7 +9,7 @@
             </StackPanel>
         </Border>
         <DockPanel>
-            <StackPanel DockPanel.Dock="Right">
+            <StackPanel DockPanel.Dock="Right" Name="StackPanel1">
                 <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="moveup">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Label Foreground="White">Move Up</Label>
@@ -18,6 +18,11 @@
                 <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="movedown">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <Label Foreground="White">Move Down</Label>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="adsep">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label Foreground="White">Add Separator</Label>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="del">

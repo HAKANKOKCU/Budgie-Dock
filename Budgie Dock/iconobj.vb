@@ -8,7 +8,6 @@ Public Class iconobj
     End Function
     Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
     Private Sub ActivateApp(ByVal aid As Integer)
-
         'Minimize Window
         SendMessage(runproc.MainWindowHandle,
           WM_SYSCOMMAND, SC_MINIMIZE, CType(0, IntPtr))
@@ -66,8 +65,8 @@ Public Class iconobj
         Catch
         End Try
         imageiconobj.ClipToBounds = True
-        isapopen.Width = GetSetting("size") / 3
-        isapopen.Margin = New Thickness(GetSetting("size") / 3, 0, GetSetting("size") / 3, 0)
+        isapopen.Width = (GetSetting("size") / 3)
+        isapopen.Margin = New Thickness((GetSetting("size") / 3), 0, (GetSetting("size") / 3), 0)
         isapopen.Height = 3
         isapopen.Background = Brushes.Transparent
         isapopen.ClipToBounds = True
@@ -203,10 +202,7 @@ Public Class iconobj
                 If runproc.MainWindowTitle = "" Then
                     'containerwin.aaps.Remove(runproc.Id)
                     'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-                    Try
-                        If Not isremoved Then remove()
-                    Catch
-                    End Try
+                    remove()
                 End If
             Catch
             End Try
@@ -285,19 +281,16 @@ Public Class iconobj
         apppath = ""
         Dim img As New BitmapImage()
         imageiconobj.Source = img
-        imageiconobj.Visibility = Visibility.Collapsed
-        imageiconobj.Width = 0
         containerwin.OptionsIcon = Nothing
         containerwin.menustack.Visibility = Visibility.Hidden
+        If stackpanel Is containerwin.runingapps Then
+            containerwin.sizecalc()
+        End If
         stackpanel.Children.Remove(imageiconobj)
         containerwin.isappopen.Children.Remove(isapopen)
         imageiconobj = Nothing
         isremoved = True
         tick.Stop()
-        If Not isEditingAvable Then
-            containerwin.aaps.Remove(aid)
-            containerwin.refopenapps(False)
-        End If
         If containerwin.runingapps.Children.Count = 1 Then
             containerwin.runingapps.Children.Clear()
         End If
@@ -336,53 +329,31 @@ Public Class iconobj
             If hr Then
                 Try
                     If Not runproc.HasExited Then
-                        Dim idd = runproc.Id
-                        aid = idd
-                        Dim prc = Process.GetProcessById(idd)
-                        If runproc.ProcessName = prc.ProcessName And Not prc.ProcessName = "" Then
+                        Dim prc = Process.GetProcessById(aid)
+                        If runproc.ProcessName = prc.ProcessName Then
                             runproc.Refresh()
-                            runproc = Process.GetProcessById(idd)
+                            runproc = Process.GetProcessById(aid)
                         End If
+                        appname = runproc.MainWindowTitle
                     Else
-                        If Not isremoved Then remove()
+                        remove()
                     End If
                 Catch
                 End Try
             End If
             Try
                 If runproc.HasExited Then
-                    Try
-                        If Not isremoved Then remove()
-                    Catch
-                    End Try
-                Else
-                    appname = runproc.MainWindowTitle
+                    remove()
                 End If
             Catch
             End Try
             'If runproc.MainWindowTitle = "" Then
-            'containerwin.aaps.Remove(runproc.Id)
-            'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
-            'Try
             'remove()
-            'Catch
-            'End Try
             'End If
         End If
         If Not containerwin.rid = runid Then
-            If isEditingAvable Then
-                tick.Stop()
-                Try
-                    If Not isremoved Then remove()
-                Catch
-                End Try
-            End If
-        End If
-    End Sub
-    Private Sub ActivateAppl(ByVal pID As Integer)
-        Dim p As Process = Process.GetProcessById(pID)
-        If p IsNot Nothing Then
-            SetForegroundWindow(p.MainWindowHandle)
+            tick.Stop()
+            If stackpanel Is containerwin.appsgrid Then remove()
         End If
     End Sub
 
@@ -418,7 +389,7 @@ Public Class iconobj
             End Try
         Else
             Try
-                runproc.Kill()
+                runproc.CloseMainWindow()
             Catch ex As Exception
                 MsgBox(ex.Message, MsgBoxStyle.Critical)
             End Try
@@ -452,15 +423,12 @@ Public Class iconobj
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
-        Try
-            If imageiconobj.Opacity + (anispeed / 1000) >= 1 Or imageiconobj.Opacity + (anispeed / 1000) <= 0.1 Then
-                anispeed = -anispeed
-                imageiconobj.Opacity += anispeed / 1000
-            Else
-                imageiconobj.Opacity += anispeed / 1000
-            End If
-        Catch
-        End Try
+        If imageiconobj.Opacity + (anispeed / 1000) >= 1 Or imageiconobj.Opacity + (anispeed / 1000) <= 0.1 Then
+            anispeed = -anispeed
+            imageiconobj.Opacity += anispeed / 1000
+        Else
+            imageiconobj.Opacity += anispeed / 1000
+        End If
     End Sub
 
     Private Sub waitBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles waitBG.DoWork

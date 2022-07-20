@@ -23,6 +23,7 @@ Class MainWindow
     End Function
     Dim icc As New ArrayList
     Dim icopack As Ini = Nothing
+
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         ticker = New DispatcherTimer
         ticker.Interval = TimeSpan.FromMilliseconds(1)
@@ -63,6 +64,16 @@ Class MainWindow
         listbtn.theStackPanel = ListingButton
         Dim asbtn As New ButtonStack
         asbtn.theStackPanel = AddspButton
+        Try
+            If GetSetting("dockCornerRadius").Contains(",") Then
+                Dim crlist = GetSetting("dockCornerRadius").Split(",")
+                bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
+            Else
+                bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
+            End If
+        Catch ex As Exception
+            MsgBox("Failled to set corner radius: " + ex.Message)
+        End Try
         If GetSetting("pos") = "Bottom" Then
             mas.Orientation = Orientation.Vertical
             appsgrid.Orientation = Orientation.Horizontal
@@ -82,37 +93,13 @@ Class MainWindow
         If GetSetting("applyDockColorAtIsAppRuning") Then
             ff.Background = bdr.Background
         End If
-        Try
-            If GetSetting("dockCornerRadius").Contains(",") Then
-                Dim crlist = GetSetting("dockCornerRadius").Split(",")
-                bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
-            Else
-                bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
-            End If
-        Catch ex As Exception
-            MsgBox("Failled to set corner radius: " + ex.Message)
-        End Try
         If GetSetting("pos") = "Bottom" Then
             Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") = 1, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
         Else
             Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
         End If
         Me.Topmost = GetSetting("topMost")
-        If GetSetting("useDockAsTaskbar") = 1 Then
-            bdr.Width = My.Computer.Screen.WorkingArea.Width
-            ff.Width = My.Computer.Screen.WorkingArea.Width
-            If GetSetting("pos") = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-            Else
-                Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-            End If
-        Else
-            If GetSetting("pos") = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-            Else
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-            End If
-        End If
+        onScreenResChange()
         RedesignLayout()
     End Sub
 
@@ -238,8 +225,10 @@ Class MainWindow
                         sizee += GetSetting("size")
                     Catch
                     End Try
-                Else
+                ElseIf TypeOf a Is Grid Then
                     sizee += 3
+                Else
+                    sizee += 1
                 End If
             Next
             agwid = sizee
@@ -253,7 +242,7 @@ Class MainWindow
         refopenapps(IIf(GetSetting("animateScale") = 1, False, True))
     End Sub
 
-    Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
+    Sub onScreenResChange()
         If GetSetting("useDockAsTaskbar") Then
             bdr.Width = My.Computer.Screen.WorkingArea.Width
             ff.Width = My.Computer.Screen.WorkingArea.Width
@@ -269,16 +258,19 @@ Class MainWindow
                 Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
             End If
         End If
-        'If My.Settings.pos = "Bottom" Then
-        'Else
-        'Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
-        'End If
+    End Sub
+
+    Dim oldSres As Integer
+
+    Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
+        If Not oldSres = Windows.Forms.Screen.PrimaryScreen.Bounds.Width Then
+            onScreenResChange()
+            oldSres = Windows.Forms.Screen.PrimaryScreen.Bounds.Width
+        End If
         If GetSetting("topMost") = 1 Then
             Me.Topmost = True
         End If
         Me.Left = 0
-        'Me.WindowState = Windows.WindowState.Normal
-        'Me.Show()
         Try
             If menustack.Visibility = Windows.Visibility.Visible Then
                 appname.Content = OptionsIcon.appname
@@ -291,63 +283,51 @@ Class MainWindow
             Me.Height = appsgrid.Height + 162
             reicon()
         End If
-        Try
-            appsgrid.Width += (agwid - appsgrid.Width) / GetSetting("animateScale")
-        Catch
-        End Try
-        Try
-            runingapps.Width += (ruwid - runingapps.Width) / GetSetting("animateScale")
-        Catch
-        End Try
-        Try
-            isappopen.Width += ((agwid + ruwid) - isappopen.Width) / GetSetting("animateScale")
-        Catch
-        End Try
+        appsgrid.Width += (agwid - appsgrid.Width) / GetSetting("animateScale")
+        runingapps.Width += (ruwid - runingapps.Width) / GetSetting("animateScale")
+        isappopen.Width += ((agwid + ruwid) - isappopen.Width) / GetSetting("animateScale")
         Dim a As Integer = 0
         Dim ar As Integer = 0
         If Not GetSetting("animateScale") = 1 Then
-            Try
-                For Each i As UIElement In appsgrid.Children
-                    If TypeOf i Is Image Then
-                        Dim ii As Image = i
-                        a += GetSetting("size") - 5
-                        If appsgrid.Width >= a Then
-                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
-                        Else
-                            ii.Height = 5
-                        End If
-                    ElseIf TypeOf i Is Grid Then
-                        Dim ii As Grid = i
-                        a += 3
-                        If appsgrid.Width >= a Then
-                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
-                        Else
-                            ii.Height = 5
-                        End If
+            For Each i As UIElement In appsgrid.Children
+                If TypeOf i Is Image Then
+                    Dim ii As Image = i
+                    a += GetSetting("size") - 5
+                    If appsgrid.Width >= a Then
+                        ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
+                    Else
+                        ii.Height = 5
                     End If
-                Next
-                For Each i As UIElement In runingapps.Children
-                    If TypeOf i Is Grid Then
-                        Dim ii As Grid = i
-                        ar += 3
-                        If appsgrid.Width >= ar Then
-                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
-                        Else
-                            ii.Height = 5
-                        End If
+                ElseIf TypeOf i Is Grid Then
+                    Dim ii As Grid = i
+                    a += 3
+                    If appsgrid.Width >= a Then
+                        ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
+                    Else
+                        ii.Height = 5
                     End If
-                    If TypeOf i Is Image Then
-                        Dim ii As Image = i
-                        ar += 3
-                        If appsgrid.Width >= ar Then
-                            ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
-                        Else
-                            ii.Height = 5
-                        End If
+                End If
+            Next
+            For Each i As UIElement In runingapps.Children
+                If TypeOf i Is Grid Then
+                    Dim ii As Grid = i
+                    ar += 3
+                    If appsgrid.Width >= ar Then
+                        ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
+                    Else
+                        ii.Height = 5
                     End If
-                Next
-            Catch
-            End Try
+                End If
+                If TypeOf i Is Image Then
+                    Dim ii As Image = i
+                    ar += 3
+                    If appsgrid.Width >= ar Then
+                        ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
+                    Else
+                        ii.Height = 5
+                    End If
+                End If
+            Next
         End If
     End Sub
 
@@ -390,9 +370,14 @@ Class MainWindow
         icop.ShowDialog()
         savicon()
     End Sub
-
+    Dim ie = False
     Private Sub appsgrid_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.DragEnter
         e.Effects = e.AllowedEffects
+        ie = True
+    End Sub
+
+    Private Sub MainWindow_DragLeave(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.DragLeave
+        ie = False
     End Sub
 
     Private Sub appsgrid_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles MyBase.Drop
@@ -407,6 +392,7 @@ Class MainWindow
                     Dim fi As New IO.FileInfo(Path)
                     Dim droptemp = fi.Length 'This should give a error if drag is folder
                     n = n.Replace(fi.Extension, "")
+                    fi.Refresh()
                 Catch
                     'do nothing if drop is folder.
                 End Try
@@ -615,6 +601,10 @@ Class MainWindow
                 End If
             End If
         Next
+        sizecalc()
+    End Sub
+
+    Sub sizecalc()
         ruwid = 0
         For Each itm As UIElement In runingapps.Children
             If TypeOf itm Is Image Then
@@ -687,4 +677,5 @@ Class MainWindow
             End
         End If
     End Sub
+
 End Class

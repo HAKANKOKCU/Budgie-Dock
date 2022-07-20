@@ -64,8 +64,11 @@ Public Class Ini
 
         End If
     End Sub
-    Function GetFilePath()
+    Function GetFilePath() As String
         Return _FileName
+    End Function
+    Function GetINIDictonary() As Dictionary(Of String, Dictionary(Of String, String))
+        Return _Sections
     End Function
     Public Function GetValue(ByVal Section As String, ByVal Name As String) As String
 

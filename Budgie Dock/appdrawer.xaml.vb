@@ -94,7 +94,7 @@ Public Class appdrawer
         For Each a As String In My.Computer.FileSystem.GetFiles(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\..\..\..\Microsoft\Windows\Start Menu\Programs")
             addicon(a, wpu)
         Next
-        For Each a As String In My.Computer.FileSystem.GetFiles("C:\ProgramData\Microsoft\Windows\Start Menu\Programs", FileIO.SearchOption.SearchAllSubDirectories)
+        For Each a As String In My.Computer.FileSystem.GetFiles("C:\ProgramData\Microsoft\Windows\Start Menu\Programs")
             addicon(a, wpu)
         Next
         If Not wpu.Children.Count = 0 Then
