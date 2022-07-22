@@ -116,6 +116,7 @@
       <DependentUpon>appdrawer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ini.vb" />
+    <Compile Include="LogSaver.vb" />
     <Compile Include="procremove.vb" />
     <Compile Include="RWidget.vb" />
     <Compile Include="Sepremover.vb" />

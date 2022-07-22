@@ -54,48 +54,52 @@ Public Class iconobj
     Dim anispeed = 10
     Sub endinit()
         Try
-            Dim img As New BitmapImage(New Uri(iconpath))
-            imageiconobj.Source = img
-        Catch
-        End Try
-        imageiconobj.Focusable = True
-        imageiconobj.Width = GetSetting("size")
-        Try
-            imageiconobj.Height = GetSetting("size") - 5
-        Catch
-        End Try
-        imageiconobj.ClipToBounds = True
-        isapopen.Width = (GetSetting("size") / 3)
-        isapopen.Margin = New Thickness((GetSetting("size") / 3), 0, (GetSetting("size") / 3), 0)
-        isapopen.Height = 3
-        isapopen.Background = Brushes.Transparent
-        isapopen.ClipToBounds = True
-        tick.Interval = TimeSpan.FromMilliseconds(2000)
-        Try
-            fi = New IO.FileInfo(apppath)
-        Catch
-        End Try
-        tick.Start()
-        If Not alreadyadded Then
-            stackpanel.Children.Add(imageiconobj)
-            containerwin.isappopen.Children.Add(isapopen)
-            alreadyadded = True
-        End If
-        animater = New DispatcherTimer
-        animater.Interval = TimeSpan.FromMilliseconds(1)
-        If Not isEditingAvable Then
-            If hr Then
-                prcrem = New procremove
-                prcrem.process = runproc
-                waitBG = New BackgroundWorker
-                waitBG.RunWorkerAsync()
-                animater.Start()
+            Try
+                Dim img As New BitmapImage(New Uri(iconpath))
+                imageiconobj.Source = img
+            Catch
+            End Try
+            imageiconobj.Focusable = True
+            imageiconobj.Width = GetSetting("size")
+            Try
+                imageiconobj.Height = GetSetting("size") - 5
+            Catch
+            End Try
+            imageiconobj.ClipToBounds = True
+            isapopen.Width = (GetSetting("size") / 3)
+            isapopen.Margin = New Thickness((GetSetting("size") / 3), 0, (GetSetting("size") / 3), 0)
+            isapopen.Height = 3
+            isapopen.Background = Brushes.Transparent
+            isapopen.ClipToBounds = True
+            tick.Interval = TimeSpan.FromMilliseconds(2000)
+            Try
+                fi = New IO.FileInfo(apppath)
+            Catch
+            End Try
+            tick.Start()
+            If Not alreadyadded Then
+                stackpanel.Children.Add(imageiconobj)
+                containerwin.isappopen.Children.Add(isapopen)
+                alreadyadded = True
             End If
-        Else
-            runBG = New BackgroundWorker
-            runBG.WorkerReportsProgress = True
-            runBG.WorkerSupportsCancellation = True
-        End If
+            animater = New DispatcherTimer
+            animater.Interval = TimeSpan.FromMilliseconds(1)
+            If Not isEditingAvable Then
+                If hr Then
+                    prcrem = New procremove
+                    prcrem.process = runproc
+                    waitBG = New BackgroundWorker
+                    waitBG.RunWorkerAsync()
+                    animater.Start()
+                End If
+            Else
+                runBG = New BackgroundWorker
+                runBG.WorkerReportsProgress = True
+                runBG.WorkerSupportsCancellation = True
+            End If
+        Catch ex As Exception
+            insertToLog(ex.ToString)
+        End Try
     End Sub
 
     Private Sub imageiconobj_GotFocus(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles imageiconobj.GotFocus
@@ -244,35 +248,49 @@ Public Class iconobj
     End Sub
 
     Sub remove()
-        If isremoved Then Exit Sub
-        iconpath = ""
-        apppath = ""
-        Dim img As New BitmapImage()
-        imageiconobj.Source = img
-        containerwin.OptionsIcon = Nothing
-        containerwin.menustack.Visibility = Visibility.Hidden
-        If stackpanel Is containerwin.runingapps Then
-            containerwin.sizecalc()
-        End If
-        stackpanel.Children.Remove(imageiconobj)
-        containerwin.isappopen.Children.Remove(isapopen)
-        imageiconobj = Nothing
-        isremoved = True
-        tick.Stop()
-        If containerwin.runingapps.Children.Count = 1 Then
-            containerwin.runingapps.Children.Clear()
-        End If
+        Try
+            If isremoved Then Exit Sub
+            iconpath = ""
+            apppath = ""
+            Dim img As New BitmapImage()
+            imageiconobj.Source = img
+            containerwin.OptionsIcon = Nothing
+            containerwin.menustack.Visibility = Visibility.Hidden
+            If stackpanel Is containerwin.runingapps Then
+                containerwin.sizecalc()
+            End If
+            stackpanel.Children.Remove(imageiconobj)
+            containerwin.isappopen.Children.Remove(isapopen)
+            imageiconobj = Nothing
+            isremoved = True
+            tick.Stop()
+            If containerwin.runingapps.Children.Count = 1 Then
+                containerwin.runingapps.Children.Clear()
+            End If
+        Catch ex As Exception
+            insertToLog(ex.ToString)
+        End Try
     End Sub
 
     Private Sub tick_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tick.Tick
-        If checkIfRuning Then
-            isopen = False
-            isapopen.Background = Brushes.Transparent
-            If Not fi.Extension = "" Then
-                For Each prc As Process In Process.GetProcesses
-                    If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                        Try
-                            If prc.MainModule.FileName = apppath Then
+        Try
+            If checkIfRuning Then
+                isopen = False
+                isapopen.Background = Brushes.Transparent
+                If Not fi.Extension = "" Then
+                    For Each prc As Process In Process.GetProcesses
+                        If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
+                            Try
+                                If prc.MainModule.FileName = apppath Then
+                                    isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
+                                    isopen = True
+                                    Try
+                                        If hr Then If runproc.HasExited Then isprocfound = False
+                                        If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                                    Catch
+                                    End Try
+                                End If
+                            Catch
                                 isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
                                 isopen = True
                                 Try
@@ -280,49 +298,43 @@ Public Class iconobj
                                     If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
                                 Catch
                                 End Try
-                            End If
-                        Catch
-                            isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
-                            isopen = True
-                            Try
-                                If hr Then If runproc.HasExited Then isprocfound = False
-                                If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
-                            Catch
                             End Try
-                        End Try
-                    End If
-                Next
-            End If
-        Else
-            If hr Then
-                Try
-                    If Not runproc.HasExited Then
-                        Dim prc = Process.GetProcessById(aid)
-                        If runproc.ProcessName = prc.ProcessName Then
-                            runproc.Refresh()
-                            runproc = Process.GetProcessById(aid)
                         End If
-                        appname = runproc.MainWindowTitle
-                    Else
+                    Next
+                End If
+            Else
+                If hr Then
+                    Try
+                        If Not runproc.HasExited Then
+                            Dim prc = Process.GetProcessById(aid)
+                            If runproc.ProcessName = prc.ProcessName Then
+                                runproc.Refresh()
+                                runproc = Process.GetProcessById(aid)
+                            End If
+                            appname = runproc.MainWindowTitle
+                        Else
+                            remove()
+                        End If
+                    Catch
+                    End Try
+                End If
+                Try
+                    If runproc.HasExited Then
                         remove()
                     End If
                 Catch
                 End Try
-            End If
-            Try
-                If runproc.HasExited Then
+                If runproc.MainWindowHandle = IntPtr.Zero Then
                     remove()
                 End If
-            Catch
-            End Try
-            If runproc.MainWindowHandle = IntPtr.Zero Then
-                remove()
-            End If
             End If
             If Not containerwin.rid = runid Then
                 tick.Stop()
                 If stackpanel Is containerwin.appsgrid Then remove()
             End If
+        Catch ex As Exception
+            insertToLog(ex.ToString)
+        End Try
     End Sub
 
     Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
