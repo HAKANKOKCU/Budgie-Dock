@@ -17,10 +17,10 @@ Class MainWindow
     'This array will be "injected" to disallowedpnames in "Loaded" Function.
     Public defaultdisallowed() As String = {"textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
 
-    Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
-    <DllImport("user32.dll")> _
-    Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
-    End Function
+    'Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
+    '<DllImport("user32.dll")> _
+    'Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
+    'End Function
     Dim icc As New ArrayList
     Dim icopack As Ini = Nothing
 
@@ -51,6 +51,7 @@ Class MainWindow
         For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
             disallowedpnames.Add(dup)
         Next
+        UpdateIconsData.UpdateNow()
         InitSettings()
         appsgrid.Width = GetSetting("size")
         reicon()
@@ -187,16 +188,18 @@ Class MainWindow
                     pp.Width = 3
                     pp.HorizontalAlignment = Windows.HorizontalAlignment.Center
                     isappopen.Children.Add(pp)
-                Else
+                    agwid += 3
+                ElseIf Iconn.Split(":")(0) = "icon" Then
+                    Iconn = Iconn.Split(":")(1)
                     Dim a As New iconobj
-                    a.apppath = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(0)
-                    a.iconpath = Iconn.Split("*")(1)
-                    a.appname = Iconn.Split("*")(2).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|")
+                    a.apppath = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Replace("{BD-TD-}", ":").Split("^")(0)
+                    a.iconpath = Iconn.Split("*")(1).Replace("{BD-TD-}", ":")
+                    a.appname = Iconn.Split("*")(2).Replace("{BD-STAR-}", "*").Replace("{BD-TD-}", ":").Replace("{BD-FLINE-}", "|")
                     a.stackpanel = appsgrid
                     a.containerwin = Me
                     a.runid = rid
                     Try
-                        a.apparams = Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(1).Replace("{BD-UPL-}", "^")
+                        a.apparams = Iconn.Split("*")(0).Replace("{BD-TD-}", ":").Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(1).Replace("{BD-UPL-}", "^")
                     Catch
                     End Try
                     a.endinit()
@@ -213,26 +216,12 @@ Class MainWindow
                         End Try
                     End If
                     a.idd = iddd
-                    iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
+                    iconlist.Add({"icon", Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
                     iddd += 1
-                    icc.Add(My.Computer.FileSystem.GetName(Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Split("^")(0)).ToLower)
+                    icc.Add(My.Computer.FileSystem.GetName(Iconn.Split("*")(0).Replace("{BD-STAR-}", "*").Replace("{BD-FLINE-}", "|").Replace("{BD-TD-}", ":").Split("^")(0)).ToLower)
+                    agwid += GetSetting("size")
                 End If
             Next
-            Dim sizee As Integer = 0
-            For Each a As UIElement In appsgrid.Children
-                If TypeOf a Is Image Then
-                    Try
-                        sizee += GetSetting("size")
-                    Catch
-                    End Try
-                ElseIf TypeOf a Is Grid Then
-                    sizee += 3
-                Else
-                    sizee += 1
-                End If
-            Next
-            agwid = sizee
-            agwid = sizee
         Else
             Dim lbldrg As New Label
             lbldrg.Content = "Drag Here To Add Icons"
@@ -351,8 +340,8 @@ Class MainWindow
             If Not firstone Then
                 filecontent += "|"
             End If
-            If a.Length = 3 And TypeOf a Is Array Then
-                filecontent += a(0) & "*" & a(1) & "*" & a(2)
+            If TypeOf a Is Array Then
+                filecontent += a(0) & ":" & a(1) & "*" & a(2) & "*" & a(3)
             Else
                 filecontent += a
             End If
@@ -533,69 +522,67 @@ Class MainWindow
     End Sub
     Sub refopenapps(Optional ByVal ani As Boolean = True)
         For Each app As Process In Process.GetProcesses
-            If Not app.MainWindowHandle = IntPtr.Zero Then
-                If Not app.MainWindowTitle.Trim = "" Then
-                    If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle) Then
-                        If Not icc.Contains(app.ProcessName.ToLower) Then
-                            If Not aaps.Contains(app.Id) Then
-                                ruwid += GetSetting("size")
-                                If ruwid = GetSetting("size") Then
-                                    Dim a As New Grid
-                                    a.UseLayoutRounding = True
-                                    a.Height = 5
-                                    a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
-                                    a.Width = 1
-                                    a.ClipToBounds = True
-                                    a.Margin = New Thickness(1, 0, 1, 0)
-                                    a.ClipToBounds = True
-                                    runingapps.Children.Add(a)
-                                    Dim pp As New Grid
-                                    pp.Width = 3
-                                    isappopen.Children.Add(pp)
-                                    ruwid += 3
-                                End If
-                                Dim ico As New iconobj
-                                'ico.idd = 0
-                                Dim findico = True
-                                If Not icopack Is Nothing Then
-                                    If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
-                                        findico = False
-                                        ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
-                                    End If
-                                End If
-                                If findico Then
-                                    Try
-                                        Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
-                                        icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
-                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                                    Catch ex As Exception
-                                        If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
-                                            ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
-                                        Else
-                                            ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
-                                        End If
-                                    End Try
-                                End If
-                                ico.appname = app.MainWindowTitle & " - " + app.ProcessName
-                                ico.stackpanel = runingapps
-                                ico.apppath = app.ProcessName
-                                ico.containerwin = Me
-                                ico.runid = rid
-                                ico.isEditingAvable = False
-                                ico.hr = True
-                                ico.runproc = app
-                                ico.isapopen.Background = Brushes.White
-                                ico.isopen = True
-                                ico.isprocfound = True
-                                ico.checkIfRuning = False
-                                ico.endinit()
-                                If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
-                                Try
-                                    If Not ani Then ico.imageiconobj.Height = GetSetting("size") - 5
-                                Catch
-                                End Try
-                                aaps.Add(app.Id)
+            If Not aaps.Contains(app.Id) Then
+                If Not app.MainWindowHandle = IntPtr.Zero Then
+                    If Not app.MainWindowTitle.Trim = "" Then
+                        If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle) Then
+                            'If Not icc.Contains(app.ProcessName.ToLower) Then
+                            ruwid += GetSetting("size")
+                            If ruwid = GetSetting("size") Then
+                                Dim a As New Grid
+                                a.UseLayoutRounding = True
+                                a.Height = 5
+                                a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
+                                a.Width = 1
+                                a.ClipToBounds = True
+                                a.Margin = New Thickness(1, 0, 1, 0)
+                                runingapps.Children.Add(a)
+                                Dim pp As New Grid
+                                pp.Width = 3
+                                isappopen.Children.Add(pp)
+                                ruwid += 3
                             End If
+                            Dim ico As New iconobj
+                            'ico.idd = 0
+                            Dim findico = True
+                            If Not icopack Is Nothing Then
+                                If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
+                                    findico = False
+                                    ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
+                                End If
+                            End If
+                            If findico Then
+                                Try
+                                    Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
+                                    icoa.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                                    ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                Catch ex As Exception
+                                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
+                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                    Else
+                                        ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                                    End If
+                                End Try
+                            End If
+                            ico.appname = app.MainWindowTitle & " - " + app.ProcessName
+                            ico.stackpanel = runingapps
+                            ico.apppath = app.ProcessName
+                            ico.containerwin = Me
+                            ico.runid = rid
+                            ico.isEditingAvable = False
+                            ico.hr = True
+                            ico.runproc = app
+                            ico.isopen = True
+                            ico.isprocfound = True
+                            ico.checkIfRuning = False
+                            ico.endinit()
+                            If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
+                            Try
+                                If Not ani Then ico.imageiconobj.Height = GetSetting("size") - 5
+                            Catch
+                            End Try
+                            aaps.Add(app.Id)
+                            'End If
                         End If
                     End If
                 End If
@@ -605,13 +592,11 @@ Class MainWindow
     End Sub
 
     Sub sizecalc()
-        ruwid = 0
+        ruwid = 3
         For Each itm As UIElement In runingapps.Children
             If TypeOf itm Is Image Then
                 Dim itemm As Image = itm
                 ruwid += itemm.Width
-            Else
-                ruwid += 3
             End If
         Next
     End Sub

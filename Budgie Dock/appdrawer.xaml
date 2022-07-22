@@ -11,8 +11,8 @@
                 <SolidColorBrush Color="Black" Opacity="0.8"></SolidColorBrush>
             </Border.Background>
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Budgie%20Dock;component/search.png" OpacityMask="{x:Null}" Width="30" Height="30" VerticalAlignment="Center"></Image>
-                <TextBox Name="SearchTB" CaretBrush="White" SelectionBrush="White" Width="400" Background="{x:Null}" Padding="4" Foreground="White" BorderThickness="0" FontSize="16" VerticalAlignment="Center"></TextBox>
+                <Image Source="/Budgie%20Dock;component/search.png" Name="ims" OpacityMask="{x:Null}" Width="30" Height="30" VerticalAlignment="Center"></Image>
+                <TextBox UseLayoutRounding="True" Name="SearchTB" CaretBrush="White" SelectionBrush="White" Width="400" Background="Transparent" Padding="4" Foreground="White" BorderThickness="0" FontSize="16" VerticalAlignment="Center"></TextBox>
             </StackPanel>
         </Border>
         <ScrollViewer Name="sp" Margin="0,-100,0,0" VerticalScrollBarVisibility="Hidden">

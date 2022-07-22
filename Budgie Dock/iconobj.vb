@@ -129,52 +129,14 @@ Public Class iconobj
                 runBG.CancelAsync()
             End Try
         ElseIf e.Key = Key.Enter Then
-            If Not apppath.StartsWith("!") Then
-                If Not isopen Then
-                    Try
-                        runBG.RunWorkerAsync()
-                        imageiconobj.Opacity = 0.1
-                        If Not GetSetting("animateScale") = 1 Then animater.Start()
-                    Catch
-                        runBG.CancelAsync()
-                    End Try
-                Else
-                    ActivateApp(runproc.Id)
-                End If
-            Else
-                If apppath = "!AppsDrawer" Then
-                    Dim ad As New appdrawer
-                    containerwin.Visibility = Visibility.Hidden
-                    ad.ShowDialog()
-                    containerwin.Visibility = Visibility.Visible
-                End If
-            End If
+            runapp()
         End If
     End Sub
 
     Private Sub imageiconobj_KeyUp(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles imageiconobj.KeyUp
         If e.Key = Key.Space Then
             imageiconobj.Opacity = 1
-            If Not apppath.StartsWith("!") Then
-                If Not isopen Then
-                    Try
-                        runBG.RunWorkerAsync()
-                        imageiconobj.Opacity = 0.1
-                        If Not GetSetting("animateScale") = 1 Then animater.Start()
-                    Catch
-                        runBG.CancelAsync()
-                    End Try
-                Else
-                    ActivateApp(runproc.Id)
-                End If
-            Else
-                If apppath = "!AppsDrawer" Then
-                    Dim ad As New appdrawer
-                    containerwin.Visibility = Visibility.Hidden
-                    ad.ShowDialog()
-                    containerwin.Visibility = Visibility.Visible
-                End If
-            End If
+            runapp()
         End If
     End Sub
 
@@ -189,9 +151,7 @@ Public Class iconobj
 
     Private Sub imageiconobj_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseEnter
         If isEditingAvable Then
-            If runBG.IsBusy Then
-                imageiconobj.Opacity = 0.1
-            Else
+            If Not runBG.IsBusy Then
                 imageiconobj.Opacity = 0.8
             End If
         Else
@@ -199,7 +159,7 @@ Public Class iconobj
         End If
         If hr And Not isEditingAvable Then
             Try
-                If runproc.MainWindowTitle = "" Then
+                If runproc.MainWindowTitle.Trim = "" Or runproc.MainWindowHandle = IntPtr.Zero Then
                     'containerwin.aaps.Remove(runproc.Id)
                     'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     remove()
@@ -234,29 +194,37 @@ Public Class iconobj
         If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
     End Sub
 
+    Sub runapp()
+        If Not apppath.StartsWith("!") Then
+            If Not isopen Then
+                Try
+                    runBG.RunWorkerAsync()
+                    imageiconobj.Opacity = 0.1
+                    If Not GetSetting("animateScale") = 1 Then animater.Start()
+                Catch
+                    runBG.CancelAsync()
+                End Try
+            Else
+                ActivateApp(runproc.Id)
+            End If
+        Else
+            If apppath = "!AppsDrawer" Then
+                Dim ad As New appdrawer
+                containerwin.Visibility = Visibility.Hidden
+                ad.ShowDialog()
+                containerwin.Visibility = Visibility.Visible
+            End If
+            If apppath = "!Shutdown" Then
+                Dim ad As New shutdownDialog
+                ad.ShowDialog()
+            End If
+        End If
+    End Sub
+
     Private Sub imageiconobj_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles imageiconobj.MouseUp
         imageiconobj.Opacity = 1
         If e.ChangedButton = 0 Then
-            If Not apppath.StartsWith("!") Then
-                If Not isopen Then
-                    Try
-                        runBG.RunWorkerAsync()
-                        imageiconobj.Opacity = 0.1
-                        If Not GetSetting("animateScale") = 1 Then animater.Start()
-                    Catch
-                        runBG.CancelAsync()
-                    End Try
-                Else
-                    ActivateApp(runproc.Id)
-                End If
-            Else
-                If apppath = "!AppsDrawer" Then
-                    Dim ad As New appdrawer
-                    containerwin.Visibility = Visibility.Hidden
-                    ad.ShowDialog()
-                    containerwin.Visibility = Visibility.Visible
-                End If
-            End If
+            runapp()
         ElseIf e.ChangedButton = 2 And isEditingAvable Then
             containerwin.menustack.Visibility = Visibility.Visible
             Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)
@@ -347,14 +315,14 @@ Public Class iconobj
                 End If
             Catch
             End Try
-            'If runproc.MainWindowTitle = "" Then
-            'remove()
-            'End If
-        End If
-        If Not containerwin.rid = runid Then
-            tick.Stop()
-            If stackpanel Is containerwin.appsgrid Then remove()
-        End If
+            If runproc.MainWindowHandle = IntPtr.Zero Then
+                remove()
+            End If
+            End If
+            If Not containerwin.rid = runid Then
+                tick.Stop()
+                If stackpanel Is containerwin.appsgrid Then remove()
+            End If
     End Sub
 
     Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited

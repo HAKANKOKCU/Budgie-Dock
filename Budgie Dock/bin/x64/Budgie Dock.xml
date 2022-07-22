@@ -22,6 +22,14 @@ InitializeComponent
 	<summary>
 IconOptions
 </summary>
+</member><member name="M:BudgieDock.shutdownDialog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.shutdownDialog">
+	<summary>
+shutdownDialog
+</summary>
 </member><member name="M:BudgieDock.Application.InitializeComponent">
 	<summary>
 InitializeComponent

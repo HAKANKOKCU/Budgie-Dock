@@ -20,3 +20,4 @@ isAppRuningGreen=255
 isAppRuningBlue=255
 applyDockColorAtIsAppRuning=0
 useDockAsTaskbar=0
+lightThemeInAppsDrawer=0

@@ -8,9 +8,12 @@ Public Class appdrawer
     Dim bc As New CornerRadius(10)
     Public WithEvents animer As New DispatcherTimer
     Dim postogo = 0
+    Dim Textcolor = Brushes.White
+    Dim fcolor = Brushes.Black
     Private Sub appdrawer_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles Me.KeyDown
         If e.Key = Key.Escape Then
             aaps.Children.Clear()
+            animer.Stop()
             Close()
         End If
     End Sub
@@ -20,7 +23,7 @@ Public Class appdrawer
         Me.Height = My.Computer.Screen.Bounds.Height
         If Not GetSetting("animateScale") = 0 Then
             Me.Top = My.Computer.Screen.Bounds.Height
-            animer.Interval = TimeSpan.FromMilliseconds(1)
+            animer.Interval = TimeSpan.FromMilliseconds(0.05)
             animer.Start()
         Else
             Me.Top = 0
@@ -32,6 +35,15 @@ Public Class appdrawer
             icopack = New Ini(GetSetting("currentIconThemePath"))
         Else
             icopack = Nothing
+        End If
+        If GetSetting("lightThemeInAppsDrawer") = 1 Then
+            Textcolor = Brushes.Black
+            Me.Background = New SolidColorBrush(Color.FromArgb(102, 255, 255, 255))
+            sbarea.Background = New SolidColorBrush(Color.FromArgb(204, 255, 255, 255))
+            SearchTB.Foreground = Textcolor
+            SearchTB.CaretBrush = Textcolor
+            fcolor = Brushes.White
+            ims.Source = New BitmapImage(New Uri("/Budgie%20Dock;component/searchD.png", UriKind.Relative))
         End If
         findApps("")
     End Sub
@@ -47,7 +59,7 @@ Public Class appdrawer
             grp.Margin = New Thickness(10)
             Dim lbl As New Label
             lbl.Content = nm
-            lbl.Foreground = Brushes.White
+            lbl.Foreground = Textcolor
             lbl.FontSize = 16
             grp.Children.Add(lbl)
             Dim wp As New WrapPanel
@@ -60,7 +72,7 @@ Public Class appdrawer
                 aaps.Children.Add(grp)
             End If
         Next
-        For Each di As String In My.Computer.FileSystem.GetDirectories("C:\ProgramData\Microsoft\Windows\Start Menu\Programs", FileIO.SearchOption.SearchAllSubDirectories)
+        For Each di As String In My.Computer.FileSystem.GetDirectories("C:\ProgramData\Microsoft\Windows\Start Menu\Programs")
             Dim nm = My.Computer.FileSystem.GetName(di)
             'Dim bdr As New Border
             'bdr.CornerRadius = bc
@@ -69,7 +81,7 @@ Public Class appdrawer
             grp.Margin = New Thickness(10)
             Dim lbl As New Label
             lbl.Content = nm
-            lbl.Foreground = Brushes.White
+            lbl.Foreground = Textcolor
             lbl.FontSize = 16
             grp.Children.Add(lbl)
             Dim wp As New WrapPanel
@@ -86,7 +98,7 @@ Public Class appdrawer
         grpu.Margin = New Thickness(10)
         Dim lblu As New Label
         lblu.Content = "Uncategorized"
-        lblu.Foreground = Brushes.White
+        lblu.Foreground = Textcolor
         lblu.FontSize = 14
         grpu.Children.Add(lblu)
         Dim wpu As New WrapPanel
@@ -134,7 +146,7 @@ Public Class appdrawer
             Dim ico As New Image
             Dim anm As New Label
             anm.Content = nm.Replace(fi.Extension, "")
-            anm.Foreground = Brushes.White
+            anm.Foreground = Textcolor
             anm.HorizontalAlignment = Windows.HorizontalAlignment.Center
             Dim findicon = True
             If Not icopack Is Nothing Then
@@ -153,6 +165,7 @@ Public Class appdrawer
                         Dim bm As New BitmapImage
                         Dim ai As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(a)
                         ai.ToBitmap().Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                        ai.Dispose()
                         bm.BeginInit()
                         bm.UriSource = New Uri(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png")
                         bm.EndInit()
@@ -192,7 +205,7 @@ Public Class appdrawer
                                        End Sub
             Dim ismdown As Boolean = False
             AddHandler bdr.MouseDown, Sub(sender, e)
-                                          bdr.Background = Brushes.Black
+                                          bdr.Background = fcolor
                                           ismdown = True
                                       End Sub
             AddHandler bdr.MouseUp, Sub(sender, e)
@@ -204,12 +217,13 @@ Public Class appdrawer
                                             Catch ex As Exception
                                                 MsgBox(ex.Message, MsgBoxStyle.Critical)
                                             End Try
+                                            animer.Stop()
                                             Close()
                                             ismdown = False
                                         End If
                                     End Sub
             AddHandler bdr.GotFocus, Sub(sender, e)
-                                         bdr.Background = Brushes.Black
+                                         bdr.Background = fcolor
                                      End Sub
             AddHandler bdr.LostFocus, Sub(sender, e)
                                           bdr.Background = Brushes.Transparent
@@ -223,6 +237,7 @@ Public Class appdrawer
                                             Catch ex As Exception
                                                 MsgBox(ex.Message, MsgBoxStyle.Critical)
                                             End Try
+                                            animer.Stop()
                                             Close()
                                         End If
                                     End Sub
@@ -233,6 +248,9 @@ Public Class appdrawer
     Private Sub animer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animer.Tick
         Me.Top += (postogo - Me.Top) / GetSetting("animateScale")
         Me.Opacity = 1.0 - (Me.Top / My.Computer.Screen.Bounds.Height)
+        If Me.Top = 0 Then
+            animer.Interval = TimeSpan.FromMilliseconds(5)
+        End If
         If GetSetting("topMost") = 1 Then
             Me.Topmost = True
         End If

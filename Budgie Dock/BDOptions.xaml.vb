@@ -42,6 +42,7 @@ Public Class BDOptions
         dciara.IsChecked = GetSetting("applyDockColorAtIsAppRuning") = 1
         useastb.IsChecked = GetSetting("useDockAsTaskbar") = 1
         dps.SelectedIndex = IIf(GetSetting("pos") = "Bottom", 0, 1)
+        lmappsdw.IsChecked = GetSetting("lightThemeInAppsDrawer") = 1
         acs = True
     End Sub
 
@@ -222,5 +223,11 @@ Public Class BDOptions
 
     Private Sub exit_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles [Exit].MouseUp
         End
+    End Sub
+
+    Private Sub lmappsdw_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles lmappsdw.Click
+        If acs Then
+            SetSetting("lightThemeInAppsDrawer", IIf(lmappsdw.IsChecked, 1, 0), False)
+        End If
     End Sub
 End Class
