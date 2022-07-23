@@ -18,9 +18,9 @@
     End Sub
 
     Private Sub ApplyBTN_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ApplyBTN.MouseUp
-        mainwin.iconlist(iconid)(0) = AppShell.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
-        mainwin.iconlist(iconid)(1) = IconPath.Text.Replace(":", "{BD-TD-}")
-        mainwin.iconlist(iconid)(2) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
+        mainwin.iconlist(iconid)(1) = AppShell.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
+        mainwin.iconlist(iconid)(2) = IconPath.Text.Replace(":", "{BD-TD-}")
+        mainwin.iconlist(iconid)(3) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
         iconn.appname = Appname.Text
         iconn.iconpath = IconPath.Text
         iconn.apppath = AppShell.Text
