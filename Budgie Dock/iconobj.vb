@@ -255,10 +255,10 @@ Public Class iconobj
             containerwin.OptionsIcon = Nothing
             containerwin.menustack.Visibility = Visibility.Hidden
             If stackpanel Is containerwin.runingapps Then
-                containerwin.sizecalc()
                 containerwin.aaps.Remove(runproc.Id)
             End If
             stackpanel.Children.Remove(imageiconobj)
+            containerwin.sizecalc()
             containerwin.isappopen.Children.Remove(isapopen)
             imageiconobj = Nothing
             isremoved = True

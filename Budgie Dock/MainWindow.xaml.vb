@@ -447,7 +447,7 @@ Class MainWindow
                     If Not icopack.GetValue("IconPaths", n) = "Code_Item.NotFound" Then
                         findico = False
                         a.iconpath = icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
-                        iconlist.Add({Path, icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\"), n})
+                        iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace(":", "{BD-TD-}"), n.Replace(":", "{BD-TD-}")})
                     End If
                 End If
                 If findico Then
@@ -468,10 +468,10 @@ Class MainWindow
                 a.apppath = Path
                 If aiconsuccess Then
                     a.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png"
-                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", n})
+                    iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), (My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png").Replace(":", "{BD-TD-}"), n.Replace(":", "{BD-TD-}")})
                 ElseIf findico Then
                     a.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
-                    iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
+                    iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), "pack://application:,,,/Budgie%20Dock;component/unknown.png".Replace(":", "{BD-TD-}"), n.Replace(":", "{BD-TD-}")})
                 End If
                 a.appname = n
                 a.stackpanel = appsgrid
@@ -689,7 +689,7 @@ Class MainWindow
                     If Iconn = "sep" Then
                         iconlist.Add("sep")
                     Else
-                        iconlist.Add({Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
+                        iconlist.Add({"icon", Iconn.Split("*")(0), Iconn.Split("*")(1), Iconn.Split("*")(2)})
                     End If
                 Next
             End If
@@ -711,7 +711,7 @@ Class MainWindow
                 If Not icopack Is Nothing Then
                     If Not icopack.GetValue("IconPaths", n) = "Code_Item.NotFound" Then
                         findico = False
-                        iconlist.Add({Path, icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\"), n})
+                        iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), icopack.GetValue("IconPaths", n).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace(":", "{BD-TD-}"), n.Replace(":", "{BD-TD-}")})
                     End If
                 End If
                 If findico Then
@@ -730,9 +730,9 @@ Class MainWindow
                     End Try
                 End If
                 If aiconsuccess Then
-                    iconlist.Add({Path, My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+") + ".png", n})
+                    iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + Path.Replace(":", "+").Replace("\", "+").Replace(":", "{BD-TD-}") + ".png", n.Replace(":", "{BD-TD-}")})
                 ElseIf findico Then
-                    iconlist.Add({Path, "pack://application:,,,/Budgie%20Dock;component/unknown.png", n})
+                    iconlist.Add({"icon", Path.Replace(":", "{BD-TD-}"), "pack://application:,,,/Budgie%20Dock;component/unknown.png".Replace(":", "{BD-TD-}"), n.Replace(":", "{BD-TD-}")})
                 End If
                 iddd += 1
                 savicon()
