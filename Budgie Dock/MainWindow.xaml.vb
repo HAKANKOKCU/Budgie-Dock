@@ -513,6 +513,7 @@ Class MainWindow
                 ff.Background = bdr.Background
             End If
             RedesignLayout()
+            onScreenResChange()
             reicon()
         Catch ex As Exception
             insertToLog(ex.ToString)
@@ -541,6 +542,7 @@ Class MainWindow
                     ff.Background = bdr.Background
                 End If
                 RedesignLayout()
+                onScreenResChange()
                 reicon()
             ElseIf e.Key = Key.R Then
                 appsgrid.Width = GetSetting("size")
@@ -599,10 +601,9 @@ Class MainWindow
                 If Not aaps.Contains(app.Id) Then
                     If Not app.MainWindowHandle = IntPtr.Zero Then
                         If Not app.MainWindowTitle.Trim = "" Then
-                            If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle) Then
+                            If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle.ToLower) Then
                                 'If Not icc.Contains(app.ProcessName.ToLower) Then
-                                ruwid += GetSetting("size")
-                                If ruwid = GetSetting("size") Then
+                                If runingapps.Children.Count = 0 Then
                                     Dim a As New Grid
                                     a.UseLayoutRounding = True
                                     a.Height = 5
@@ -670,11 +671,13 @@ Class MainWindow
     End Sub
 
     Sub sizecalc()
-        ruwid = 3
+        ruwid = 0
         For Each itm As UIElement In runingapps.Children
             If TypeOf itm Is Image Then
                 Dim itemm As Image = itm
                 ruwid += itemm.Width
+            Else
+                ruwid += 3
             End If
         Next
     End Sub

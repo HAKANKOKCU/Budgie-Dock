@@ -3,13 +3,13 @@
     Property mainwin As MainWindow
     Property iconn As iconobj
     Private Sub IconOptions_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        AppShell.Text = mainwin.iconlist(iconid)(0)
-        IconPath.Text = mainwin.iconlist(iconid)(1)
-        Appname.Text = mainwin.iconlist(iconid)(2)
+        AppShell.Text = mainwin.iconlist(iconid)(1).Replace("{BD-TD-}", ":")
+        IconPath.Text = mainwin.iconlist(iconid)(2).Replace("{BD-TD-}", ":")
+        Appname.Text = mainwin.iconlist(iconid)(3).Replace("{BD-TD-}", ":")
         Try
             Dim bi As New BitmapImage
             bi.BeginInit()
-            bi.UriSource = New Uri(mainwin.iconlist(iconid)(1))
+            bi.UriSource = New Uri(mainwin.iconlist(iconid)(2).Replace("{BD-TD-}", ":"))
             bi.EndInit()
             Me.Icon = bi
         Catch ex As Exception
@@ -18,9 +18,9 @@
     End Sub
 
     Private Sub ApplyBTN_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ApplyBTN.MouseUp
-        mainwin.iconlist(iconid)(0) = AppShell.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}")
-        mainwin.iconlist(iconid)(1) = IconPath.Text
-        mainwin.iconlist(iconid)(2) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}")
+        mainwin.iconlist(iconid)(0) = AppShell.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
+        mainwin.iconlist(iconid)(1) = IconPath.Text.Replace(":", "{BD-TD-}")
+        mainwin.iconlist(iconid)(2) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
         iconn.appname = Appname.Text
         iconn.iconpath = IconPath.Text
         iconn.apppath = AppShell.Text

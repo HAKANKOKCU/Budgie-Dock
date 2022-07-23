@@ -183,9 +183,7 @@ Public Class iconobj
 
     Private Sub imageiconobj_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseLeave
         If isEditingAvable Then
-            If runBG.IsBusy Then
-                imageiconobj.Opacity = 0.1
-            Else
+            If Not runBG.IsBusy Then
                 imageiconobj.Opacity = 1
             End If
         Else
@@ -281,7 +279,7 @@ Public Class iconobj
                     For Each prc As Process In Process.GetProcesses
                         If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
                             Try
-                                If prc.MainModule.FileName = apppath Then
+                                If prc.MainModule.FileName.ToLower = apppath.ToLower Then
                                     isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
                                     isopen = True
                                     Try
@@ -306,19 +304,21 @@ Public Class iconobj
                 If hr Then
                     Try
                         If Not runproc.HasExited Then
+                            aid = runproc.Id
                             Dim prc = Process.GetProcessById(aid)
                             If runproc.ProcessName = prc.ProcessName Then
                                 runproc.Refresh()
-                                runproc = Process.GetProcessById(aid)
+                                runproc = prc
                             End If
-                            appname = runproc.MainWindowTitle
                         Else
                             remove()
                         End If
-                    Catch
+                    Catch ex As Exception
+                        insertToLog(ex.ToString)
                     End Try
                 End If
                 Try
+                    appname = runproc.MainWindowTitle
                     If runproc.HasExited Then
                         remove()
                     End If
