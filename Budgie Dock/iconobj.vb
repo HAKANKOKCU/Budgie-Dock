@@ -193,7 +193,7 @@ Public Class iconobj
     End Sub
 
     Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
-        If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+        If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - containerwin.Left - (containerwin.appname.ActualWidth / 2)))
     End Sub
 
     Sub runapp()
@@ -229,7 +229,7 @@ Public Class iconobj
             runapp()
         ElseIf e.ChangedButton = 2 And isEditingAvable Then
             containerwin.menustack.Visibility = Visibility.Visible
-            Canvas.SetLeft(containerwin.menustack, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - 100)
+            Canvas.SetLeft(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - containerwin.Left - 100)
             containerwin.OptionsIcon = Me
         ElseIf e.ChangedButton = 2 And Not isEditingAvable Then
             prcrem.hide()

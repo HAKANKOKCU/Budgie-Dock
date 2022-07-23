@@ -23,6 +23,7 @@ Class MainWindow
     'End Function
     Dim icc As New ArrayList
     Dim icopack As Ini = Nothing
+    Public SystemDPI = Forms.Screen.PrimaryScreen.Bounds.Height / SystemParameters.PrimaryScreenHeight
 
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
@@ -101,7 +102,7 @@ Class MainWindow
                 appsgrid.Orientation = Orientation.Vertical
                 appsgrid.Width = GetSetting("size")
             End If
-            Me.Width = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Width
+            Me.Width = My.Computer.Screen.WorkingArea.Width
             Me.Left = 0
             If GetSetting("animateScale") = 0 Then
                 SetSetting("animateScale", 1, True)
@@ -112,11 +113,11 @@ Class MainWindow
             If GetSetting("applyDockColorAtIsAppRuning") Then
                 ff.Background = bdr.Background
             End If
-            If GetSetting("pos") = "Bottom" Then
-                Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") = 1, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-            Else
-                Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
-            End If
+            'If GetSetting("pos") = "Bottom" Then
+            'Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") = 1, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+            'Else
+            'Me.Left = Forms.Screen.PrimaryScreen.WorkingArea.Width - Me.Width + 180
+            'End If
             Me.Topmost = GetSetting("topMost")
             onScreenResChange()
             RedesignLayout()
@@ -276,15 +277,15 @@ Class MainWindow
                 bdr.Width = My.Computer.Screen.WorkingArea.Width
                 ff.Width = My.Computer.Screen.WorkingArea.Width
                 If GetSetting("pos") = "Bottom" Then
-                    Me.Top = Forms.Screen.PrimaryScreen.Bounds.Height - Me.Height + Forms.Screen.PrimaryScreen.Bounds.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = My.Computer.Screen.Bounds.Height - Me.Height + (My.Computer.Screen.WorkingArea.Top) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 Else
-                    Me.Top = Forms.Screen.PrimaryScreen.Bounds.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = (My.Computer.Screen.Bounds.Top) - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 End If
             Else
                 If GetSetting("pos") = "Bottom" Then
-                    Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Height - Me.Height + Forms.Screen.PrimaryScreen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = (My.Computer.Screen.WorkingArea.Height) - (Me.Height * SystemDPI) + My.Computer.Screen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 Else
-                    Me.Top = Forms.Screen.PrimaryScreen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = My.Computer.Screen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 End If
             End If
         Catch ex As Exception
@@ -296,9 +297,10 @@ Class MainWindow
 
     Private Sub ticker_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles ticker.Tick
         Try
-            If Not oldSres = Windows.Forms.Screen.PrimaryScreen.Bounds.Width Then
-                onScreenResChange()
-                oldSres = Windows.Forms.Screen.PrimaryScreen.Bounds.Width
+            onScreenResChange()
+            If Not oldSres = My.Computer.Screen.Bounds.Width Then
+
+                oldSres = My.Computer.Screen.Bounds.Width
             End If
             If GetSetting("topMost") = 1 Then
                 Me.Topmost = True

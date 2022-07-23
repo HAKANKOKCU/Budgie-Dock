@@ -10,6 +10,8 @@ Public Class appdrawer
     Dim postogo = 0
     Dim Textcolor = Brushes.White
     Dim fcolor = Brushes.Black
+    Dim fs As Boolean = True
+    Dim icos As New Dictionary(Of String, BitmapImage)
     Private Sub appdrawer_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles Me.KeyDown
         If e.Key = Key.Escape Then
             aaps.Children.Clear()
@@ -119,6 +121,7 @@ Public Class appdrawer
                 'bdr.Child = grp
                 aaps.Children.Add(grpu)
             End If
+            fs = False
         Catch ex As Exception
             insertToLog(ex.ToString)
         End Try
@@ -141,7 +144,9 @@ Public Class appdrawer
 
     Sub addicon(ByVal a As String, ByVal wpToadd As WrapPanel)
         Try
-            insertToLog("Adding Icon From Path: " & a)
+            If fs Then
+                insertToLog("Adding Icon From Path: " & a)
+            End If
             Dim nm = My.Computer.FileSystem.GetName(a)
             Dim adda = False
             If nm.ToLower.Contains(SearchTB.Text) Or nm.ToUpper.Contains(SearchTB.Text) Or nm.Contains(SearchTB.Text) Then
@@ -181,21 +186,20 @@ Public Class appdrawer
                             bm.UriSource = New Uri(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png")
                             bm.EndInit()
                             ico.Source = bm
-                        Catch
-                            If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png") Then
-                                Dim bm As New BitmapImage
-                                bm.BeginInit()
-                                bm.UriSource = New Uri(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png")
-                                bm.EndInit()
-                                ico.Source = bm
-                            End If
+                        Catch ex As Exception
+                            insertToLog(ex.ToString)
                         End Try
                     Else
-                        Dim bm As New BitmapImage
-                        bm.BeginInit()
-                        bm.UriSource = New Uri(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png")
-                        bm.EndInit()
-                        ico.Source = bm
+                        If fs Then
+                            Dim bm As New BitmapImage
+                            bm.BeginInit()
+                            bm.UriSource = New Uri(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + a.Replace(":", "+").Replace("\", "+") + ".png")
+                            bm.EndInit()
+                            icos.Add(a, bm)
+                            ico.Source = bm
+                        Else
+                            ico.Source = icos(a)
+                        End If
                     End If
                 End If
                 ico.Margin = imargin
@@ -231,6 +235,7 @@ Public Class appdrawer
                                                 animer.Stop()
                                                 Close()
                                                 ismdown = False
+                                                icos.Clear()
                                             End If
                                         End Sub
                 AddHandler bdr.GotFocus, Sub(sender, e)
@@ -248,6 +253,7 @@ Public Class appdrawer
                                                 Catch ex As Exception
                                                     MsgBox(ex.Message, MsgBoxStyle.Critical)
                                                 End Try
+                                                icos.Clear()
                                                 animer.Stop()
                                                 Close()
                                             End If
