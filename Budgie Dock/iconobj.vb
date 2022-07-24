@@ -62,7 +62,7 @@ Public Class iconobj
             imageiconobj.Focusable = True
             imageiconobj.Width = GetSetting("size")
             Try
-                If GetSetting("pos") = "Right" Then
+                If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                     imageiconobj.Height = GetSetting("size")
                 Else
                     imageiconobj.Height = GetSetting("size") - 5
@@ -70,7 +70,7 @@ Public Class iconobj
             Catch
             End Try
             imageiconobj.ClipToBounds = True
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 isapopen.Height = (GetSetting("size") / 3)
                 isapopen.Margin = New Thickness(0, (GetSetting("size") / 3), 0, (GetSetting("size") / 3))
                 isapopen.Width = 3
@@ -188,6 +188,9 @@ Public Class iconobj
                 If GetSetting("pos") = "Right" Then
                     Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
                     Canvas.SetRight(containerwin.appname, 0)
+                ElseIf GetSetting("pos") = "Left" Then
+                    Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
+                    Canvas.SetLeft(containerwin.appname, 0)
                 Else
                     Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
                 End If
@@ -209,7 +212,7 @@ Public Class iconobj
 
     Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
         If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - (containerwin.appname.ActualHeight * 2)))
             Else
                 Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
@@ -253,7 +256,10 @@ Public Class iconobj
             If GetSetting("pos") = "Right" Then
                 'Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
                 Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
-                Canvas.SetLeft(containerwin.menustack, 0)
+                Canvas.SetRight(containerwin.menustack, 0)
+            ElseIf GetSetting("pos") = "Left" Then
+                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
+                Canvas.SetRight(containerwin.menustack, 0)
             Else
                 Canvas.SetLeft(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - 100)
             End If

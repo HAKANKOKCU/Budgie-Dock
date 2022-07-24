@@ -9,7 +9,7 @@
     <Grid VerticalAlignment="Bottom" Name="mg">
         <StackPanel Name="mas" VerticalAlignment="Center">
             <Canvas Height="160" Name="ncan">
-                <StackPanel Visibility="Hidden" Name="menustack" Width="200" Background="wheat">
+                <StackPanel Visibility="Hidden" Name="menustack" Width="200" Background="wheat" Panel.ZIndex="5">
                     <StackPanel Height="26" Width="200" Name="AddspButton">
                         <Label HorizontalAlignment="Center" VerticalAlignment="Center">Add Separator</Label>
                     </StackPanel>

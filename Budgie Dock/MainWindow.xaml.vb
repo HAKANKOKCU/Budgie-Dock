@@ -93,7 +93,7 @@ Class MainWindow
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
             End Try
             insertToLog("Setting Position")
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 Me.Height = My.Computer.Screen.WorkingArea.Height
             Else
                 Me.Width = My.Computer.Screen.WorkingArea.Width
@@ -172,8 +172,6 @@ Class MainWindow
                 mas.Children.Add(ff)
                 ncan.Height = Me.Height
                 ncan.Margin = New Thickness(-200 - GetSetting("size"), 0, 0, 0)
-                Canvas.SetTop(appname, 0)
-                Canvas.SetTop(menustack, 30)
                 ff.Width = 3
                 isappopen.Width = 3
                 isappopen.Orientation = Orientation.Vertical
@@ -186,6 +184,28 @@ Class MainWindow
                 mas.HorizontalAlignment = Windows.HorizontalAlignment.Right
                 bdrcont.Orientation = Orientation.Vertical
                 bdr.HorizontalAlignment = Windows.HorizontalAlignment.Right
+            ElseIf GetSetting("pos") = "Left" Then
+                mas.Children.Remove(ncan)
+                mas.Children.Remove(bdr)
+                mas.Children.Remove(ff)
+                mas.Orientation = Orientation.Horizontal
+                mas.Children.Add(ff)
+                mas.Children.Add(bdr)
+                mas.Children.Add(ncan)
+                ncan.Height = Me.Height
+                ncan.Margin = New Thickness(0, 0, -200, 0)
+                ff.Width = 3
+                isappopen.Width = 3
+                isappopen.Orientation = Orientation.Vertical
+                runingapps.Orientation = Orientation.Vertical
+                mg.VerticalAlignment = Windows.VerticalAlignment.Center
+                bdr.VerticalAlignment = Windows.VerticalAlignment.Center
+                appsgrid.Orientation = Orientation.Vertical
+                appsgrid.Height = 0
+                runingapps.Height = 0
+                mas.HorizontalAlignment = Windows.HorizontalAlignment.Left
+                bdrcont.Orientation = Orientation.Vertical
+                bdr.HorizontalAlignment = Windows.HorizontalAlignment.Left
             End If
             mas.UpdateLayout()
             runingapps.UpdateLayout()
@@ -245,7 +265,7 @@ Class MainWindow
                     If Iconn = "sep" Then
                         Dim a As New Grid
                         a.UseLayoutRounding = True
-                        If GetSetting("pos") = "Right" Then
+                        If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                             If Not GetSetting("animateScale") = 1 Then a.Width = 5
                             Try
                                 If GetSetting("animateScale") = 1 Then a.Width = GetSetting("size") - 5
@@ -259,13 +279,13 @@ Class MainWindow
                             End Try
                         End If
                         a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
-                        If GetSetting("pos") = "Right" Then
+                        If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                             a.Height = 1
                         Else
                             a.Width = 1
                         End If
                         a.ClipToBounds = True
-                        If GetSetting("pos") = "Right" Then
+                        If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                             a.Margin = New Thickness(0, 1, 0, 1)
                         Else
                             a.Margin = New Thickness(1, 0, 1, 0)
@@ -279,7 +299,7 @@ Class MainWindow
                         iddd += 1
                         a.ClipToBounds = True
                         Dim pp As New Grid
-                        If GetSetting("pos") = "Right" Then
+                        If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                             pp.Height = 3
                         Else
                             pp.Width = 3
@@ -307,7 +327,7 @@ Class MainWindow
                         'Catch
                         'End Try
                         If animate Then
-                            If GetSetting("pos") = "Right" Then
+                            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                                 If Not GetSetting("animateScale") = 1 Then a.imageiconobj.Width = 5
                                 Try
                                     If GetSetting("animateScale") = 1 Then a.imageiconobj.Width = GetSetting("size") - 5
@@ -344,12 +364,22 @@ Class MainWindow
         Try
             'Console.WriteLine(My.Computer.Screen.WorkingArea.Width & "-" & My.Computer.Screen.WorkingArea.Left & "-" & Me.Width)
             If GetSetting("useDockAsTaskbar") Then
-                bdr.Width = My.Computer.Screen.WorkingArea.Width
-                ff.Width = My.Computer.Screen.WorkingArea.Width
                 If GetSetting("pos") = "Bottom" Then
                     Me.Top = My.Computer.Screen.Bounds.Height - Me.Height + (My.Computer.Screen.WorkingArea.Top) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    bdr.Width = My.Computer.Screen.WorkingArea.Width
+                    ff.Width = My.Computer.Screen.WorkingArea.Width
                 ElseIf GetSetting("pos") = "Top" Then
                     Me.Top = (My.Computer.Screen.Bounds.Top) - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    bdr.Width = My.Computer.Screen.WorkingArea.Width
+                    ff.Width = My.Computer.Screen.WorkingArea.Width
+                ElseIf GetSetting("pos") = "Right" Then
+                    Me.Left = My.Computer.Screen.WorkingArea.Width - (Me.Width * SystemDPI) + My.Computer.Screen.WorkingArea.Left + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    bdr.Height = My.Computer.Screen.WorkingArea.Height
+                    ff.Height = My.Computer.Screen.WorkingArea.Height
+                ElseIf GetSetting("pos") = "Left" Then
+                    Me.Left = My.Computer.Screen.WorkingArea.Left - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
+                    bdr.Height = My.Computer.Screen.WorkingArea.Height
+                    ff.Height = My.Computer.Screen.WorkingArea.Height
                 End If
             Else
                 If GetSetting("pos") = "Bottom" Then
@@ -358,6 +388,8 @@ Class MainWindow
                     Me.Top = My.Computer.Screen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 ElseIf GetSetting("pos") = "Right" Then
                     Me.Left = My.Computer.Screen.WorkingArea.Width - (Me.Width * SystemDPI) + My.Computer.Screen.WorkingArea.Left + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                ElseIf GetSetting("pos") = "Left" Then
+                    Me.Left = My.Computer.Screen.WorkingArea.Left - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
                 End If
             End If
         Catch ex As Exception
@@ -373,7 +405,7 @@ Class MainWindow
             If GetSetting("topMost") = 1 Then
                 Me.Topmost = True
             End If
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 Me.Top = 0
             Else
                 Me.Left = 0
@@ -385,7 +417,7 @@ Class MainWindow
                 End If
             Catch
             End Try
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 If Not appsgrid.Width = GetSetting("size") Then
                     appsgrid.Width = GetSetting("size")
                     runingapps.Width = GetSetting("size")
@@ -400,7 +432,7 @@ Class MainWindow
                     reicon()
                 End If
             End If
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 appsgrid.Height += (agwid - appsgrid.Height) / GetSetting("animateScale")
                 runingapps.Height += (ruwid - runingapps.Height) / GetSetting("animateScale")
                 isappopen.Height += ((agwid + ruwid) - isappopen.Height) / GetSetting("animateScale")
@@ -413,7 +445,7 @@ Class MainWindow
             Dim a As Integer = 0
             Dim ar As Integer = 0
             'Console.WriteLine(isappopen.Width & " " & isappopen.Height & " " & isappopen.Visibility.ToString)
-            If GetSetting("pos") = "Right" Then
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 If Not GetSetting("animateScale") = 1 Then
                     For Each i As UIElement In appsgrid.Children
                         If TypeOf i Is Image Then
@@ -683,7 +715,7 @@ Class MainWindow
                 onScreenResChange()
                 reicon()
             ElseIf e.Key = Key.R Then
-                If GetSetting("pos") = "Right" Then
+                If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                     appsgrid.Height = GetSetting("size")
                     isappopen.Height = GetSetting("size")
                     runingapps.Height = 0
@@ -751,7 +783,7 @@ Class MainWindow
                                     Dim a As New Grid
                                     a.UseLayoutRounding = True
                                     a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
-                                    If GetSetting("pos") = "Right" Then
+                                    If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                                         a.Height = 1
                                         a.Width = 5
                                     Else
@@ -802,7 +834,7 @@ Class MainWindow
                                 ico.isprocfound = True
                                 ico.checkIfRuning = False
                                 ico.endinit()
-                                If GetSetting("pos") = "Right" Then
+                                If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                                     If ani Then ico.imageiconobj.Width = 5 'My.Settings.Size - 5
                                     Try
                                         If Not ani Then ico.imageiconobj.Width = GetSetting("size") - 5
@@ -815,12 +847,12 @@ Class MainWindow
                                     Catch
                                     End Try
                                 End If
-                                    aaps.Add(app.Id)
-                                    'End If
-                                End If
+                                aaps.Add(app.Id)
+                                'End If
                             End If
                         End If
                     End If
+                End If
             Catch ex As Exception
                 insertToLog(ex.ToString)
             End Try
@@ -833,7 +865,7 @@ Class MainWindow
         For Each itm As UIElement In runingapps.Children
             If TypeOf itm Is Image Then
                 Dim itemm As Image = itm
-                If GetSetting("pos") = "Right" Then
+                If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                     ruwid += itemm.Height
                 Else
                     ruwid += itemm.Width
