@@ -62,13 +62,23 @@ Public Class iconobj
             imageiconobj.Focusable = True
             imageiconobj.Width = GetSetting("size")
             Try
-                imageiconobj.Height = GetSetting("size") - 5
+                If GetSetting("pos") = "Right" Then
+                    imageiconobj.Height = GetSetting("size")
+                Else
+                    imageiconobj.Height = GetSetting("size") - 5
+                End If
             Catch
             End Try
             imageiconobj.ClipToBounds = True
-            isapopen.Width = (GetSetting("size") / 3)
-            isapopen.Margin = New Thickness((GetSetting("size") / 3), 0, (GetSetting("size") / 3), 0)
-            isapopen.Height = 3
+            If GetSetting("pos") = "Right" Then
+                isapopen.Height = (GetSetting("size") / 3)
+                isapopen.Margin = New Thickness(0, (GetSetting("size") / 3), 0, (GetSetting("size") / 3))
+                isapopen.Width = 3
+            Else
+                isapopen.Width = (GetSetting("size") / 3)
+                isapopen.Margin = New Thickness((GetSetting("size") / 3), 0, (GetSetting("size") / 3), 0)
+                isapopen.Height = 3
+            End If
             isapopen.Background = Brushes.Transparent
             isapopen.ClipToBounds = True
             tick.Interval = TimeSpan.FromMilliseconds(2000)
@@ -175,7 +185,12 @@ Public Class iconobj
             If Not containerwin.menustack.Visibility = Visibility.Visible Then
                 containerwin.appname.Content = appname
                 containerwin.appname.UpdateLayout()
-                Canvas.SetLeft(containerwin.appname, System.Windows.Forms.Control.MousePosition.X - containerwin.Left - (containerwin.appname.ActualWidth / 2))
+                If GetSetting("pos") = "Right" Then
+                    Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
+                    Canvas.SetRight(containerwin.appname, 0)
+                Else
+                    Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
+                End If
                 containerwin.appname.Visibility = Visibility.Visible
             End If
         End If
@@ -193,7 +208,13 @@ Public Class iconobj
     End Sub
 
     Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
-        If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - containerwin.Left - (containerwin.appname.ActualWidth / 2)))
+        If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then
+            If GetSetting("pos") = "Right" Then
+                Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - (containerwin.appname.ActualHeight * 2)))
+            Else
+                Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
+            End If
+        End If
     End Sub
 
     Sub runapp()
@@ -229,7 +250,13 @@ Public Class iconobj
             runapp()
         ElseIf e.ChangedButton = 2 And isEditingAvable Then
             containerwin.menustack.Visibility = Visibility.Visible
-            Canvas.SetLeft(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - containerwin.Left - 100)
+            If GetSetting("pos") = "Right" Then
+                'Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
+                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
+                Canvas.SetLeft(containerwin.menustack, 0)
+            Else
+                Canvas.SetLeft(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - 100)
+            End If
             containerwin.OptionsIcon = Me
         ElseIf e.ChangedButton = 2 And Not isEditingAvable Then
             prcrem.hide()
@@ -279,8 +306,18 @@ Public Class iconobj
                 If Not fi.Extension = "" Then
                     For Each prc As Process In Process.GetProcesses
                         If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                            Try
-                                If prc.MainModule.FileName.ToLower = apppath.ToLower Then
+                            If Not prc.MainWindowTitle = "" And Not prc.MainWindowHandle = IntPtr.Zero Then
+                                Try
+                                    If prc.MainModule.FileName.ToLower = apppath.ToLower Then
+                                        isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
+                                        isopen = True
+                                        Try
+                                            If hr Then If runproc.HasExited Then isprocfound = False
+                                            If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                                        Catch
+                                        End Try
+                                    End If
+                                Catch
                                     isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
                                     isopen = True
                                     Try
@@ -288,16 +325,8 @@ Public Class iconobj
                                         If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
                                     Catch
                                     End Try
-                                End If
-                            Catch
-                                isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
-                                isopen = True
-                                Try
-                                    If hr Then If runproc.HasExited Then isprocfound = False
-                                    If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
-                                Catch
                                 End Try
-                            End Try
+                            End If
                         End If
                     Next
                 End If

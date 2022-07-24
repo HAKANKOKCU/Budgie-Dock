@@ -12,6 +12,7 @@
                 <ComboBox Name="dps">
                     <ComboBoxItem Content="Bottom" />
                     <ComboBoxItem Content="Top" />
+                    <ComboBoxItem Content="Right" />
                 </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">

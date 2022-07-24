@@ -6,7 +6,7 @@
     <Window.Background>
         <SolidColorBrush Opacity="0" Color="White"/>
     </Window.Background>
-    <Grid VerticalAlignment="Bottom">
+    <Grid VerticalAlignment="Bottom" Name="mg">
         <StackPanel Name="mas" VerticalAlignment="Center">
             <Canvas Height="160" Name="ncan">
                 <StackPanel Visibility="Hidden" Name="menustack" Width="200" Background="wheat">
@@ -33,10 +33,12 @@
                 </Label>
             </Canvas>
             <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True">
-                <DockPanel ClipToBounds="True" AllowDrop="True" HorizontalAlignment="Center" Name="bdrcont">
-                    <StackPanel AllowDrop="True" Name="appsgrid" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
-                    <StackPanel Orientation="Horizontal" Name="runingapps" HorizontalAlignment="Center" VerticalAlignment="Center" Width="0" ClipToBounds="True"></StackPanel>
-                </DockPanel>
+                <StackPanel ClipToBounds="True" AllowDrop="True" HorizontalAlignment="Center" Name="bdrcont" Orientation="Horizontal">
+                    <StackPanel AllowDrop="True" Name="appsgrid" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Name="runingapps" VerticalAlignment="Center" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
+                    </StackPanel>
+                </StackPanel>
             </Border>
             <Border Name="ff" HorizontalAlignment="Center">
                 <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" ClipToBounds="True">

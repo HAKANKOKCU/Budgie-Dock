@@ -41,7 +41,7 @@ Public Class BDOptions
         iuB.Text = GetSetting("isAppRuningBlue")
         dciara.IsChecked = GetSetting("applyDockColorAtIsAppRuning") = 1
         useastb.IsChecked = GetSetting("useDockAsTaskbar") = 1
-        dps.SelectedIndex = IIf(GetSetting("pos") = "Bottom", 0, 1)
+        dps.SelectedIndex = IIf(GetSetting("pos") = "Bottom", 0, IIf(GetSetting("pos") = "Top", 1, 2))
         lmappsdw.IsChecked = GetSetting("lightThemeInAppsDrawer") = 1
         acs = True
     End Sub
