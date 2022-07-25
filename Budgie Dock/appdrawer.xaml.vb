@@ -33,7 +33,6 @@ Public Class appdrawer
                 Me.Top = 0
                 Me.Opacity = 1
             End If
-            Me.Top = 0
             Me.Left = 0
             SearchTB.Focus()
             If My.Computer.FileSystem.FileExists(GetSetting("currentIconThemePath")) Then

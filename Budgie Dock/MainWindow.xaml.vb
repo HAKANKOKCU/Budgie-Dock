@@ -24,7 +24,7 @@ Class MainWindow
     Dim icc As New ArrayList
     Dim icopack As Ini = Nothing
     Public SystemDPI = Forms.Screen.PrimaryScreen.Bounds.Height / SystemParameters.PrimaryScreenHeight
-
+    Public MILeft As Integer
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         Try
             insertToLog("BudgieDock Launched")
@@ -359,38 +359,47 @@ Class MainWindow
 
     Sub onScreenResChange()
         Try
+            MILeft = 0
+            For i As Integer = 0 To GetSetting("placedScreenID") - 1
+                MILeft += Forms.Screen.AllScreens(i).Bounds.Width / SystemDPI
+            Next
             'Console.WriteLine(My.Computer.Screen.WorkingArea.Width & "-" & My.Computer.Screen.WorkingArea.Left & "-" & Me.Width)
             If GetSetting("useDockAsTaskbar") Then
                 If GetSetting("pos") = "Bottom" Then
-                    Me.Top = My.Computer.Screen.Bounds.Height - Me.Height + (My.Computer.Screen.WorkingArea.Top) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI - Me.Height + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Top / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                     bdr.Width = My.Computer.Screen.WorkingArea.Width
                     ff.Width = My.Computer.Screen.WorkingArea.Width
                 ElseIf GetSetting("pos") = "Top" Then
-                    Me.Top = (My.Computer.Screen.Bounds.Top) - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Top / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                     bdr.Width = My.Computer.Screen.WorkingArea.Width
                     ff.Width = My.Computer.Screen.WorkingArea.Width
                 ElseIf GetSetting("pos") = "Right" Then
-                    Me.Left = My.Computer.Screen.WorkingArea.Width - (Me.Width * SystemDPI) + My.Computer.Screen.WorkingArea.Left + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI - (Me.Width * SystemDPI) + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Left / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                     bdr.Height = My.Computer.Screen.WorkingArea.Height
                     ff.Height = My.Computer.Screen.WorkingArea.Height
                 ElseIf GetSetting("pos") = "Left" Then
-                    Me.Left = My.Computer.Screen.WorkingArea.Left - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
+                    Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Left / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
                     bdr.Height = My.Computer.Screen.WorkingArea.Height
                     ff.Height = My.Computer.Screen.WorkingArea.Height
                 End If
             Else
                 If GetSetting("pos") = "Bottom" Then
-                    Me.Top = (My.Computer.Screen.WorkingArea.Height) - (Me.Height * SystemDPI) + My.Computer.Screen.WorkingArea.Top + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Height / SystemDPI - (Me.Height * SystemDPI) + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Top / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 ElseIf GetSetting("pos") = "Top" Then
-                    Me.Top = My.Computer.Screen.WorkingArea.Top - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Top / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 ElseIf GetSetting("pos") = "Right" Then
-                    Me.Left = My.Computer.Screen.WorkingArea.Width - (Me.Width * SystemDPI) + My.Computer.Screen.WorkingArea.Left + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
+                    Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Width / SystemDPI - (Me.Width * SystemDPI) + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Left / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
                 ElseIf GetSetting("pos") = "Left" Then
-                    Me.Left = My.Computer.Screen.WorkingArea.Left - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
+                    Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Left / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
                 End If
             End If
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
+                Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Top / SystemDPI
+            Else
+                Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Left / SystemDPI
+            End If
         Catch ex As Exception
-            insertToLog(ex.Message)
+            insertToLog(ex.ToString)
         End Try
     End Sub
 
@@ -401,11 +410,6 @@ Class MainWindow
             onScreenResChange()
             If GetSetting("topMost") = 1 Then
                 Me.Topmost = True
-            End If
-            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
-                Me.Top = 0
-            Else
-                Me.Left = 0
             End If
             Try
                 If menustack.Visibility = Windows.Visibility.Visible Then

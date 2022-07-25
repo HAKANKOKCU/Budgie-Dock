@@ -215,7 +215,7 @@ Public Class iconobj
             If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
                 Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - (containerwin.appname.ActualHeight * 2)))
             Else
-                Canvas.SetLeft(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
+                Canvas.SetLeft(containerwin.appname, (((System.Windows.Forms.Control.MousePosition.X - containerwin.MILeft) / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
             End If
         End If
     End Sub
@@ -236,9 +236,9 @@ Public Class iconobj
         Else
             If apppath = "!AppsDrawer" Then
                 Dim ad As New appdrawer
-                containerwin.Visibility = Visibility.Hidden
+                'containerwin.Visibility = Visibility.Hidden
                 ad.ShowDialog()
-                containerwin.Visibility = Visibility.Visible
+                'containerwin.Visibility = Visibility.Visible
             End If
             If apppath = "!Shutdown" Then
                 Dim ad As New shutdownDialog
@@ -261,7 +261,7 @@ Public Class iconobj
                 Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
                 Canvas.SetRight(containerwin.menustack, 0)
             Else
-                Canvas.SetLeft(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.X / containerwin.SystemDPI) - 100)
+                Canvas.SetLeft(containerwin.menustack, ((System.Windows.Forms.Control.MousePosition.X + containerwin.MILeft) / containerwin.SystemDPI) - 100)
             End If
             containerwin.OptionsIcon = Me
         ElseIf e.ChangedButton = 2 And Not isEditingAvable Then
