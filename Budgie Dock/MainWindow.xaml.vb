@@ -64,11 +64,9 @@ Class MainWindow
             End Try
             insertToLog("Updating icon data if outdated")
             UpdateIconsData.UpdateNow()
-            insertToLog("init Settings Start")
+            insertToLog("init Settings")
             InitSettings()
-            insertToLog("init Settings End")
             appsgrid.Width = GetSetting("size")
-            reicon()
             insertToLog("Adding hover effects")
             Dim dlbtn As New ButtonStack
             dlbtn.theStackPanel = DeleteIconButton
@@ -232,7 +230,6 @@ Class MainWindow
 
     Sub reicon(Optional ByVal animate As Boolean = True)
         Try
-            ff.Width = 3
             runingapps.Width = GetSetting("size")
             LoadIconPack()
             icc.Clear()
@@ -440,7 +437,7 @@ Class MainWindow
                 appsgrid.Width += (agwid - appsgrid.Width) / GetSetting("animateScale")
                 runingapps.Width += (ruwid - runingapps.Width) / GetSetting("animateScale")
                 isappopen.Width += ((agwid + ruwid) - isappopen.Width) / GetSetting("animateScale")
-                ff.Width = isappopen.Width
+                'ff.Width = isappopen.Width
             End If
             Dim a As Integer = 0
             Dim ar As Integer = 0

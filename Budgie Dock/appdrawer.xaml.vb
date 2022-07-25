@@ -27,12 +27,13 @@ Public Class appdrawer
             Me.Height = My.Computer.Screen.Bounds.Height
             If Not GetSetting("animateScale") = 0 Then
                 Me.Top = My.Computer.Screen.Bounds.Height
-                animer.Interval = TimeSpan.FromMilliseconds(0.05)
+                animer.Interval = TimeSpan.FromMilliseconds(0.1)
                 animer.Start()
             Else
                 Me.Top = 0
                 Me.Opacity = 1
             End If
+            Me.Top = 0
             Me.Left = 0
             SearchTB.Focus()
             If My.Computer.FileSystem.FileExists(GetSetting("currentIconThemePath")) Then
@@ -268,7 +269,7 @@ Public Class appdrawer
     Private Sub animer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animer.Tick
         Me.Top += (postogo - Me.Top) / GetSetting("animateScale")
         Me.Opacity = 1.0 - (Me.Top / My.Computer.Screen.Bounds.Height)
-        If Me.Top = 0 Then
+        If Me.Opacity = 1 Then
             animer.Interval = TimeSpan.FromMilliseconds(5)
         End If
         If GetSetting("topMost") = 1 Then
