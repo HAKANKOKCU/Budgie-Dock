@@ -22,3 +22,4 @@ applyDockColorAtIsAppRuning=0
 useDockAsTaskbar=0
 lightThemeInAppsDrawer=0
 placedScreenID=0
+showOpenedApps=1

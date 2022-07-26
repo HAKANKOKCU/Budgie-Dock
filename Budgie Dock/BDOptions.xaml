@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BDOptions"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="BudgieDock Options" Height="475" Width="658" WindowStartupLocation="CenterScreen" Icon="/Budgie%20Dock;component/prflrsmi.ico">
+    Title="BudgieDock Options" Height="500" Width="678" WindowStartupLocation="CenterScreen" Icon="/Budgie%20Dock;component/prflrsmi.ico">
        <ScrollViewer VerticalScrollBarVisibility="Auto">
          <StackPanel>
             <Border Background="Orange">
@@ -73,6 +73,7 @@
             <CheckBox Name="dciara">Dock Color At IsAppRuning Area</CheckBox>
             <CheckBox Name="useastb">Taskbar Mode (Restart Needed For Disabling)</CheckBox>
             <CheckBox Name="lmappsdw">Light Theme In Apps Drawer</CheckBox>
+            <CheckBox Name="srtd" IsChecked="True">Show Runing Apps</CheckBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <Border CornerRadius="15" Height="30" Width="100" Background="Orange" Cursor="Hand" Name="restartapp">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">

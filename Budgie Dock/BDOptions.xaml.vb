@@ -43,6 +43,7 @@ Public Class BDOptions
         useastb.IsChecked = GetSetting("useDockAsTaskbar") = 1
         dps.SelectedIndex = IIf(GetSetting("pos") = "Bottom", 0, IIf(GetSetting("pos") = "Top", 1, IIf(GetSetting("pos") = "Right", 2, 3)))
         lmappsdw.IsChecked = GetSetting("lightThemeInAppsDrawer") = 1
+        srtd.IsChecked = GetSetting("showOpenedApps") = 1
         For i As Integer = 0 To Forms.Screen.AllScreens.Count - 1
             stp.Items.Add(i + 1)
         Next
@@ -238,6 +239,12 @@ Public Class BDOptions
     Private Sub stp_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles stp.SelectionChanged
         If acs Then
             SetSetting("placedScreenID", stp.SelectedIndex, True)
+        End If
+    End Sub
+
+    Private Sub srtd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles srtd.Click
+        If acs Then
+            SetSetting("showOpenedApps", IIf(srtd.IsChecked, 1, 0), True)
         End If
     End Sub
 End Class

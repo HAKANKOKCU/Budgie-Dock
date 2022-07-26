@@ -350,7 +350,9 @@ Class MainWindow
                 appsgrid.Children.Add(lbldrg)
                 agwid = 138
             End If
-            refopenapps(IIf(GetSetting("animateScale") = 1, False, True))
+            If GetSetting("showOpenedApps") = 1 Then
+                refopenapps(IIf(GetSetting("animateScale") = 1, False, True))
+            End If
         Catch ex As Exception
             insertToLog(ex.ToString)
         End Try
@@ -774,7 +776,9 @@ Class MainWindow
     End Sub
 
     Private Sub refer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles refer.Tick
-        refopenapps()
+        If GetSetting("showOpenedApps") = 1 Then
+            refopenapps()
+        End If
     End Sub
     Sub refopenapps(Optional ByVal ani As Boolean = True)
         For Each app As Process In Process.GetProcesses
