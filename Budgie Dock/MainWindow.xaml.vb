@@ -91,11 +91,6 @@ Class MainWindow
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
             End Try
             insertToLog("Setting Position")
-            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
-                Me.Height = My.Computer.Screen.WorkingArea.Height
-            Else
-                Me.Width = My.Computer.Screen.WorkingArea.Width
-            End If
             Me.Left = 0
             If GetSetting("animateScale") = 0 Then
                 SetSetting("animateScale", 1, True)
@@ -397,6 +392,11 @@ Class MainWindow
                 Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Top / SystemDPI
             Else
                 Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Left / SystemDPI
+            End If
+            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
+                Me.Height = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Height / SystemDPI
+            Else
+                Me.Width = Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Width / SystemDPI
             End If
         Catch ex As Exception
             insertToLog(ex.ToString)
