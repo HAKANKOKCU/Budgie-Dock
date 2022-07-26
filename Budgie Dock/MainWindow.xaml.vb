@@ -367,20 +367,20 @@ Class MainWindow
             If GetSetting("useDockAsTaskbar") Then
                 If GetSetting("pos") = "Bottom" Then
                     Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI - Me.Height + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Top / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-                    bdr.Width = My.Computer.Screen.WorkingArea.Width
-                    ff.Width = My.Computer.Screen.WorkingArea.Width
+                    bdr.Width = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI
+                    ff.Width = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI
                 ElseIf GetSetting("pos") = "Top" Then
                     Me.Top = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Top / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-                    bdr.Width = My.Computer.Screen.WorkingArea.Width
-                    ff.Width = My.Computer.Screen.WorkingArea.Width
+                    bdr.Width = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI
+                    ff.Width = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI
                 ElseIf GetSetting("pos") = "Right" Then
                     Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Width / SystemDPI - (Me.Width * SystemDPI) + (Forms.Screen.AllScreens(GetSetting("placedScreenID")).WorkingArea.Left / SystemDPI) + IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0) + GetSetting("paddingTop")
-                    bdr.Height = My.Computer.Screen.WorkingArea.Height
-                    ff.Height = My.Computer.Screen.WorkingArea.Height
+                    bdr.Height = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI
+                    ff.Height = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI
                 ElseIf GetSetting("pos") = "Left" Then
                     Me.Left = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Left / SystemDPI - IIf(GetSetting("autoHide") And Not isdockhovered, GetSetting("size") - 2, 0)
-                    bdr.Height = My.Computer.Screen.WorkingArea.Height
-                    ff.Height = My.Computer.Screen.WorkingArea.Height
+                    bdr.Height = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI
+                    ff.Height = Forms.Screen.AllScreens(GetSetting("placedScreenID")).Bounds.Height / SystemDPI
                 End If
             Else
                 If GetSetting("pos") = "Bottom" Then
