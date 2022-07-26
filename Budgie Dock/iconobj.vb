@@ -439,12 +439,16 @@ Public Class iconobj
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
-        If imageiconobj.Opacity + (anispeed / 1000) >= 1 Or imageiconobj.Opacity + (anispeed / 1000) <= 0.1 Then
-            anispeed = -anispeed
-            imageiconobj.Opacity += anispeed / 1000
-        Else
-            imageiconobj.Opacity += anispeed / 1000
-        End If
+        Try
+            If imageiconobj.Opacity + (anispeed / 1000) >= 1 Or imageiconobj.Opacity + (anispeed / 1000) <= 0.1 Then
+                anispeed = -anispeed
+                imageiconobj.Opacity += anispeed / 1000
+            Else
+                imageiconobj.Opacity += anispeed / 1000
+            End If
+        Catch
+            animater.Stop()
+        End Try
     End Sub
 
     Private Sub waitBG_DoWork(ByVal sender As Object, ByVal e As System.ComponentModel.DoWorkEventArgs) Handles waitBG.DoWork

@@ -42,13 +42,13 @@ Class MainWindow
             insertToLog("Missing Files Recreation Start")
             My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\")
             My.Computer.FileSystem.CreateDirectory(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons")
-            If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data") Then
+            If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data") Then
                 Dim dd As String = ""
-                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", dd, False)
+                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data", dd, False)
             End If
-            If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings.ini") Then
+            If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings" + SettingsLoadID + ".ini") Then
                 Dim dd As String = My.Resources.DefaultSettings
-                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings.ini", dd, False)
+                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings" + SettingsLoadID + ".ini", dd, False)
             End If
             If Not My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data") Then
                 Dim dd As String = ""
@@ -251,8 +251,8 @@ Class MainWindow
             Catch ex As Exception
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
             End Try
-            If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Contains("*") Then
-                For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
+            If My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data").Contains("*") Then
+                For Each Iconn As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data").Split("|")
                     insertToLog("Current icon:" & Iconn)
                     If Iconn = "sep" Then
                         Dim a As New Grid
@@ -343,6 +343,10 @@ Class MainWindow
             Else
                 Dim lbldrg As New Label
                 lbldrg.Content = "Drag Here To Add Icons"
+                lbldrg.UpdateLayout()
+                Dim lblspc As New Grid
+                lblspc.Width = lbldrg.ActualWidth
+                isappopen.Children.Add(lblspc)
                 appsgrid.Children.Add(lbldrg)
                 agwid = 138
             End If
@@ -567,7 +571,7 @@ Class MainWindow
                 End If
                 firstone = False
             Next
-            My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
+            My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data", filecontent, False)
             insertToLog("Saved")
         Catch ex As Exception
             insertToLog(ex.ToString)
@@ -936,6 +940,10 @@ Class MainWindow
                 MsgBox(ex.Message, MsgBoxStyle.Critical)
             End Try
             End
+        Else
+            If Not Command.Replace("""", "").Trim = "" Then
+                SettingsLoadID = Command.Replace("""", "")
+            End If
         End If
     End Sub
 

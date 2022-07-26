@@ -1,7 +1,8 @@
 ﻿Module SettingsHostModule
     Dim SettingsIni As Ini
+    Public SettingsLoadID As String = ""
     Sub InitSettings()
-        SettingsIni = New Ini(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings.ini")
+        SettingsIni = New Ini(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Settings" + SettingsLoadID + ".ini")
         CheckAndInsertInvalid()
     End Sub
 
@@ -27,7 +28,8 @@
             sec.Clear()
             My.Computer.FileSystem.DeleteFile(My.Computer.FileSystem.SpecialDirectories.Temp & "\BDockDefaultSettings.ini")
         Catch ex As Exception
-            MsgBox(ex.Message + vbNewLine + "Deleting Settings File May Fix This." + vbNewLine + "Budgie Dock Can't Load Settings And Will Crash After This Error.", MsgBoxStyle.Critical)
+            'MsgBox(ex.Message + vbNewLine + "Deleting Settings File May Fix This." + vbNewLine + "Budgie Dock Can't Load Settings And Will Crash After This Error.", MsgBoxStyle.Critical)
+            insertToLog(ex.ToString)
         End Try
     End Sub
 
