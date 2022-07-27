@@ -1,6 +1,7 @@
 ﻿Public Class ItemListing
     Dim itlist As New ArrayList
     Dim sepid As Integer = 0
+    Dim dontallowclosing As Boolean = True
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         For Each a As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
             itlist.Add(a)
@@ -24,6 +25,7 @@
             firstone = False
         Next
         My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
+        dontallowclosing = False
         Me.Close()
     End Sub
 
@@ -73,22 +75,24 @@
     End Sub
 
     Private Sub Window_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
-        e.Cancel = True
-        Dim qs As MsgBoxResult = MsgBox("Do You Want To Discard The Changes? (Click ""No"" To Save)", MsgBoxStyle.Question + MsgBoxStyle.YesNoCancel, "Unsaved Changes")
-        If qs = MsgBoxResult.Yes Then
-            e.Cancel = False
-        ElseIf qs = MsgBoxResult.No Then
-            Dim filecontent As String = ""
-            Dim firstone As Boolean = True
-            For Each a As String In itlist
-                If Not firstone Then
-                    filecontent += "|"
-                End If
-                filecontent += a
-                firstone = False
-            Next
-            My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
-            e.Cancel = False
+        If dontallowclosing Then
+            e.Cancel = True
+            Dim qs As MsgBoxResult = MsgBox("Do You Want To Discard The Changes? (Click ""No"" To Save)", MsgBoxStyle.Question + MsgBoxStyle.YesNoCancel, "Unsaved Changes")
+            If qs = MsgBoxResult.Yes Then
+                e.Cancel = False
+            ElseIf qs = MsgBoxResult.No Then
+                Dim filecontent As String = ""
+                Dim firstone As Boolean = True
+                For Each a As String In itlist
+                    If Not firstone Then
+                        filecontent += "|"
+                    End If
+                    filecontent += a
+                    firstone = False
+                Next
+                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
+                e.Cancel = False
+            End If
         End If
     End Sub
 End Class
