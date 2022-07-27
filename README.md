@@ -1,6 +1,6 @@
 # Budgie-Dock
 Budgie Dock App (1.5 Release!)&nbsp;&nbsp;&nbsp;
-<a href="https://github.com/HAKANKOKCU/Budgie-Dock/raw/main/Budgie%20Dock/bin/">Download (The Beta)</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock/blob/main/Themes.md">Themes</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock-Temp-Cleaner">Temp Cleaner</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock/blob/main/Creating%20icon%20pack.md">Create Icon Pack</a>
+<a href="https://github.com/HAKANKOKCU/Budgie-Dock/raw/main/Budgie%20Dock%20Setup.exe">Download Setup</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock/raw/main/Budgie%20Dock/bin/">Download</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock/blob/main/Themes.md">Themes</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock-Temp-Cleaner">Temp Cleaner</a>&nbsp;&nbsp;&nbsp;<a href="https://github.com/HAKANKOKCU/Budgie-Dock/blob/main/Creating%20icon%20pack.md">Create Icon Pack</a>
 &nbsp;&nbsp;&nbsp;(Put it to `shell:startup` folder to make it run at startup. Or use task scheduler.)
 
 <div align="center">
