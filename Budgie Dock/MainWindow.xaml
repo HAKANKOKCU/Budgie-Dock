@@ -40,7 +40,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Name="ff" HorizontalAlignment="Center">
+            <Border Name="ff" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" ClipToBounds="True">
                     <StackPanel.Background>
                         <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>

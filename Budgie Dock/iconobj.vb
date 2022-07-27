@@ -213,7 +213,7 @@ Public Class iconobj
     Private Sub imageiconobj_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles imageiconobj.MouseMove
         If Not containerwin.menustack.Visibility = Visibility.Visible Or containerwin.OptionsIcon Is Me Then
             If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
-                Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - (containerwin.appname.ActualHeight * 2)))
+                Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - (containerwin.appname.ActualHeight / 2)))
             Else
                 Canvas.SetLeft(containerwin.appname, (((System.Windows.Forms.Control.MousePosition.X - containerwin.MILeft) / containerwin.SystemDPI) - (containerwin.appname.ActualWidth / 2)))
             End If
@@ -255,10 +255,10 @@ Public Class iconobj
             containerwin.menustack.Visibility = Visibility.Visible
             If GetSetting("pos") = "Right" Then
                 'Canvas.SetTop(containerwin.appname, ((System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 30))
-                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
+                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 80)
                 Canvas.SetRight(containerwin.menustack, 0)
             ElseIf GetSetting("pos") = "Left" Then
-                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 110)
+                Canvas.SetTop(containerwin.menustack, (System.Windows.Forms.Control.MousePosition.Y / containerwin.SystemDPI) - 80)
                 Canvas.SetRight(containerwin.menustack, 0)
             Else
                 Canvas.SetLeft(containerwin.menustack, ((System.Windows.Forms.Control.MousePosition.X + containerwin.MILeft) / containerwin.SystemDPI) - 100)
