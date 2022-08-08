@@ -23,7 +23,12 @@
         mainwin.iconlist(iconid)(3) = Appname.Text.Replace("*", "{BD-STAR-}").Replace("|", "{BD-FLINE-}").Replace(":", "{BD-TD-}")
         iconn.appname = Appname.Text
         iconn.iconpath = IconPath.Text
-        iconn.apppath = AppShell.Text
+        If AppShell.Text.Split("^").Count > 1 Then
+            iconn.apparams = AppShell.Text.Split("^")(1).Replace("{BD-UPL-}", "^")
+        Else
+            iconn.apparams = ""
+        End If
+        iconn.apppath = AppShell.Text.Split("^")(0)
         iconn.endinit()
     End Sub
 
