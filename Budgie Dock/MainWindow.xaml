@@ -41,10 +41,11 @@
                 </StackPanel>
             </Border>
             <Border Name="ff" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border.Background>
+                    <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
+                </Border.Background>
                 <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" ClipToBounds="True">
-                    <StackPanel.Background>
-                        <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
-                    </StackPanel.Background>
+                    
                 </StackPanel>
             </Border>
         </StackPanel>

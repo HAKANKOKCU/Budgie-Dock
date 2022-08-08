@@ -57,7 +57,7 @@ Class MainWindow
             insertToLog("Missing Files Recreation End")
             Try
                 For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
-                    disallowedpnames.Add(dup)
+                    disallowedpnames.Add(dup.ToLower)
                 Next
             Catch ex As Exception
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
@@ -79,23 +79,12 @@ Class MainWindow
             Dim asbtn As New ButtonStack
             asbtn.theStackPanel = AddspButton
             insertToLog("Setting Corner Radius Of The Dock")
-            Try
-                If GetSetting("dockCornerRadius").Contains(",") Then
-                    Dim crlist = GetSetting("dockCornerRadius").Split(",")
-                    bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
-                Else
-                    bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
-                End If
-            Catch ex As Exception
-                MsgBox("Failled to set corner radius: " + ex.Message)
-                insertToLog("Handled Error: " & vbNewLine & ex.ToString)
-            End Try
+            applySettings()
             insertToLog("Setting Position")
             Me.Left = 0
             If GetSetting("animateScale") = 0 Then
                 SetSetting("animateScale", 1, True)
             End If
-            Me.Height = appsgrid.Height + 163
             insertToLog("Setting Colors")
             bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
             If GetSetting("applyDockColorAtIsAppRuning") Then
@@ -108,6 +97,25 @@ Class MainWindow
         Catch ex As Exception
             insertToLog(ex.ToString)
         End Try
+    End Sub
+
+    Sub applySettings()
+        Try
+            If GetSetting("dockCornerRadius").Contains(",") Then
+                Dim crlist = GetSetting("dockCornerRadius").Split(",")
+                bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
+            Else
+                bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
+            End If
+        Catch ex As Exception
+            MsgBox("Failled to set corner radius: " + ex.Message)
+        End Try
+        bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
+        If GetSetting("applyDockColorAtIsAppRuning") Then
+            ff.Background = bdr.Background
+        End If
+        appname.Background = New SolidColorBrush(Color.FromArgb((GetSetting("nameTagOpacity") / 100) * 255, GetSetting("nameTagRed"), GetSetting("nameTagGreen"), GetSetting("nameTagBlue")))
+        appname.Foreground = New SolidColorBrush(Color.FromRgb(GetSetting("nameTagTRed"), GetSetting("nameTagTGreen"), GetSetting("nameTagTBlue")))
     End Sub
 
     Sub RedesignLayout()
@@ -246,7 +254,7 @@ Class MainWindow
             insertToLog("Defaultdisallowed Added To Disallowed Names")
             Try
                 For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
-                    disallowedpnames.Add(dup)
+                    disallowedpnames.Add(dup.ToLower)
                 Next
             Catch ex As Exception
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
@@ -428,7 +436,7 @@ Class MainWindow
                 If Not appsgrid.Width = GetSetting("size") Then
                     appsgrid.Width = GetSetting("size")
                     runingapps.Width = GetSetting("size")
-                    Me.Width = appsgrid.Height + 162
+                    Me.Width = appsgrid.Width + 162
                     reicon()
                 End If
             Else
@@ -675,20 +683,7 @@ Class MainWindow
             appname.Visibility = Windows.Visibility.Hidden
             icop.ShowDialog()
             InitSettings()
-            Try
-                If GetSetting("dockCornerRadius").Contains(",") Then
-                    Dim crlist = GetSetting("dockCornerRadius").Split(",")
-                    bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
-                Else
-                    bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
-                End If
-            Catch ex As Exception
-                MsgBox("Failled to set corner radius: " + ex.Message)
-            End Try
-            bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
-            If GetSetting("applyDockColorAtIsAppRuning") Then
-                ff.Background = bdr.Background
-            End If
+            applySettings()
             RedesignLayout()
             onScreenResChange()
             reicon()
@@ -704,20 +699,7 @@ Class MainWindow
                 menustack.Visibility = Visibility.Hidden
                 icop.ShowDialog()
                 InitSettings()
-                Try
-                    If GetSetting("dockCornerRadius").Contains(",") Then
-                        Dim crlist = GetSetting("dockCornerRadius").Split(",")
-                        bdr.CornerRadius = New CornerRadius(crlist(0), crlist(1), crlist(2), crlist(3))
-                    Else
-                        bdr.CornerRadius = New CornerRadius(GetSetting("dockCornerRadius"))
-                    End If
-                Catch ex As Exception
-                    MsgBox("Failled to set corner radius: " + ex.Message)
-                End Try
-                bdr.Background = New SolidColorBrush(Color.FromArgb((GetSetting("dockOpacity") / 100) * 255, GetSetting("dockRed"), GetSetting("dockGreen"), GetSetting("dockBlue")))
-                If GetSetting("applyDockColorAtIsAppRuning") Then
-                    ff.Background = bdr.Background
-                End If
+                applySettings()
                 RedesignLayout()
                 onScreenResChange()
                 reicon()

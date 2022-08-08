@@ -44,6 +44,10 @@ Public Class BDOptions
         dps.SelectedIndex = IIf(GetSetting("pos") = "Bottom", 0, IIf(GetSetting("pos") = "Top", 1, IIf(GetSetting("pos") = "Right", 2, 3)))
         lmappsdw.IsChecked = GetSetting("lightThemeInAppsDrawer") = 1
         srtd.IsChecked = GetSetting("showOpenedApps") = 1
+        nmtcR.Text = GetSetting("nameTagRed")
+        nmtcG.Text = GetSetting("nameTagGreen")
+        nmtcB.Text = GetSetting("nameTagBlue")
+        nmtcO.Text = GetSetting("nameTagOpacity")
         For i As Integer = 0 To Forms.Screen.AllScreens.Count - 1
             stp.Items.Add(i + 1)
         Next
@@ -246,5 +250,75 @@ Public Class BDOptions
         If acs Then
             SetSetting("showOpenedApps", IIf(srtd.IsChecked, 1, 0), True)
         End If
+    End Sub
+
+    Private Sub nmtcR_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtcR.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagRed", nmtcR.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtcG_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtcG.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagGreen", nmtcG.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtcB_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtcB.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagBlue", nmtcB.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtcO_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtcO.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagOpacity", nmtcO.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtR_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtR.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagTRed", nmtR.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtG_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtG.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagTGreen", nmtG.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
+    End Sub
+
+    Private Sub nmtB_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles nmtB.TextChanged
+        Try
+            If acs Then
+                SetSetting("nameTagTBlue", nmtB.Text, True)
+            End If
+        Catch ex As Exception
+            MsgBox("Please Enter A Valid Number")
+        End Try
     End Sub
 End Class
