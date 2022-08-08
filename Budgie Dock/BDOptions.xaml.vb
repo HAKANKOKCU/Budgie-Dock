@@ -47,6 +47,9 @@ Public Class BDOptions
         nmtcR.Text = GetSetting("nameTagRed")
         nmtcG.Text = GetSetting("nameTagGreen")
         nmtcB.Text = GetSetting("nameTagBlue")
+        nmtR.Text = GetSetting("nameTagTRed")
+        nmtG.Text = GetSetting("nameTagTGreen")
+        nmtB.Text = GetSetting("nameTagTBlue")
         nmtcO.Text = GetSetting("nameTagOpacity")
         For i As Integer = 0 To Forms.Screen.AllScreens.Count - 1
             stp.Items.Add(i + 1)
