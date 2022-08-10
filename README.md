@@ -29,7 +29,7 @@ Needs .Net Framework 4.
 ![resim](https://user-images.githubusercontent.com/103432992/183477967-9912d6a7-ebdb-47f3-9631-ef634008b571.png)
 
 * !Shutdown : Opens a "Shutdown" dialog that you can Shutdown, Restart, Logoff and Hibernate
-![resim](https://user-images.githubusercontent.com/103432992/183477302-87329efa-8457-456b-b23d-aa9522c8a806.png)
+![resim](https://user-images.githubusercontent.com/103432992/183923758-48ce8cd3-d8aa-4dc6-bd67-b66a1801043f.png)
 
 # Editing Source Code With Visual Basic/Studio
 This project was made with Visual Basic 2010. It should work in newer Visual Studio.
