@@ -11,10 +11,10 @@
                 <StackPanel Orientation="Horizontal">
                     <Label>Dock Position</Label>
                     <ComboBox Name="dps">
-                        <ComboBoxItem Content="Bottom" />
-                        <ComboBoxItem Content="Top" />
-                        <ComboBoxItem Content="Right" />
-                        <ComboBoxItem Content="Left" />
+                        <ComboBoxItem Content="Bottom" BorderThickness="0"/>
+                        <ComboBoxItem Content="Top" BorderThickness="0"/>
+                        <ComboBoxItem Content="Right" BorderThickness="0"/>
+                        <ComboBoxItem Content="Left" BorderThickness="0"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">

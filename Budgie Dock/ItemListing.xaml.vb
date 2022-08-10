@@ -8,8 +8,12 @@
             Try
                 itemslist.Items.Add(a.Split("*")(2))
             Catch
-                itemslist.Items.Add("-- Separator " + sepid.ToString + " --")
-                sepid += 1
+                If a = "sep" Then
+                    itemslist.Items.Add("-- Separator " + sepid.ToString + " --")
+                    sepid += 1
+                Else
+                    itemslist.Items.Add("-- Right Dock Contents Start --")
+                End If
             End Try
         Next
     End Sub
@@ -69,9 +73,16 @@
     End Sub
 
     Private Sub adsep_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles adsep.MouseUp
-        itlist.Add("sep")
-        itemslist.Items.Add("-- Separator " + sepid.ToString + " --")
-        sepid += 1
+        Dim dig As New DockElemAddDiag
+        dig.ShowDialog()
+        If dig.result = "sep" Then
+            itlist.Add("sep")
+            itemslist.Items.Add("-- Separator " + sepid.ToString + " --")
+            sepid += 1
+        ElseIf dig.result = "rightstart" Then
+            itlist.Add("rightstart")
+            itemslist.Items.Add("-- Right Dock Contents Start --")
+        End If
     End Sub
 
     Private Sub Window_Closing(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing

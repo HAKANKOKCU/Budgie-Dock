@@ -32,22 +32,29 @@
                     </Label.Background>
                 </Label>
             </Canvas>
-            <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True">
+            <Border Name="bdr" HorizontalAlignment="Center" ClipToBounds="True" AllowDrop="True" UseLayoutRounding="False">
                 <StackPanel ClipToBounds="True" AllowDrop="True" HorizontalAlignment="Center" Name="bdrcont" Orientation="Horizontal">
                     <StackPanel AllowDrop="True" Name="appsgrid" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Name="runingapps" VerticalAlignment="Center" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Name="rdc" VerticalAlignment="Center" HorizontalAlignment="Center" Width="0" ClipToBounds="True">
+                    </StackPanel>
                 </StackPanel>
             </Border>
-            <Border Name="ff" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border Name="ff" HorizontalAlignment="Center" VerticalAlignment="Center" UseLayoutRounding="False" ClipToBounds="True">
                 <Border.Background>
                     <SolidColorBrush Color="White" Opacity="0.01"></SolidColorBrush>
                 </Border.Background>
-                <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" ClipToBounds="True">
-                    
+                <StackPanel Orientation="Horizontal" Name="iao">
+                    <StackPanel Name="isappopen" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" Height="0" ClipToBounds="True">
+                        
+                    </StackPanel>
+                    <StackPanel Name="isappopenr" Orientation="Horizontal" HorizontalAlignment="Center"  Width="0" Height="0" ClipToBounds="True">
+
+                    </StackPanel>
                 </StackPanel>
-            </Border>
+        </Border>
         </StackPanel>
     </Grid>
 </Window>

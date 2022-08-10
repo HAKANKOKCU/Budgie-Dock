@@ -22,7 +22,7 @@
                 </Border>
                 <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="adsep">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Label Foreground="White">Add Separator</Label>
+                        <Label Foreground="White">Add..</Label>
                     </StackPanel>
                 </Border>
                 <Border CornerRadius="15" Height="30" Background="Orange" Cursor="Hand" Name="del">

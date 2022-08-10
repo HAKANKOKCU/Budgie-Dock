@@ -1,35 +1,11 @@
 ﻿Imports System.Windows.Threading
-Imports System.Runtime.InteropServices
 Imports System.ComponentModel
 
 Public Class iconobj
-    <DllImport("user32.dll", EntryPoint:="SetForegroundWindow")> _
-    Private Shared Function SetForegroundWindow(ByVal hWnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
-    End Function
-    Private Declare Auto Function IsIconic Lib "user32.dll" (ByVal hwnd As IntPtr) As Boolean
-    Private Sub ActivateApp(ByVal aid As Integer)
-        'Minimize Window
-        SendMessage(runproc.MainWindowHandle,
-          WM_SYSCOMMAND, SC_MINIMIZE, CType(0, IntPtr))
-
-        'Restore Window
-        SendMessage(runproc.MainWindowHandle,
-          WM_SYSCOMMAND, SC_RESTORE, CType(0, IntPtr))
-    End Sub
-
-    <DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)> _
-    Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As UInteger, ByVal lParam As IntPtr) As IntPtr
-    End Function
-
-    Const WM_SYSCOMMAND As UInt32 = &H112
-    Const SC_RESTORE As UInt32 = &HF120
-    Const SC_MAXIMIZE As UInt32 = &HF030
-    Const SC_MINIMIZE As UInt32 = &HF020
 
     Dim alreadyadded As Boolean = False
     Public WithEvents imageiconobj As New Image
     Public WithEvents isapopen As New Grid
-    Public WithEvents tick As New DispatcherTimer
     Property iconpath As String = ""
     Property apppath As String = ""
     Property stackpanel As StackPanel
@@ -40,6 +16,7 @@ Public Class iconobj
     Property apparams As String = ""
     Public WithEvents runproc As Process
     Public WithEvents animater As DispatcherTimer
+    Public WithEvents tick As New DispatcherTimer
     Public hr = False
     Public isopen = False
     Public isprocfound = False
@@ -55,7 +32,11 @@ Public Class iconobj
     Sub endinit()
         Try
             Try
-                Dim img As New BitmapImage(New Uri(iconpath))
+                Dim img As New BitmapImage
+                img.BeginInit()
+                img.CacheOption = BitmapCacheOption.OnDemand
+                img.UriSource = New Uri(iconpath)
+                img.EndInit()
                 imageiconobj.Source = img
             Catch
             End Try
@@ -89,7 +70,11 @@ Public Class iconobj
             tick.Start()
             If Not alreadyadded Then
                 stackpanel.Children.Add(imageiconobj)
-                containerwin.isappopen.Children.Add(isapopen)
+                If stackpanel Is containerwin.rdc Then
+                    containerwin.isappopenr.Children.Add(isapopen)
+                Else
+                    containerwin.isappopen.Children.Add(isapopen)
+                End If
                 alreadyadded = True
             End If
             animater = New DispatcherTimer
@@ -231,19 +216,10 @@ Public Class iconobj
                     runBG.CancelAsync()
                 End Try
             Else
-                ActivateApp(runproc.Id)
+                ActivateApp(runproc.MainWindowHandle)
             End If
         Else
-            If apppath = "!AppsDrawer" Then
-                Dim ad As New appdrawer
-                'containerwin.Visibility = Visibility.Hidden
-                ad.ShowDialog()
-                'containerwin.Visibility = Visibility.Visible
-            End If
-            If apppath = "!Shutdown" Then
-                Dim ad As New shutdownDialog
-                ad.ShowDialog()
-            End If
+            showSpecialDiag(apppath)
         End If
     End Sub
 
@@ -304,13 +280,13 @@ Public Class iconobj
         End Try
     End Sub
 
-    Private Sub tick_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tick.Tick
+    Sub TickLoop() Handles tick.Tick
         Try
             If checkIfRuning Then
                 isopen = False
                 isapopen.Background = Brushes.Transparent
                 If Not fi.Extension = "" Then
-                    For Each prc As Process In Process.GetProcesses
+                    For Each prc As Process In containerwin.proclist
                         If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
                             If Not prc.MainWindowTitle = "" And Not prc.MainWindowHandle = IntPtr.Zero Then
                                 Try
@@ -322,6 +298,7 @@ Public Class iconobj
                                             If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
                                         Catch
                                         End Try
+                                        Exit For
                                     End If
                                 Catch
                                     isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
@@ -331,6 +308,7 @@ Public Class iconobj
                                         If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
                                     Catch
                                     End Try
+                                    Exit For
                                 End Try
                             End If
                         End If
@@ -365,7 +343,7 @@ Public Class iconobj
                 End If
             End If
             If Not containerwin.rid = runid Then
-                tick.Stop()
+                'tick.Stop()
                 If stackpanel Is containerwin.appsgrid Then remove()
             End If
         Catch ex As Exception
@@ -447,7 +425,10 @@ Public Class iconobj
                 imageiconobj.Opacity += anispeed / 1000
             End If
         Catch
-            animater.Stop()
+            Try
+                animater.Stop()
+            Catch
+            End Try
         End Try
     End Sub
 

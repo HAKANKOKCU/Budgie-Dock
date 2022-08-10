@@ -38,6 +38,14 @@ InitializeComponent
 	<summary>
 appdrawer
 </summary>
+</member><member name="M:BudgieDock.DockElemAddDiag.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.DockElemAddDiag">
+	<summary>
+DockElemAddDiag
+</summary>
 </member><member name="M:BudgieDock.shutdownDialog.InitializeComponent">
 	<summary>
 InitializeComponent

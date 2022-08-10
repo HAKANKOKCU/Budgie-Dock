@@ -115,6 +115,10 @@
     <Compile Include="appdrawer.xaml.vb">
       <DependentUpon>appdrawer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BMain.vb" />
+    <Compile Include="DockElemAddDiag.xaml.vb">
+      <DependentUpon>DockElemAddDiag.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ini.vb" />
     <Compile Include="LogSaver.vb" />
     <Compile Include="procremove.vb" />
@@ -130,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BDOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DockElemAddDiag.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

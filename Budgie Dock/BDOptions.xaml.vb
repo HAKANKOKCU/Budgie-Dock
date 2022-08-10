@@ -52,7 +52,10 @@ Public Class BDOptions
         nmtB.Text = GetSetting("nameTagTBlue")
         nmtcO.Text = GetSetting("nameTagOpacity")
         For i As Integer = 0 To Forms.Screen.AllScreens.Count - 1
-            stp.Items.Add(i + 1)
+            Dim itm As New ComboBoxItem
+            itm.Content = i + 1
+            itm.BorderThickness = New Thickness(0)
+            stp.Items.Add(itm)
         Next
         stp.SelectedIndex = GetSetting("placedScreenID")
         acs = True

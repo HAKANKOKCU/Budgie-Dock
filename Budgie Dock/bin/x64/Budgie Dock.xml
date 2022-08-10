@@ -50,6 +50,14 @@ InitializeComponent
 	<summary>
 BDOptions
 </summary>
+</member><member name="M:BudgieDock.DockElemAddDiag.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.DockElemAddDiag">
+	<summary>
+DockElemAddDiag
+</summary>
 </member><member name="M:BudgieDock.appdrawer.InitializeComponent">
 	<summary>
 InitializeComponent
