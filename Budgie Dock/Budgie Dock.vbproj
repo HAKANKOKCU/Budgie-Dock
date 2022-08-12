@@ -129,6 +129,9 @@
       <DependentUpon>shutdownDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UpdateIconsData.vb" />
+    <Compile Include="WebSearch.xaml.vb">
+      <DependentUpon>WebSearch.xaml</DependentUpon>
+    </Compile>
     <Page Include="appdrawer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -173,6 +176,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="shutdownDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WebSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

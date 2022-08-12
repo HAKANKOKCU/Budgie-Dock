@@ -3,9 +3,9 @@
     Property mainwin As MainWindow
     Property iconn As iconobj
     Private Sub IconOptions_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        AppShell.Text = mainwin.iconlist(iconid)(1).Replace("{BD-TD-}", ":")
-        IconPath.Text = mainwin.iconlist(iconid)(2).Replace("{BD-TD-}", ":")
-        Appname.Text = mainwin.iconlist(iconid)(3).Replace("{BD-TD-}", ":")
+        AppShell.Text = mainwin.iconlist(iconid)(1).ToString.Replace("{BD-TD-}", ":")
+        IconPath.Text = mainwin.iconlist(iconid)(2).ToString.Replace("{BD-TD-}", ":")
+        Appname.Text = mainwin.iconlist(iconid)(3).ToString.Replace("{BD-TD-}", ":")
         Try
             Dim bi As New BitmapImage
             bi.BeginInit()

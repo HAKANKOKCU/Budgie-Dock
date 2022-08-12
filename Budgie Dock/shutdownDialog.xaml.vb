@@ -26,4 +26,14 @@
     Private Sub cancel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles cancel.Click
         Close()
     End Sub
+
+    Private Sub shutdownDialog_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles Me.KeyDown
+        If e.Key = Key.Escape Then
+            Close()
+        End If
+    End Sub
+
+    Private Sub shutdownDialog_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        shutdown.Focus()
+    End Sub
 End Class

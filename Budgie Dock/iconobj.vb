@@ -17,6 +17,7 @@ Public Class iconobj
     Public WithEvents runproc As Process
     Public WithEvents animater As DispatcherTimer
     Public WithEvents tick As New DispatcherTimer
+    Public WithEvents animeRemoveLM As DispatcherTimer
     Public hr = False
     Public isopen = False
     Public isprocfound = False
@@ -74,6 +75,17 @@ Public Class iconobj
                     containerwin.isappopenr.Children.Add(isapopen)
                 Else
                     containerwin.isappopen.Children.Add(isapopen)
+                End If
+                If containerwin.lriID = idd Then
+                    If Not idd = Nothing Then
+                        imageiconobj.Margin = New Thickness(GetSetting("size"), 0, 0, 0)
+                        animeRemoveLM = New DispatcherTimer
+                        animeRemoveLM.Interval = TimeSpan.FromMilliseconds(1)
+                        animeRemoveLM.Start()
+                    End If
+                Else
+                    imageiconobj.Margin = New Thickness(0)
+
                 End If
                 alreadyadded = True
             End If
@@ -265,6 +277,8 @@ Public Class iconobj
             containerwin.menustack.Visibility = Visibility.Hidden
             If stackpanel Is containerwin.runingapps Then
                 containerwin.aaps.Remove(runproc.Id)
+            Else
+                'containerwin.lriID = idd
             End If
             stackpanel.Children.Remove(imageiconobj)
             containerwin.sizecalc()
@@ -375,9 +389,10 @@ Public Class iconobj
     Private Sub isapopen_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles isapopen.MouseUp
         If checkIfRuning Then
             Try
-                runBG.RunWorkerAsync()
-                imageiconobj.Opacity = 0.1
-                If Not GetSetting("animateScale") = 1 Then animater.Start()
+                runapp()
+                'runBG.RunWorkerAsync()
+                'imageiconobj.Opacity = 0.1
+                'If Not GetSetting("animateScale") = 1 Then animater.Start()
             Catch
                 runBG.CancelAsync()
             End Try
@@ -442,5 +457,9 @@ Public Class iconobj
     Private Sub waitBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles waitBG.RunWorkerCompleted
         animater.Stop()
         imageiconobj.Opacity = 1
+    End Sub
+
+    Private Sub animeRemoveLM_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animeRemoveLM.Tick
+        imageiconobj.Margin = New Thickness((-imageiconobj.Margin.Left) / GetSetting("animateScale"), 0, 0, 0)
     End Sub
 End Class

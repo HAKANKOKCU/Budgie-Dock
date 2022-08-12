@@ -36,7 +36,9 @@ Class MainWindow
     Public SystemDPI = Forms.Screen.PrimaryScreen.Bounds.Height / SystemParameters.PrimaryScreenHeight
     Public MILeft As Integer
     Public proclist As Process()
+    Public lriID As Integer = Nothing
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        'UpdateNotifyWorker.RunWorkerAsync()
         Try
             insertToLog("BudgieDock Launched")
             ticker = New DispatcherTimer
@@ -396,6 +398,7 @@ Class MainWindow
                     ElseIf Iconn = "rightstart" Then
                         toadd = rdc
                         iconlist.Add("rightstart")
+                        iddd += 1
                     End If
                 Next
             Else
@@ -525,7 +528,7 @@ Class MainWindow
                         If TypeOf i Is Image Then
                             Dim ii As Image = i
                             'Console.WriteLine(appsgrid.Height & "-" & a)
-                            a += GetSetting("size") - 5
+                            a += GetSetting("size") / 2
                             If appsgrid.Height >= a Then
                                 ii.Width += (GetSetting("size") - 6 - ii.Width) / GetSetting("animateScale")
                             Else
@@ -553,7 +556,7 @@ Class MainWindow
                         End If
                         If TypeOf i Is Image Then
                             Dim ii As Image = i
-                            ar += GetSetting("size") - 5
+                            ar += GetSetting("size") / 2
                             If appsgrid.Height >= ar Then
                                 ii.Width += (GetSetting("size") - 6 - ii.Width) / GetSetting("animateScale")
                             Else
@@ -577,7 +580,7 @@ Class MainWindow
                             Dim ii As Image = i
                             'Console.WriteLine(ii.Width & " " & arr)
                             'Console.WriteLine(ii.Height)
-                            arr += GetSetting("size") - 5
+                            arr += GetSetting("size") / 2
                             If rdc.Height >= arr Then
                                 ii.Width += (GetSetting("size") - 6 - ii.Width) / GetSetting("animateScale")
                             Else
@@ -591,7 +594,7 @@ Class MainWindow
                     For Each i As UIElement In appsgrid.Children
                         If TypeOf i Is Image Then
                             Dim ii As Image = i
-                            a += GetSetting("size") - 5
+                            a += GetSetting("size") / 2
                             If appsgrid.Width >= a Then
                                 ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                             Else
@@ -619,7 +622,7 @@ Class MainWindow
                         End If
                         If TypeOf i Is Image Then
                             Dim ii As Image = i
-                            ar += GetSetting("size") - 5
+                            ar += GetSetting("size") / 2
                             If appsgrid.Width >= ar Then
                                 ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                             Else
@@ -639,7 +642,7 @@ Class MainWindow
                         End If
                         If TypeOf i Is Image Then
                             Dim ii As Image = i
-                            arr += GetSetting("size") - 5
+                            arr += GetSetting("size") / 2
                             If rdc.Width >= arr Then
                                 ii.Height += (GetSetting("size") - 6 - ii.Height) / GetSetting("animateScale")
                             Else

@@ -30,6 +30,14 @@ InitializeComponent
 	<summary>
 shutdownDialog
 </summary>
+</member><member name="M:BudgieDock.WebSearch.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:BudgieDock.WebSearch">
+	<summary>
+WebSearch
+</summary>
 </member><member name="M:BudgieDock.Application.InitializeComponent">
 	<summary>
 InitializeComponent

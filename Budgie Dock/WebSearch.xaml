@@ -1,0 +1,20 @@
+﻿<Window x:Class="WebSearch"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="WebSearch" Height="300" ShowInTaskbar="False" Width="300" Topmost="true" WindowState="Maximized" WindowStartupLocation="CenterScreen" AllowsTransparency="True" WindowStyle="None">
+    <Window.Background>
+        <SolidColorBrush Color="Black" Opacity="0.3"></SolidColorBrush>
+    </Window.Background>
+    <DockPanel>
+        <Border CornerRadius="30,30,0,0" Background="#FF1A1A1A" MaxHeight="300" VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
+            <StackPanel Margin="20">
+                <Border CornerRadius="20" Height="40" Background="#FF585050">
+                    <TextBox Name="searchTB" Background="Transparent" VerticalAlignment="Center" Margin="4" FontSize="20" Foreground="White" BorderThickness="0" CaretBrush="White"></TextBox>
+                </Border>
+                <Label Name="infs" HorizontalAlignment="Center" Foreground="White">Type To Search With {SEARCHENGINE}</Label>
+                <StackPanel Orientation="Horizontal" Name="lsPanel" HorizontalAlignment="Center"></StackPanel>
+            </StackPanel>
+        </Border>
+        <Grid MouseDown="csw"></Grid>
+    </DockPanel>
+</Window>

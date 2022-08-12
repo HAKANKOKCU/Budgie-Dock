@@ -52,6 +52,19 @@ Partial Friend NotInheritable Class MySettings
             Return defaultInstance
         End Get
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("<?xml version=""1.0"" encoding=""utf-16""?>"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"<ArrayOfString xmlns:xsi=""http://www.w3."& _ 
+        "org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" />")>  _
+    Public Property LastSearches() As Global.System.Collections.Specialized.StringCollection
+        Get
+            Return CType(Me("LastSearches"),Global.System.Collections.Specialized.StringCollection)
+        End Get
+        Set
+            Me("LastSearches") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
