@@ -3,6 +3,7 @@
     Property se As String
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         sedata.Add("google", {"Google", "https://www.google.com/search?q=%input%"})
+        sedata.Add("bing", {"Bing", "https://www.bing.com/search?q=%input%"})
         sedata.Add("yandex", {"Yandex", "https://www.yandex.com/search?text=%input%"})
         sedata.Add("duckduckgo", {"DuckDuckGo", "https://www.duckduckgo.com?q=%input%"})
         sedata.Add("startpage", {"Startpage", "https://www.startpage.com/sp/search?q=%input%"})
