@@ -24,11 +24,25 @@ Needs .Net Framework 4.
 * You can click to line of **runing app/process** icons to close them
 
 # Special Application Run Paths
-* !AppsDrawer : Opens a menu contains your apps (Its fullscreen and dark mode is default)
-![resim](https://user-images.githubusercontent.com/103432992/183476842-b744749d-db4c-4c69-8065-96074e5901aa.png)
-![resim](https://user-images.githubusercontent.com/103432992/183477967-9912d6a7-ebdb-47f3-9631-ef634008b571.png)
+## !AppsDrawer 
+Opens a menu contains your apps (Its fullscreen and dark mode is default)
 
-* !Shutdown : Opens a "Shutdown" dialog that you can Shutdown, Restart, Logoff and Hibernate
+![resim](https://user-images.githubusercontent.com/103432992/183476842-b744749d-db4c-4c69-8065-96074e5901aa.png)
+![resim](https://user-images.githubusercontent.com/103432992/184365770-bee20f09-303d-48c9-a06b-339ba18cc8f3.png)
+
+## !WebSearch:[SearchEngineNameInLowerCase]
+### Currently Supported Search Engines:
+* Google = google
+* Bing = bing
+* Yandex = yandex
+* DuckDuckGo = duckduckgo
+### Images
+![resim](https://user-images.githubusercontent.com/103432992/184365547-edec5f1e-63e9-405f-843c-9bddd7e80ba3.png)
+
+
+## !Shutdown
+Opens a "Shutdown" dialog that you can Shutdown, Restart, Logoff and Hibernate
+
 ![resim](https://user-images.githubusercontent.com/103432992/183923758-48ce8cd3-d8aa-4dc6-bd67-b66a1801043f.png)
 
 # Editing Source Code With Visual Basic/Studio
