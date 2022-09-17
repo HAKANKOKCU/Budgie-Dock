@@ -6,7 +6,7 @@
         <SolidColorBrush Color="Black" Opacity="0.3"></SolidColorBrush>
     </Window.Background>
     <DockPanel>
-        <Border CornerRadius="30,30,0,0" Background="#FF1A1A1A" MaxHeight="300" VerticalAlignment="Bottom" DockPanel.Dock="Bottom">
+        <Border CornerRadius="40,40,0,0" Background="#FF1A1A1A" MaxHeight="300" DockPanel.Dock="Bottom">
             <StackPanel Margin="20">
                 <Border CornerRadius="20" Height="40" Background="#FF585050">
                     <TextBox Name="searchTB" Background="Transparent" VerticalAlignment="Center" Margin="4" FontSize="20" Foreground="White" BorderThickness="0" CaretBrush="White"></TextBox>
@@ -15,6 +15,6 @@
                 <StackPanel Orientation="Horizontal" Name="lsPanel" HorizontalAlignment="Center"></StackPanel>
             </StackPanel>
         </Border>
-        <Grid MouseDown="csw"></Grid>
+        <Grid Name="wincloseclick" Background="#00000000"></Grid>
     </DockPanel>
 </Window>

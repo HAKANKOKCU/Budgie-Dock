@@ -3,7 +3,7 @@
     Dim sepid As Integer = 0
     Dim dontallowclosing As Boolean = True
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
-        For Each a As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data").Split("|")
+        For Each a As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data").Split("|")
             itlist.Add(a)
             Try
                 itemslist.Items.Add(a.Split("*")(2))
@@ -28,7 +28,7 @@
             filecontent += a
             firstone = False
         Next
-        My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
+        My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data", filecontent, False)
         dontallowclosing = False
         Me.Close()
     End Sub
@@ -101,7 +101,7 @@
                     filecontent += a
                     firstone = False
                 Next
-                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons.data", filecontent, False)
+                My.Computer.FileSystem.WriteAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\Icons" + SettingsLoadID + ".data", filecontent, False)
                 e.Cancel = False
             End If
         End If

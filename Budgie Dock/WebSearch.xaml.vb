@@ -9,6 +9,7 @@
         sedata.Add("startpage", {"Startpage", "https://www.startpage.com/sp/search?q=%input%"})
         infs.Content = infs.Content.ToString.Replace("{SEARCHENGINE}", sedata(se)(0))
         searchTB.Focus()
+        AddHandler wincloseclick.MouseDown, AddressOf csw
         Dim nwLS = My.Settings.LastSearches
         Try
             For i As Integer = nwLS.Count - 1 To nwLS.Count - 8 Step -1

@@ -1,9 +1,9 @@
 ﻿<Window x:Class="appdrawer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Topmost="True" Title="Applications" Height="445" Width="706" WindowStyle="None" Opacity="0" ShowInTaskbar="False" WindowStartupLocation="CenterScreen" AllowsTransparency="True">
+    Topmost="True" Title="Applications" WindowStartupLocation="CenterScreen" WindowState="Maximized" Height="445" Width="706" WindowStyle="None" Opacity="0" ShowInTaskbar="False" AllowsTransparency="True">
     <Window.Background>
-        <SolidColorBrush Color="Black" Opacity="0.4"></SolidColorBrush>
+        <SolidColorBrush Color="Black" Opacity="0.5"></SolidColorBrush>
     </Window.Background>
     <DockPanel>
         <Border HorizontalAlignment="Center" Margin="40" CornerRadius="16" Height="32" DockPanel.Dock="Top" Name="sbarea" Panel.ZIndex="100000">

@@ -21,7 +21,7 @@ Public Class iconobj
     Public hr = False
     Public isopen = False
     Public isprocfound = False
-    Private fi As IO.FileInfo
+    Private fi As IO.FileInfo = Nothing
     Property runid As Integer = 0
     Property checkIfRuning As Boolean = True
     Property isEditingAvable As Boolean = True
@@ -30,6 +30,7 @@ Public Class iconobj
     Public WithEvents runBG As BackgroundWorker
     Public WithEvents waitBG As BackgroundWorker
     Dim anispeed = 10
+    Property winPTR
     Sub endinit()
         Try
             Try
@@ -38,6 +39,7 @@ Public Class iconobj
                 img.CacheOption = BitmapCacheOption.OnDemand
                 img.UriSource = New Uri(iconpath)
                 img.EndInit()
+                img.Freeze()
                 imageiconobj.Source = img
             Catch
             End Try
@@ -65,7 +67,7 @@ Public Class iconobj
             isapopen.ClipToBounds = True
             tick.Interval = TimeSpan.FromMilliseconds(2000)
             Try
-                fi = New IO.FileInfo(apppath)
+                If My.Computer.FileSystem.FileExists(apppath) Then fi = New IO.FileInfo(apppath)
             Catch
             End Try
             tick.Start()
@@ -95,6 +97,7 @@ Public Class iconobj
                 If hr Then
                     prcrem = New procremove
                     prcrem.process = runproc
+                    prcrem.hw = winPTR
                     waitBG = New BackgroundWorker
                     waitBG.RunWorkerAsync()
                     animater.Start()
@@ -170,7 +173,11 @@ Public Class iconobj
         End If
         If hr And Not isEditingAvable Then
             Try
-                If runproc.MainWindowTitle.Trim = "" Or runproc.MainWindowHandle = IntPtr.Zero Then
+                If Not arWinnameFromDict.ContainsKey(winPTR) Then
+                    remove()
+                    Exit Try
+                End If
+                If arWinnameFromDict(winPTR) = "" Then
                     'containerwin.aaps.Remove(runproc.Id)
                     'If Not isremoved Then containerwin.ruwid -= My.Settings.Size
                     remove()
@@ -228,7 +235,7 @@ Public Class iconobj
                     runBG.CancelAsync()
                 End Try
             Else
-                ActivateApp(runproc.MainWindowHandle)
+                ActivateApp(winPTR)
             End If
         Else
             showSpecialDiag(apppath)
@@ -276,7 +283,7 @@ Public Class iconobj
             containerwin.OptionsIcon = Nothing
             containerwin.menustack.Visibility = Visibility.Hidden
             If stackpanel Is containerwin.runingapps Then
-                containerwin.aaps.Remove(runproc.Id)
+                containerwin.aaps.Remove(winPTR)
             Else
                 'containerwin.lriID = idd
             End If
@@ -295,26 +302,18 @@ Public Class iconobj
     End Sub
 
     Sub TickLoop() Handles tick.Tick
-        Try
-            If checkIfRuning Then
-                isopen = False
-                isapopen.Background = Brushes.Transparent
-                If Not fi.Extension = "" Then
-                    For Each prc As Process In containerwin.proclist
-                        If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
-                            If Not prc.MainWindowTitle = "" And Not prc.MainWindowHandle = IntPtr.Zero Then
-                                Try
-                                    If prc.MainModule.FileName.ToLower = apppath.ToLower Then
-                                        isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
-                                        isopen = True
-                                        Try
-                                            If hr Then If runproc.HasExited Then isprocfound = False
-                                            If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
-                                        Catch
-                                        End Try
-                                        Exit For
-                                    End If
-                                Catch
+        'Try
+        If checkIfRuning Then
+            isopen = False
+            isapopen.Background = Brushes.Transparent
+            If fi Is Nothing Then Exit Sub
+            If Not fi.Exists Then Exit Sub
+            If Not fi.Extension = "" Then
+                For Each prc As Process In containerwin.proclist
+                    If prc.ProcessName.ToLower = My.Computer.FileSystem.GetName(apppath).Replace(fi.Extension, "").ToLower Then
+                        If Not prc.MainWindowTitle = "" And Not prc.MainWindowHandle = IntPtr.Zero Then
+                            Try
+                                If prc.MainModule.FileName.ToLower = apppath.ToLower Then
                                     isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
                                     isopen = True
                                     Try
@@ -323,52 +322,62 @@ Public Class iconobj
                                     Catch
                                     End Try
                                     Exit For
+                                End If
+                            Catch
+                                isapopen.Background = New SolidColorBrush(Color.FromArgb(255, GetSetting("isAppRuningRed"), GetSetting("isAppRuningGreen"), GetSetting("isAppRuningBlue")))
+                                isopen = True
+                                Try
+                                    If hr Then If runproc.HasExited Then isprocfound = False
+                                    If Not isprocfound Then If Not prc.MainWindowTitle = "" Then runproc = prc
+                                Catch
                                 End Try
-                            End If
+                                Exit For
+                            End Try
                         End If
-                    Next
-                End If
-            Else
-                If hr Then
-                    Try
-                        If Not runproc.HasExited Then
-                            aid = runproc.Id
-                            Dim prc = Process.GetProcessById(aid)
-                            If runproc.ProcessName = prc.ProcessName Then
-                                runproc.Refresh()
-                                runproc = prc
-                            End If
-                        Else
-                            remove()
-                        End If
-                    Catch ex As Exception
-                        insertToLog(ex.ToString)
-                    End Try
-                End If
+                    End If
+                Next
+            End If
+        Else
+            If hr Then
                 Try
-                    appname = runproc.MainWindowTitle
-                    If runproc.HasExited Then
+                    If Not runproc.HasExited Then
+                        aid = runproc.Id
+                        Dim prc = Process.GetProcessById(aid)
+                        If runproc.ProcessName = prc.ProcessName Then
+                            runproc.Refresh()
+                            runproc = prc
+                        End If
+                    Else
                         remove()
                     End If
-                Catch
+                Catch ex As Exception
+                    insertToLog(ex.ToString)
                 End Try
-                If runproc.MainWindowHandle = IntPtr.Zero Then
-                    remove()
-                End If
             End If
-            If Not containerwin.rid = runid Then
-                'tick.Stop()
-                If stackpanel Is containerwin.appsgrid Then remove()
+            Try
+                appname = arWinnameFromDict(winPTR)
+                'If runproc.HasExited Then
+                'remove()
+                'End If
+            Catch
+            End Try
+            If Not arWinnameFromDict.ContainsKey(winPTR) Then
+                remove()
             End If
-        Catch ex As Exception
-            insertToLog(ex.ToString)
-        End Try
+        End If
+        If Not containerwin.rid = runid Then
+            'tick.Stop()
+            If stackpanel Is containerwin.appsgrid Then remove()
+        End If
+        'Catch ex As Exception
+        'insertToLog(ex.ToString)
+        'End Try
     End Sub
 
-    Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
-        isapopen.Background = Brushes.Transparent
-        isprocfound = False
-    End Sub
+    'Private Sub runproc_Exited(ByVal sender As Object, ByVal e As System.EventArgs) Handles runproc.Exited
+    '    isapopen.Background = Brushes.Transparent
+    '    isprocfound = False
+    'End Sub
 
     Private Sub isapopen_MouseEnter(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles isapopen.MouseEnter
         If checkIfRuning Then
@@ -427,8 +436,11 @@ Public Class iconobj
     End Sub
 
     Private Sub runBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles runBG.RunWorkerCompleted
-        imageiconobj.Opacity = 1
-        animater.Stop()
+        Try
+            imageiconobj.Opacity = 1
+            animater.Stop()
+        Catch
+        End Try
     End Sub
 
     Private Sub animater_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animater.Tick
@@ -455,8 +467,11 @@ Public Class iconobj
     End Sub
 
     Private Sub waitBG_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles waitBG.RunWorkerCompleted
-        animater.Stop()
-        imageiconobj.Opacity = 1
+        Try
+            animater.Stop()
+            imageiconobj.Opacity = 1
+        Catch
+        End Try
     End Sub
 
     Private Sub animeRemoveLM_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animeRemoveLM.Tick

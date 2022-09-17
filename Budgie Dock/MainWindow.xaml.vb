@@ -15,22 +15,8 @@ Class MainWindow
     Dim ismw As Boolean = False
     Public disallowedpnames As New ArrayList
     'This array will be "injected" to disallowedpnames in "Loaded" Function.
-    Public defaultdisallowed() As String = {"textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName.ToLower}
-    Const WM_GETTEXT As Integer = &HD
-    Const WM_GETTEXTLENGTH As Integer = &HE
+    Public defaultdisallowed() As String = {"textinputhost", "textinputhost.exe", "dwm", "dwm.exe", "csrss.exe", "csrss", Process.GetCurrentProcess.ProcessName}
 
-    '<DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)> Private Shared Function SendMessage(ByVal hWnd As IntPtr, ByVal Msg As UInteger, ByVal wParam As Int32, ByVal lParam As String) As Int32
-    'End Function
-
-    '<DllImport("user32.dll", CharSet:=CharSet.Auto)> Private Shared Sub GetClassName(ByVal hWnd As IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As Integer)
-    'End Sub
-
-    '<DllImport("user32.dll", SetLastError:=True, CharSet:=CharSet.Auto)> Private Shared Function FindWindowEx(ByVal parentHandle As IntPtr, ByVal childAfter As IntPtr, ByVal lclassName As String, ByVal windowTitle As String) As IntPtr
-    'End Function
-
-    '<DllImport("user32.dll")> _
-    'Private Shared Function GetWindowRect(ByVal hWnd As HandleRef, ByRef lpRect As Rect) As Boolean
-    'End Function
     Dim icc As New ArrayList
     Dim icopack As Ini = Nothing
     Public SystemDPI = Forms.Screen.PrimaryScreen.Bounds.Height / SystemParameters.PrimaryScreenHeight
@@ -70,7 +56,7 @@ Class MainWindow
             insertToLog("Missing Files Recreation End")
             Try
                 For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
-                    disallowedpnames.Add(dup.ToLower)
+                    disallowedpnames.Add(dup)
                 Next
             Catch ex As Exception
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
@@ -293,7 +279,7 @@ Class MainWindow
             insertToLog("Defaultdisallowed Added To Disallowed Names")
             Try
                 For Each dup As String In My.Computer.FileSystem.ReadAllText(My.Computer.FileSystem.SpecialDirectories.MyDocuments & "\BudgieDock\BlacklistProceses.data").Split("|")
-                    disallowedpnames.Add(dup.ToLower)
+                    disallowedpnames.Add(dup)
                 Next
             Catch ex As Exception
                 insertToLog("Handled Error: " & vbNewLine & ex.ToString)
@@ -869,13 +855,126 @@ Class MainWindow
             refopenapps()
         End If
     End Sub
+
     Sub refopenapps(Optional ByVal ani As Boolean = True)
+        refreshOpenedWindows()
+        'For Each aap As IntPtr In aaps
+        'Console.WriteLine(aap)
+        'Next
+        'For Each a As String In disallowedpnames
+        'MsgBox(a)
+        'Next
+        For Each ap In arWindows
+            Dim app = Process.GetProcessById(ap(1))
+            Dim appModulePath = ""
+            Try
+                appModulePath = app.MainModule.FileName
+            Catch ex As Exception
+
+            End Try
+            'Console.WriteLine(disallowedpnames.Contains(appModulePath) & " - " & appModulePath)
+            If Not disallowedpnames.Contains(app.ProcessName) Then
+                If Not disallowedpnames.Contains(appModulePath) Then
+                    If Not (disallowedpnames.Contains(ap(0).ToString)) Then
+                        If Not aaps.Contains(ap(2)) Then
+                            If runingapps.Children.Count = 0 Then
+                                Dim a As New Grid
+                                a.UseLayoutRounding = True
+                                a.Background = New SolidColorBrush(Color.FromRgb(GetSetting("separatorRed"), GetSetting("SeparatorGreen"), GetSetting("SeparatorBlue")))
+                                If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
+                                    a.Height = 1
+                                    a.Width = 5
+                                Else
+                                    a.Height = 5
+                                    a.Width = 1
+                                End If
+                                a.ClipToBounds = True
+                                a.Margin = New Thickness(1, 0, 1, 0)
+                                runingapps.Children.Add(a)
+                                Dim pp As New Grid
+                                pp.Width = 3
+                                isappopen.Children.Add(pp)
+                                ruwid += 3
+                            End If
+                            Dim ico As New iconobj
+                            'ico.idd = 0
+                            Dim findico = True
+                            If Not icopack Is Nothing Then
+                                If Not icopack.GetValue("IconPaths", app.ProcessName) = "Code_Item.NotFound" Then
+                                    findico = False
+                                    ico.iconpath = icopack.GetValue("IconPaths", app.ProcessName).Replace("{Budgie.BDock.ConfigDirectory}", My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\").Replace("{iniDir}", GetSetting("currentIconThemePath").Replace(My.Computer.FileSystem.GetName(GetSetting("currentIconThemePath")), ""))
+                                End If
+                            End If
+                            If findico Then
+                                Try
+                                    Dim icoa As System.Drawing.Icon = System.Drawing.Icon.ExtractAssociatedIcon(app.MainModule.FileName)
+                                    Dim cic = icoa.ToBitmap()
+                                    cic.Save(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png", System.Drawing.Imaging.ImageFormat.Png)
+                                    cic.Dispose()
+                                    icoa.Dispose()
+                                    ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                Catch ex As Exception
+                                    If My.Computer.FileSystem.FileExists(My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png") Then
+                                        ico.iconpath = My.Computer.FileSystem.SpecialDirectories.MyDocuments + "\BudgieDock\Icons\" + app.Id.ToString + app.ProcessName + ".png"
+                                    Else
+                                        ico.iconpath = "pack://application:,,,/Budgie%20Dock;component/unknown.png"
+                                    End If
+                                    insertToLog(ex.ToString)
+                                End Try
+                            End If
+                            ico.appname = ap(0)
+                            ico.stackpanel = runingapps
+                            ico.apppath = app.ProcessName
+                            ico.containerwin = Me
+                            ico.runid = rid
+                            ico.isEditingAvable = False
+                            ico.hr = True
+                            ico.runproc = app
+                            ico.isopen = True
+                            ico.isprocfound = True
+                            ico.checkIfRuning = False
+                            ico.winPTR = ap(2)
+                            'AddHandler tickIco.Tick, AddressOf ico.TickLoop
+                            ico.endinit()
+                            If GetSetting("pos") = "Right" Or GetSetting("pos") = "Left" Then
+                                If ani Then ico.imageiconobj.Width = 5 'My.Settings.Size - 5
+                                Try
+                                    If Not ani Then ico.imageiconobj.Width = GetSetting("size") - 5
+                                Catch
+                                End Try
+                            Else
+                                If ani Then ico.imageiconobj.Height = 5 'My.Settings.Size - 5
+                                Try
+                                    If Not ani Then ico.imageiconobj.Height = GetSetting("size") - 5
+                                Catch
+                                End Try
+                            End If
+                            'hWnd = FindWindowEx(IntPtr.Zero, hWnd, vbNullString, vbNullString)
+                            'End While
+                            'If Not icc.Contains(app.ProcessName.ToLower) Then
+
+                            aaps.Add(ap(2))
+                        End If
+                    End If
+                End If
+            End If
+        Next
+        sizecalc()
+    End Sub
+
+    Sub refopenappsLegacy(Optional ByVal ani As Boolean = True)
         For Each app As Process In proclist
             Try
                 If Not aaps.Contains(app.Id) Then
                     If Not app.MainWindowHandle = IntPtr.Zero Then
                         If Not app.MainWindowTitle.Trim = "" Then
-                            If Not disallowedpnames.Contains(app.ProcessName.ToLower) Or disallowedpnames.Contains(app.MainWindowTitle.ToLower) Then
+                            Dim appModulePath = ""
+                            Try
+                                appModulePath = app.MainModule.FileName
+                            Catch ex As Exception
+
+                            End Try
+                            If Not disallowedpnames.Contains(app.ProcessName) Or disallowedpnames.Contains(app.MainWindowTitle) Or disallowedpnames.Contains(appModulePath) Then
                                 'Dim hWnd As IntPtr = IntPtr.Zero
                                 'hWnd = FindWindowEx(IntPtr.Zero, hWnd, vbNullString, vbNullString)
                                 'While Not hWnd.Equals(IntPtr.Zero)

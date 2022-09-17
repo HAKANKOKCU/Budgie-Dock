@@ -23,17 +23,17 @@ Public Class appdrawer
     Private Sub Window_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
         insertToLog("AppsDrawer Opened")
         Try
-            Me.Width = My.Computer.Screen.Bounds.Width
-            Me.Height = My.Computer.Screen.Bounds.Height
+            'Me.Width = My.Computer.Screen.Bounds.Width
+            'Me.Height = My.Computer.Screen.Bounds.Height
             If Not GetSetting("animateScale") = 0 Then
-                Me.Top = My.Computer.Screen.Bounds.Height
+                'Me.Top = My.Computer.Screen.Bounds.Height
                 animer.Interval = TimeSpan.FromMilliseconds(0.1)
                 animer.Start()
             Else
-                Me.Top = 0
+                'Me.Top = 0
                 Me.Opacity = 1
             End If
-            Me.Left = 0
+            'Me.Left = 0
             SearchTB.Focus()
             If My.Computer.FileSystem.FileExists(GetSetting("currentIconThemePath")) Then
                 icopack = New Ini(GetSetting("currentIconThemePath"))
@@ -42,7 +42,7 @@ Public Class appdrawer
             End If
             If GetSetting("lightThemeInAppsDrawer") = 1 Then
                 Textcolor = Brushes.Black
-                Me.Background = New SolidColorBrush(Color.FromArgb(102, 255, 255, 255))
+                Me.Background = New SolidColorBrush(Color.FromArgb(255 / 2, 255, 255, 255))
                 sbarea.Background = New SolidColorBrush(Color.FromArgb(204, 255, 255, 255))
                 SearchTB.Foreground = Textcolor
                 SearchTB.CaretBrush = Textcolor
@@ -158,12 +158,14 @@ Public Class appdrawer
             End If
             If adda Then
                 Dim bdr As New Border
+                bdr.Width = 120
                 Dim st As New StackPanel
                 Dim ico As New Image
-                Dim anm As New Label
-                anm.Content = nm.Replace(fi.Extension, "")
+                Dim anm As New TextBlock
+                anm.Text = nm.Replace(fi.Extension, "")
                 anm.Foreground = Textcolor
                 anm.HorizontalAlignment = Windows.HorizontalAlignment.Center
+                anm.TextWrapping = TextWrapping.Wrap
                 Dim findicon = True
                 If Not icopack Is Nothing Then
                     If Not icopack.GetValue("IconPaths", nm) = "Code_Item.NotFound" Then
@@ -266,8 +268,8 @@ Public Class appdrawer
     End Sub
 
     Private Sub animer_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles animer.Tick
-        Me.Top += (postogo - Me.Top) / GetSetting("animateScale")
-        Me.Opacity = 1.0 - (Me.Top / My.Computer.Screen.Bounds.Height)
+        'Me.Top += (postogo - Me.Top) / GetSetting("animateScale")
+        Me.Opacity += (1.0 - Me.Opacity) / GetSetting("animateScale")
         If Me.Opacity = 1 Then
             animer.Interval = TimeSpan.FromMilliseconds(5)
         End If
